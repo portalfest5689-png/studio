@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, Search, Tv, Bell, ChevronDown, User, Settings, Zap, CreditCard, Power } from "lucide-react"
+import { Menu, Search, Tv, Bell, ChevronDown, User, Settings, Zap, CreditCard, Power, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -74,7 +74,7 @@ export function CRMHeader() {
             <Tv className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hidden sm:flex" title="Central de Ajuda">
-            <QuestionCircle className="w-5 h-5" />
+            <HelpCircle className="w-5 h-5" />
           </Button>
           <div className="relative">
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
@@ -118,7 +118,7 @@ export function CRMHeader() {
               <CreditCard className="w-4 h-4 mr-2" /> Planos e pagamentos
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <QuestionCircle className="w-4 h-4 mr-2" /> Central de aprendizado
+              <HelpCircle className="w-4 h-4 mr-2" /> Central de aprendizado
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive">
@@ -128,26 +128,5 @@ export function CRMHeader() {
         </DropdownMenu>
       </div>
     </header>
-  )
-}
-
-function QuestionCircle(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-      <path d="M12 17h.01" />
-    </svg>
   )
 }
