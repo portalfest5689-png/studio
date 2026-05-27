@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 import { 
   Home, 
   Building2, 
@@ -26,7 +27,10 @@ import {
   ThumbsUp,
   X,
   Search,
-  List as ListIcon
+  List as ListIcon,
+  UserPlus,
+  Key,
+  Info
 } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -93,18 +97,6 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
   ]
 }
 
-const STATES = [
-  { value: "AC", label: "Acre" }, { value: "AL", label: "Alagoas" }, { value: "AP", label: "Amapá" },
-  { value: "AM", label: "Amazonas" }, { value: "BA", label: "Bahia" }, { value: "CE", label: "Ceará" },
-  { value: "DF", label: "Distrito Federal" }, { value: "ES", label: "Espírito Santo" }, { value: "GO", label: "Goiás" },
-  { value: "MA", label: "Maranhão" }, { value: "MT", label: "Mato Grosso" }, { value: "MS", label: "Mato Grosso do Sul" },
-  { value: "MG", label: "Minas Gerais" }, { value: "PA", label: "Pará" }, { value: "PB", label: "Paraíba" },
-  { value: "PR", label: "Paraná" }, { value: "PE", label: "Pernambuco" }, { value: "PI", label: "Piauí" },
-  { value: "RJ", label: "Rio de Janeiro" }, { value: "RN", label: "Rio Grande do Norte" }, { value: "RS", label: "Rio Grande do Sul" },
-  { value: "RO", label: "Rondônia" }, { value: "RR", label: "Roraima" }, { value: "SC", label: "Santa Catarina" },
-  { value: "SP", label: "São Paulo" }, { value: "SE", label: "Sergipe" }, { value: "TO", label: "Tocantins" },
-]
-
 const DEFAULT_CATEGORIES = [{ value: "padrao", label: "Padrão" }]
 
 const CHARACTERISTICS = {
@@ -151,6 +143,18 @@ const CHARACTERISTICS = {
   ]
 }
 
+const STATES = [
+  { value: "AC", label: "Acre" }, { value: "AL", label: "Alagoas" }, { value: "AP", label: "Amapá" },
+  { value: "AM", label: "Amazonas" }, { value: "BA", label: "Bahia" }, { value: "CE", label: "Ceará" },
+  { value: "DF", label: "Distrito Federal" }, { value: "ES", label: "Espírito Santo" }, { value: "GO", label: "Goiás" },
+  { value: "MA", label: "Maranhão" }, { value: "MT", label: "Mato Grosso" }, { value: "MS", label: "Mato Grosso do Sul" },
+  { value: "MG", label: "Minas Gerais" }, { value: "PA", label: "Pará" }, { value: "PB", label: "Paraíba" },
+  { value: "PR", label: "Paraná" }, { value: "PE", label: "Pernambuco" }, { value: "PI", label: "Piauí" },
+  { value: "RJ", label: "Rio de Janeiro" }, { value: "RN", label: "Rio Grande do Norte" }, { value: "RS", label: "Rio Grande do Sul" },
+  { value: "RO", label: "Rondônia" }, { value: "RR", label: "Roraima" }, { value: "SC", label: "Santa Catarina" },
+  { value: "SP", label: "São Paulo" }, { value: "SE", label: "Sergipe" }, { value: "TO", label: "Tocantins" },
+]
+
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
@@ -160,6 +164,11 @@ export default function NewPropertyWizard() {
   // Map State
   const [mapConfirmed, setMapConfirmed] = useState(false)
   const [showMap, setShowMap] = useState(false)
+
+  // Step 3 States
+  const [iptuMode, setIptuMode] = useState("monthly")
+  const [condoMode, setCondoMode] = useState("not_exempt")
+  const [keysAvailable, setKeysAvailable] = useState<string>("")
 
   const handleNext = () => {
     if (currentStep < 6) setCurrentStep(currentStep + 1)
@@ -518,7 +527,186 @@ export default function NewPropertyWizard() {
                     </div>
                   )}
 
-                  {currentStep > 2 && currentStep < 6 && (
+                  {currentStep === 3 && (
+                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                      {/* Donos do Imóvel */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <UserPlus className="w-4 h-4" />
+                          Informe o(s) dono(s) do imóvel
+                        </div>
+                        <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs h-11 px-6">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Adicionar proprietário
+                        </Button>
+                      </section>
+
+                      {/* Controle de Chaves */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Key className="w-4 h-4" />
+                          Controle de Chaves
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Chave Disponível? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select value={keysAvailable} onValueChange={setKeysAvailable}>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="sim">Sim</SelectItem>
+                                <SelectItem value="nao">Não</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Local da Chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select disabled={keysAvailable !== "sim"}>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="filial">Filial</SelectItem>
+                                <SelectItem value="imobiliaria">Imobiliária</SelectItem>
+                                <SelectItem value="outro">Outro</SelectItem>
+                                <SelectItem value="proprietario">Proprietário(a)</SelectItem>
+                                <SelectItem value="alexandre">Alexandre</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="col-span-full space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Informações extras sobre a chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Textarea rows={5} placeholder="" className="custom-border no-resize" />
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Informações detalhadas */}
+                      <section className="space-y-8">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Info className="w-4 h-4" />
+                          Informações detalhadas
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="novo">Novo</SelectItem>
+                                <SelectItem value="usado">Usado</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="reformado">Reformado</SelectItem>
+                                <SelectItem value="para-reformar">Para Reformar</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="pronto">Pronto para morar</SelectItem>
+                                <SelectItem value="construcao">Em construção</SelectItem>
+                                <SelectItem value="planta">Na planta</SelectItem>
+                                <SelectItem value="lancamento">Lançamento</SelectItem>
+                                <SelectItem value="breve">Breve lançamento</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="vago">Vago</SelectItem>
+                                <SelectItem value="proprietario">Ocupado com Proprietário</SelectItem>
+                                <SelectItem value="inquilino">Ocupado com Inquilino</SelectItem>
+                                <SelectItem value="outros">Ocupado (Outros)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        {/* IPTU e Condomínio */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 pt-4">
+                          <div className="space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {["monthly", "annual", "exempt"].map((mode) => (
+                                <Button
+                                  key={mode}
+                                  type="button"
+                                  onClick={() => setIptuMode(mode)}
+                                  variant={iptuMode === mode ? "default" : "outline"}
+                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all
+                                    ${iptuMode === mode ? 'bg-primary text-white shadow-md' : 'border-muted text-muted-foreground hover:bg-muted/50'}
+                                  `}
+                                >
+                                  {mode === "monthly" ? "Mensal" : mode === "annual" ? "Anual" : "Isento"}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                                <Input disabled={iptuMode === "exempt"} placeholder="0,00" className="h-11 pl-10" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {["not_exempt", "exempt"].map((mode) => (
+                                <Button
+                                  key={mode}
+                                  type="button"
+                                  onClick={() => setCondoMode(mode)}
+                                  variant={condoMode === mode ? "default" : "outline"}
+                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all
+                                    ${condoMode === mode ? 'bg-primary text-white shadow-md' : 'border-muted text-muted-foreground hover:bg-muted/50'}
+                                  `}
+                                >
+                                  {mode === "not_exempt" ? "Não Isento" : "Isento"}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                                <Input disabled={condoMode === "exempt"} placeholder="0,00" className="h-11 pl-10" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  )}
+
+                  {currentStep > 3 && currentStep < 6 && (
                     <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 text-muted-foreground animate-in fade-in duration-500">
                       <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center"><FileText className="w-8 h-8" /></div>
                       <div>
