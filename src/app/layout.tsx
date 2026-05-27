@@ -1,8 +1,9 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Imóveis - PrimeEstate CRM',
+  title: 'Imóveis - imobTrack CRM',
   description: 'Sistema de Gestão Imobiliária Profissional',
 };
 

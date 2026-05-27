@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link"
@@ -12,9 +13,18 @@ export function CRMHeader() {
       <div className="flex items-center gap-6 flex-1">
         <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-            <span className="text-primary font-bold text-xl">P</span>
+            <span className="text-primary font-bold text-xl">i</span>
           </div>
-          <span className="text-white font-bold text-lg hidden md:block">PrimeEstate</span>
+          <span 
+            className="text-white text-xl hidden md:block" 
+            style={{ 
+              fontFamily: 'Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif', 
+              fontStyle: 'italic',
+              letterSpacing: '-0.02em'
+            }}
+          >
+            imobTrack
+          </span>
         </Link>
 
         <div className="h-10 w-px bg-white/20 mx-2 hidden md:block" />
