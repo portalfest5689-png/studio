@@ -49,8 +49,32 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
     { value: "sobreposta-baixa", label: "Sobreposta Baixa" },
     { value: "tiny-house", label: "Tiny House" },
     { value: "townhouse", label: "Townhouse" },
+  ],
+  apartamento: [
+    { value: "padrao", label: "Padrão" },
+    { value: "1-por-andar", label: "1 por Andar" },
+    { value: "duplex", label: "Apartamento Duplex" },
+    { value: "area-privativa", label: "Área Privativa" },
+    { value: "cobertura-duplex", label: "Cobertura Duplex" },
+    { value: "cobertura-padrao", label: "Cobertura Padrão" },
+    { value: "cobertura-triplex", label: "Cobertura Triplex" },
+    { value: "flat", label: "Flat" },
+    { value: "garden", label: "Garden" },
+    { value: "kitnet", label: "Kitnet" },
+    { value: "loft", label: "Loft" },
+    { value: "penthouse", label: "Penthouse" },
+    { value: "sala-living", label: "Sala Living" },
+    { value: "studio", label: "Studio" },
+  ],
+  "terreno-lote": [
+    { value: "padrao", label: "Padrão" },
+    { value: "condominio", label: "Terreno/Lote em Condomínio" },
   ]
 }
+
+const DEFAULT_CATEGORIES = [
+  { value: "padrao", label: "Padrão" }
+]
 
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -71,7 +95,12 @@ export default function NewPropertyWizard() {
     setCategory("") // Reset category when type changes
   }
 
-  const currentCategories = CATEGORIES_MAP[propertyType] || []
+  const getCategories = () => {
+    if (!propertyType) return []
+    return CATEGORIES_MAP[propertyType] || DEFAULT_CATEGORIES
+  }
+
+  const currentCategories = getCategories()
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -191,7 +220,7 @@ export default function NewPropertyWizard() {
                           <div className="space-y-2">
                             <Label>Escolha uma categoria</Label>
                             <Select 
-                              disabled={!propertyType || currentCategories.length === 0}
+                              disabled={!propertyType}
                               value={category}
                               onValueChange={setCategory}
                             >
