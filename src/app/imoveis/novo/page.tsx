@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
 import { 
   Home, 
   Building2, 
@@ -31,7 +32,9 @@ import {
   UserPlus,
   Key,
   Info,
-  DollarSign
+  DollarSign,
+  Contact,
+  Paperclip
 } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -754,7 +757,7 @@ export default function NewPropertyWizard() {
                           </div>
                         </div>
 
-                        {/* IPTU e Condomínio - Core da Etapa 4 */}
+                        {/* IPTU e Condomínio */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 pt-4">
                           <div className="space-y-4">
                             <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
@@ -814,13 +817,95 @@ export default function NewPropertyWizard() {
                     </div>
                   )}
 
-                  {currentStep > 4 && currentStep < 6 && (
-                    <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 text-muted-foreground animate-in fade-in duration-500">
-                      <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center"><FileText className="w-8 h-8" /></div>
-                      <div>
-                        <h3 className="text-lg font-bold text-primary">Próximo passo: {STEPS[currentStep - 1].label}</h3>
-                        <p className="text-sm">Preencha as informações necessárias para continuar.</p>
-                      </div>
+                  {currentStep === 5 && (
+                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                      {/* Transação */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <DollarSign className="w-4 h-4" />
+                          Transação
+                        </div>
+                        <div className="flex flex-wrap gap-12">
+                          <div className="flex items-center gap-3">
+                            <Switch id="sell" defaultChecked />
+                            <Label htmlFor="sell" className="font-bold text-sm cursor-pointer">Vender</Label>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Switch id="rent" />
+                            <Label htmlFor="rent" className="font-bold text-sm cursor-pointer">Alugar</Label>
+                          </div>
+                          <div className="flex items-center gap-3 hidden">
+                            <Switch id="season" />
+                            <Label htmlFor="season" className="font-bold text-sm cursor-pointer">Temporada</Label>
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Captadores */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <UserPlus className="w-4 h-4" />
+                          Quem são os captadores desse imóvel?
+                        </div>
+                        <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs h-11 px-6">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Adicionar Captador
+                        </Button>
+                      </section>
+
+                      {/* Corretor Responsável */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Contact className="w-4 h-4" />
+                          Quem é o corretor responsável pela negociação do imóvel?
+                        </div>
+                        <div className="max-w-md space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Corretor responsável</Label>
+                          <Select defaultValue="alexandre">
+                            <SelectTrigger className="h-11">
+                              <SelectValue placeholder="Selecione" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="alexandre">Alexandre Mendonça</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </section>
+
+                      {/* Autorização */}
+                      <section className="space-y-8">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Paperclip className="w-4 h-4" />
+                          Autorizado para negociação?
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Autorizado? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="sim-exclusividade">Sim, com exclusividade</SelectItem>
+                                <SelectItem value="sim">Sim</SelectItem>
+                                <SelectItem value="nao">Não</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Início do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="31/05/2026" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Duração em dias <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="200" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Final do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="17/12/2026" readOnly className="h-11 bg-muted" />
+                          </div>
+                        </div>
+                      </section>
                     </div>
                   )}
 
