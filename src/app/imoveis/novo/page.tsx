@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -7,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Home, Building2, Factory, Signpost, ArrowRight, ArrowLeft, CheckCircle2, Barcode, FolderOpen } from "lucide-react"
 import Link from "next/link"
 
@@ -71,8 +70,8 @@ export default function NewPropertyWizard() {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 mt-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8">
+          <div className="grid grid-cols-1 gap-8">
+            <div className="max-w-2xl mx-auto w-full">
               <Card className="border-none shadow-sm">
                 <CardContent className="pt-6 space-y-8">
                   {currentStep === 1 && (
@@ -85,7 +84,7 @@ export default function NewPropertyWizard() {
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="auto_code">Código Automático</Label>
-                          <Input id="auto_code" value="1" readOnly className="bg-muted font-mono" />
+                          <Input id="auto_code" value="1" readOnly className="bg-muted font-mono h-11" />
                         </div>
                       </section>
 
@@ -125,7 +124,7 @@ export default function NewPropertyWizard() {
                           Qual tipo de imóvel você quer inserir?
                         </div>
                         
-                        <div className="grid sm:grid-cols-2 gap-6">
+                        <div className="space-y-6">
                           <div className="space-y-2">
                             <Label>Escolha um tipo de imóvel</Label>
                             <Select disabled={!purpose}>
@@ -134,8 +133,15 @@ export default function NewPropertyWizard() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="apartamento">Apartamento</SelectItem>
+                                <SelectItem value="area">Área</SelectItem>
+                                <SelectItem value="area-lazer">Área de Lazer</SelectItem>
+                                <SelectItem value="box-garagem">Box/Garagem</SelectItem>
                                 <SelectItem value="casa">Casa</SelectItem>
-                                <SelectItem value="terreno">Terreno</SelectItem>
+                                <SelectItem value="chacara">Chácara</SelectItem>
+                                <SelectItem value="ilha">Ilha</SelectItem>
+                                <SelectItem value="rancho">Rancho</SelectItem>
+                                <SelectItem value="terreno-lote">Terreno/Lote</SelectItem>
+                                <SelectItem value="village">Village</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -147,8 +153,7 @@ export default function NewPropertyWizard() {
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="padrao">Padrão</SelectItem>
-                                <SelectItem value="luxo">Luxo</SelectItem>
+                                <SelectItem value="selecione">Selecione</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -210,32 +215,6 @@ export default function NewPropertyWizard() {
                 </CardContent>
               </Card>
             </div>
-
-            {/* Helper Sidebar */}
-            <div className="lg:col-span-4 space-y-6">
-              <Card className="bg-primary text-white border-none shadow-xl overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                   <HelpCircleIcon className="w-24 h-24" />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-lg">Dica do Especialista</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-white/80 text-sm leading-relaxed">
-                    Certifique-se de preencher a finalidade corretamente. Isso ajuda nossos algoritmos a sugerirem o melhor tipo de marketing para seu imóvel.
-                  </p>
-                  <div className="h-px bg-white/20 w-full" />
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">
-                      AI
-                    </div>
-                    <div className="text-[10px] uppercase font-bold tracking-widest">
-                      Assistente PrimeEstate
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </div>
       </main>
@@ -246,11 +225,5 @@ export default function NewPropertyWizard() {
 function PlusSquareIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-  )
-}
-
-function HelpCircleIcon(props: any) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
   )
 }
