@@ -1,9 +1,11 @@
+
 "use client"
 
 import { Search, ChevronDown, Plus, Download, Trash2, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 export function PropertySearchHeader() {
   return (
@@ -14,9 +16,11 @@ export function PropertySearchHeader() {
             Imóveis
             <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
           </h1>
-          <Button className="btn-custom-red uppercase font-bold text-xs px-6">
-            novo imóvel
-          </Button>
+          <Link href="/imoveis/novo">
+            <Button className="btn-custom-red uppercase font-bold text-xs px-6">
+              novo imóvel
+            </Button>
+          </Link>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-2xl justify-end">
