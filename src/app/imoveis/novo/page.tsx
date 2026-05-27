@@ -19,9 +19,44 @@ const STEPS = [
   { id: 6, label: "Parabéns" },
 ]
 
+const PROPERTY_TYPES = [
+  { value: "apartamento", label: "Apartamento" },
+  { value: "area", label: "Área" },
+  { value: "area-lazer", label: "Área de Lazer" },
+  { value: "box-garagem", label: "Box/Garagem" },
+  { value: "casa", label: "Casa" },
+  { value: "chacara", label: "Chácara" },
+  { value: "ilha", label: "Ilha" },
+  { value: "rancho", label: "Rancho" },
+  { value: "terreno-lote", label: "Terreno/Lote" },
+  { value: "village", label: "Village" },
+]
+
+const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
+  casa: [
+    { value: "padrao", label: "Padrão" },
+    { value: "bangalo", label: "Bangalô" },
+    { value: "cabana", label: "Cabana" },
+    { value: "casa-canadense", label: "Casa Canadense" },
+    { value: "casa-container", label: "Casa Container" },
+    { value: "casa-condominio", label: "Casa de Condomínio" },
+    { value: "casa-geminada", label: "Casa Geminada" },
+    { value: "chale", label: "Chalé" },
+    { value: "edicula", label: "Edícula" },
+    { value: "sobrado-duplex", label: "Sobrado/Duplex" },
+    { value: "sobrado-triplex", label: "Sobrado/Triplex" },
+    { value: "sobreposta-alta", label: "Sobreposta Alta" },
+    { value: "sobreposta-baixa", label: "Sobreposta Baixa" },
+    { value: "tiny-house", label: "Tiny House" },
+    { value: "townhouse", label: "Townhouse" },
+  ]
+}
+
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
+  const [propertyType, setPropertyType] = useState<string>("")
+  const [category, setCategory] = useState<string>("")
 
   const handleNext = () => {
     if (currentStep < 6) setCurrentStep(currentStep + 1)
@@ -30,6 +65,13 @@ export default function NewPropertyWizard() {
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
+
+  const handlePropertyTypeChange = (value: string) => {
+    setPropertyType(value)
+    setCategory("") // Reset category when type changes
+  }
+
+  const currentCategories = CATEGORIES_MAP[propertyType] || []
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -103,6 +145,7 @@ export default function NewPropertyWizard() {
                           ].map((item) => (
                             <button
                               key={item.id}
+                              type="button"
                               onClick={() => setPurpose(item.id)}
                               className={`flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all gap-3
                                 ${purpose === item.id 
@@ -127,33 +170,40 @@ export default function NewPropertyWizard() {
                         <div className="space-y-6">
                           <div className="space-y-2">
                             <Label>Escolha um tipo de imóvel</Label>
-                            <Select disabled={!purpose}>
+                            <Select 
+                              disabled={!purpose} 
+                              value={propertyType} 
+                              onValueChange={handlePropertyTypeChange}
+                            >
                               <SelectTrigger className="h-11">
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="apartamento">Apartamento</SelectItem>
-                                <SelectItem value="area">Área</SelectItem>
-                                <SelectItem value="area-lazer">Área de Lazer</SelectItem>
-                                <SelectItem value="box-garagem">Box/Garagem</SelectItem>
-                                <SelectItem value="casa">Casa</SelectItem>
-                                <SelectItem value="chacara">Chácara</SelectItem>
-                                <SelectItem value="ilha">Ilha</SelectItem>
-                                <SelectItem value="rancho">Rancho</SelectItem>
-                                <SelectItem value="terreno-lote">Terreno/Lote</SelectItem>
-                                <SelectItem value="village">Village</SelectItem>
+                                {PROPERTY_TYPES.map((type) => (
+                                  <SelectItem key={type.value} value={type.value}>
+                                    {type.label}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
 
                           <div className="space-y-2">
                             <Label>Escolha uma categoria</Label>
-                            <Select disabled={!purpose}>
+                            <Select 
+                              disabled={!propertyType || currentCategories.length === 0}
+                              value={category}
+                              onValueChange={setCategory}
+                            >
                               <SelectTrigger className="h-11">
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="selecione">Selecione</SelectItem>
+                                {currentCategories.map((cat) => (
+                                  <SelectItem key={cat.value} value={cat.value}>
+                                    {cat.label}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
