@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Home, Building2, Factory, MapSigns, ArrowRight, ArrowLeft, CheckCircle2, Barcode, FolderOpen } from "lucide-react"
+import { Home, Building2, Factory, Signpost, ArrowRight, ArrowLeft, CheckCircle2, Barcode, FolderOpen } from "lucide-react"
 import Link from "next/link"
 
 const STEPS = [
@@ -100,7 +100,7 @@ export default function NewPropertyWizard() {
                             { id: "residencial", label: "Residencial", icon: <Home className="w-6 h-6" /> },
                             { id: "comercial", label: "Comercial", icon: <Building2 className="w-6 h-6" /> },
                             { id: "industrial", label: "Industrial", icon: <Factory className="w-6 h-6" /> },
-                            { id: "rural", label: "Rural", icon: <MapSigns className="w-6 h-6" /> },
+                            { id: "rural", label: "Rural", icon: <Signpost className="w-6 h-6" /> },
                           ].map((item) => (
                             <button
                               key={item.id}
