@@ -11,7 +11,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 217 59% 15%;
 
-    /* PRIMARY → AZUL ESCURO */
+    /* PRIMARY → AZUL ESCURO (#1B3A6B) */
     --primary: 217 59% 26%;
     --primary-foreground: 0 0% 100%;
 
@@ -23,7 +23,7 @@
     --muted: 217 20% 96%;
     --muted-foreground: 217 15% 50%;
 
-    /* ACCENT → DOURADO */
+    /* ACCENT → DOURADO (#C9A84C) */
     --accent: 40 52% 55%;
     --accent-foreground: 0 0% 100%;
 
@@ -99,4 +99,18 @@
 .nav-link-active {
   color: #ffffff;
   border-bottom: 2px solid #C9A84C;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #1B3A6B;
+  border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #0F2B52;
 }
