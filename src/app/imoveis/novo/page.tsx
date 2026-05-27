@@ -19,7 +19,8 @@ import {
   FolderOpen, 
   MapPin, 
   FileText,
-  Plus
+  Plus,
+  Map as MapIcon
 } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -86,6 +87,36 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
   ]
 }
 
+const STATES = [
+  { value: "AC", label: "Acre" },
+  { value: "AL", label: "Alagoas" },
+  { value: "AP", label: "Amapá" },
+  { value: "AM", label: "Amazonas" },
+  { value: "BA", label: "Bahia" },
+  { value: "CE", label: "Ceará" },
+  { value: "DF", label: "Distrito Federal" },
+  { value: "ES", label: "Espírito Santo" },
+  { value: "GO", label: "Goiás" },
+  { value: "MA", label: "Maranhão" },
+  { value: "MT", label: "Mato Grosso" },
+  { value: "MS", label: "Mato Grosso do Sul" },
+  { value: "MG", label: "Minas Gerais" },
+  { value: "PA", label: "Pará" },
+  { value: "PB", label: "Paraíba" },
+  { value: "PR", label: "Paraná" },
+  { value: "PE", label: "Pernambuco" },
+  { value: "PI", label: "Piauí" },
+  { value: "RJ", label: "Rio de Janeiro" },
+  { value: "RN", label: "Rio Grande do Norte" },
+  { value: "RS", label: "Rio Grande do Sul" },
+  { value: "RO", label: "Rondônia" },
+  { value: "RR", label: "Roraima" },
+  { value: "SC", label: "Santa Catarina" },
+  { value: "SP", label: "São Paulo" },
+  { value: "SE", label: "Sergipe" },
+  { value: "TO", label: "Tocantins" },
+]
+
 const DEFAULT_CATEGORIES = [
   { value: "padrao", label: "Padrão" }
 ]
@@ -123,14 +154,14 @@ export default function NewPropertyWizard() {
       <main className="pb-24">
         {/* Page Header */}
         <div className="bg-white border-b px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold text-primary">Inserir novo imóvel</h1>
           </div>
         </div>
 
         {/* Wizard Progress */}
         <div className="bg-white border-b overflow-x-auto">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-6xl mx-auto px-4">
             <div className="flex justify-between py-6 min-w-[600px]">
               {STEPS.map((step) => (
                 <div 
@@ -154,13 +185,13 @@ export default function NewPropertyWizard() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 mt-8">
+        <div className="max-w-6xl mx-auto px-4 mt-8">
           <div className="grid grid-cols-1 gap-8">
-            <div className="max-w-2xl mx-auto w-full">
+            <div className="w-full">
               <Card className="border-none shadow-sm">
-                <CardContent className="pt-6 space-y-8">
+                <CardContent className="pt-8 space-y-12">
                   {currentStep === 1 && (
-                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <div className="max-w-2xl mx-auto w-full space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                       {/* Código */}
                       <section className="space-y-4">
                         <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
@@ -257,73 +288,182 @@ export default function NewPropertyWizard() {
 
                   {currentStep === 2 && (
                     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                      {/* Onde fica o imóvel? */}
-                      <section className="space-y-6">
-                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                          <MapPin className="w-4 h-4" />
-                          Onde fica o imóvel?
-                        </div>
+                      
+                      {/* Grid Principal Etapa 2 */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         
-                        <div className="space-y-2">
-                          <Label htmlFor="address">Selecione o endereço</Label>
-                          <div className="space-y-1">
-                            <Input 
-                              id="address" 
-                              placeholder="Digite o nome da rua e número" 
-                              className="h-11 border-destructive focus-visible:ring-destructive"
-                            />
-                            <p className="text-xs text-destructive font-medium">Esse campo é obrigatório.</p>
+                        {/* Coluna Esquerda: Endereço */}
+                        <div className="space-y-8">
+                          <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                            <MapPin className="w-4 h-4" />
+                            Onde fica o imóvel?
+                          </div>
+
+                          <div className="space-y-6">
+                            {/* Digite o endereço */}
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Digite o endereço</Label>
+                              <div className="space-y-1.5">
+                                <Input 
+                                  placeholder="Digite o nome da rua e número" 
+                                  className="h-11 border-destructive/40 focus-visible:ring-destructive/20"
+                                />
+                                <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                              </div>
+                            </div>
+
+                            {/* Loteamento / Torre */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">
+                                  Loteamento / Cond / Emp <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                                </Label>
+                                <Input placeholder="Selecione" className="h-11" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">
+                                  Torre/Bloco <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                                </Label>
+                                <Input placeholder="ex.: Bloco A" className="h-11" />
+                              </div>
+                            </div>
+
+                            {/* Número / Complemento */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">Número/Lote</Label>
+                                <div className="space-y-1.5">
+                                  <Input placeholder="ex.: 980" className="h-11 border-destructive/40" />
+                                  <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">
+                                  Complemento <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                                </Label>
+                                <Input placeholder="ex.: Apto 42" className="h-11" />
+                              </div>
+                            </div>
+
+                            {/* Estado / Cidade */}
+                            <div className="grid grid-cols-[100px_1fr] gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">Estado</Label>
+                                <Select>
+                                  <SelectTrigger className="h-11">
+                                    <SelectValue placeholder="UF" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {STATES.map((s) => (
+                                      <SelectItem key={s.value} value={s.value}>{s.value}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-sm font-bold text-primary/80">Cidade</Label>
+                                <div className="space-y-1.5">
+                                  <Input placeholder="Digite o nome da cidade" className="h-11 border-destructive/40" />
+                                  <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Bairro */}
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Bairro</Label>
+                              <div className="space-y-1.5">
+                                <Input placeholder="Digite o nome do bairro" className="h-11" />
+                              </div>
+                            </div>
+
+                            {/* CEP */}
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">CEP</Label>
+                              <Input placeholder="00000-000" className="h-11 border-destructive/40" />
+                              <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                            </div>
                           </div>
                         </div>
-                      </section>
 
-                      {/* Dados principais do imóvel */}
-                      <section className="space-y-6">
+                        {/* Coluna Direita: Mapa */}
+                        <div className="space-y-8">
+                          <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                            <MapIcon className="w-4 h-4" />
+                            Localização no mapa
+                          </div>
+
+                          <div className="relative aspect-square w-full bg-muted rounded-xl border-2 border-dashed border-primary/10 overflow-hidden group">
+                            {/* Fake Map Background */}
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700"
+                              style={{ backgroundImage: "url('https://picsum.photos/seed/map-prime/1000/1000')" }}
+                            />
+                            
+                            {/* Overlay Controls */}
+                            <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
+                              <Button className="bg-primary hover:bg-primary/90 text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl transition-transform hover:scale-105">
+                                Confirme a localização no mapa
+                              </Button>
+                            </div>
+
+                            {/* Status Badge */}
+                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full border shadow-sm flex items-center gap-2">
+                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                              <span className="text-[10px] font-bold uppercase text-primary">Localização confirmada</span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Dados Principais do Imóvel */}
+                      <section className="space-y-8 pt-8 border-t">
                         <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                           <FileText className="w-4 h-4" />
                           Dados principais do imóvel
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                           <div className="space-y-2">
-                            <Label htmlFor="bedrooms">Quartos</Label>
-                            <Input id="bedrooms" type="number" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Quartos</Label>
+                            <Input type="number" placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="rooms">Salas <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="rooms" type="number" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input type="number" placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="suites">Suítes <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="suites" type="number" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input type="number" placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="bathrooms">Banheiros</Label>
-                            <Input id="bathrooms" type="number" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
+                            <Input type="number" placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="garage">Vagas de Garagem <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="garage" type="number" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input type="number" placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="useful_area">Área Útil (m²) <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="useful_area" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="total_area">Área Total <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="total_area" placeholder="0" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="0" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="build_area">Área Construída <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="build_area" placeholder="" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="terrain_width">Largura do Terreno <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="terrain_width" placeholder="" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="" className="h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="terrain_length">Comprimento do Terreno <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
-                            <Input id="terrain_length" placeholder="" className="h-11" />
+                            <Label className="text-sm font-bold text-primary/80">Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input placeholder="" className="h-11" />
                           </div>
                         </div>
 
@@ -335,14 +475,14 @@ export default function NewPropertyWizard() {
                                 Adicionar outras medidas e informações
                               </span>
                             </AccordionTrigger>
-                            <AccordionContent className="pt-4 space-y-4">
-                              <div className="grid grid-cols-2 gap-4">
+                            <AccordionContent className="pt-6 space-y-6">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                  <Label>Área Comum</Label>
+                                  <Label className="text-sm font-bold text-primary/80">Área Comum</Label>
                                   <Input placeholder="0" className="h-11" />
                                 </div>
                                 <div className="space-y-2">
-                                  <Label>Ano de Construção</Label>
+                                  <Label className="text-sm font-bold text-primary/80">Ano de Construção</Label>
                                   <Input type="number" placeholder="Ex: 2020" className="h-11" />
                                 </div>
                               </div>
