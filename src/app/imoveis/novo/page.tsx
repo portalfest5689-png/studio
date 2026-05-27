@@ -7,8 +7,22 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
-import { Home, Building2, Factory, Signpost, ArrowRight, ArrowLeft, CheckCircle2, Barcode, FolderOpen } from "lucide-react"
+import { 
+  Home, 
+  Building2, 
+  Factory, 
+  Signpost, 
+  ArrowRight, 
+  ArrowLeft, 
+  CheckCircle2, 
+  Barcode, 
+  FolderOpen, 
+  MapPin, 
+  FileText,
+  Plus
+} from "lucide-react"
 import Link from "next/link"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 const STEPS = [
   { id: 1, label: "Dados Principais" },
@@ -92,7 +106,7 @@ export default function NewPropertyWizard() {
 
   const handlePropertyTypeChange = (value: string) => {
     setPropertyType(value)
-    setCategory("") // Reset category when type changes
+    setCategory("") 
   }
 
   const getCategories = () => {
@@ -241,10 +255,108 @@ export default function NewPropertyWizard() {
                     </div>
                   )}
 
-                  {currentStep > 1 && currentStep < 6 && (
+                  {currentStep === 2 && (
+                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                      {/* Onde fica o imóvel? */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <MapPin className="w-4 h-4" />
+                          Onde fica o imóvel?
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="address">Selecione o endereço</Label>
+                          <div className="space-y-1">
+                            <Input 
+                              id="address" 
+                              placeholder="Digite o nome da rua e número" 
+                              className="h-11 border-destructive focus-visible:ring-destructive"
+                            />
+                            <p className="text-xs text-destructive font-medium">Esse campo é obrigatório.</p>
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Dados principais do imóvel */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <FileText className="w-4 h-4" />
+                          Dados principais do imóvel
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="bedrooms">Quartos</Label>
+                            <Input id="bedrooms" type="number" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="rooms">Salas <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="rooms" type="number" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="suites">Suítes <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="suites" type="number" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="bathrooms">Banheiros</Label>
+                            <Input id="bathrooms" type="number" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="garage">Vagas de Garagem <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="garage" type="number" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="useful_area">Área Útil (m²) <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="useful_area" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="total_area">Área Total <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="total_area" placeholder="0" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="build_area">Área Construída <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="build_area" placeholder="" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="terrain_width">Largura do Terreno <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="terrain_width" placeholder="" className="h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="terrain_length">Comprimento do Terreno <span className="text-[10px] text-muted-foreground uppercase">(opcional)</span></Label>
+                            <Input id="terrain_length" placeholder="" className="h-11" />
+                          </div>
+                        </div>
+
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem value="extra-info" className="border-none">
+                            <AccordionTrigger className="flex items-center gap-2 hover:no-underline py-2">
+                              <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                                <Plus className="w-4 h-4" />
+                                Adicionar outras medidas e informações
+                              </span>
+                            </AccordionTrigger>
+                            <AccordionContent className="pt-4 space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label>Área Comum</Label>
+                                  <Input placeholder="0" className="h-11" />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Ano de Construção</Label>
+                                  <Input type="number" placeholder="Ex: 2020" className="h-11" />
+                                </div>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </section>
+                    </div>
+                  )}
+
+                  {currentStep > 2 && currentStep < 6 && (
                     <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 text-muted-foreground animate-in fade-in duration-500">
                       <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center">
-                        <PlusSquareIcon />
+                        <FileText className="w-8 h-8" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-primary">Próximo passo: {STEPS[currentStep - 1].label}</h3>
@@ -298,11 +410,5 @@ export default function NewPropertyWizard() {
         </div>
       </main>
     </div>
-  )
-}
-
-function PlusSquareIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
   )
 }
