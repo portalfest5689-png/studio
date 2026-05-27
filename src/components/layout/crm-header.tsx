@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, Search, Tv, Bell, ChevronDown, User, Settings, Zap, CreditCard, Power, HelpCircle } from "lucide-react"
+import { Menu, Tv, Bell, ChevronDown, User, Settings, Zap, Power, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -109,16 +109,6 @@ export function CRMHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Settings className="w-4 h-4 mr-2" /> Configurações
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-               <Zap className="w-4 h-4 mr-2" /> Integrações
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <CreditCard className="w-4 h-4 mr-2" /> Planos e pagamentos
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <HelpCircle className="w-4 h-4 mr-2" /> Central de aprendizado
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive">
