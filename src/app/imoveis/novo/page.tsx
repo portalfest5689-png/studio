@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -20,7 +21,10 @@ import {
   MapPin, 
   FileText,
   Plus,
-  Map as MapIcon
+  Map as MapIcon,
+  ThumbsUp,
+  X,
+  Search
 } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -126,6 +130,10 @@ export default function NewPropertyWizard() {
   const [purpose, setPurpose] = useState<string | null>(null)
   const [propertyType, setPropertyType] = useState<string>("")
   const [category, setCategory] = useState<string>("")
+  
+  // Map State
+  const [mapConfirmed, setMapConfirmed] = useState(false)
+  const [showMap, setShowMap] = useState(false)
 
   const handleNext = () => {
     if (currentStep < 6) setCurrentStep(currentStep + 1)
@@ -300,20 +308,26 @@ export default function NewPropertyWizard() {
                           </div>
 
                           <div className="space-y-6">
-                            {/* Digite o endereço */}
+                            {/* Digite o endereço (Mighty Style) */}
                             <div className="space-y-2">
-                              <Label className="text-sm font-bold text-primary/80">Digite o endereço</Label>
-                              <div className="space-y-1.5">
+                              <Label className="text-sm font-bold text-primary/80">Selecione o endereço</Label>
+                              <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/40 group-focus-within:text-accent transition-colors">
+                                   <Search className="w-4 h-4" />
+                                </div>
                                 <Input 
                                   placeholder="Digite o nome da rua e número" 
-                                  className="h-11 border-destructive/40 focus-visible:ring-destructive/20"
+                                  className="h-11 pl-10 border-destructive shadow-sm focus-visible:ring-destructive/20 pr-10"
                                 />
-                                <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                                <button className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground/40 hover:text-destructive transition-colors">
+                                  <X className="w-4 h-4" />
+                                </button>
+                                <p className="text-[11px] text-destructive font-bold mt-1.5 px-1">Esse campo é obrigatório.</p>
                               </div>
                             </div>
 
                             {/* Loteamento / Torre */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div className="space-y-2">
                                 <Label className="text-sm font-bold text-primary/80">
                                   Loteamento / Cond / Emp <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
@@ -329,11 +343,11 @@ export default function NewPropertyWizard() {
                             </div>
 
                             {/* Número / Complemento */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div className="space-y-2">
                                 <Label className="text-sm font-bold text-primary/80">Número/Lote</Label>
                                 <div className="space-y-1.5">
-                                  <Input placeholder="ex.: 980" className="h-11 border-destructive/40" />
+                                  <Input placeholder="ex.: 980" className="h-11 border-destructive shadow-sm" />
                                   <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
                                 </div>
                               </div>
@@ -363,7 +377,7 @@ export default function NewPropertyWizard() {
                               <div className="space-y-2">
                                 <Label className="text-sm font-bold text-primary/80">Cidade</Label>
                                 <div className="space-y-1.5">
-                                  <Input placeholder="Digite o nome da cidade" className="h-11 border-destructive/40" />
+                                  <Input placeholder="Digite o nome da cidade" className="h-11 border-destructive shadow-sm" />
                                   <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
                                 </div>
                               </div>
@@ -373,46 +387,119 @@ export default function NewPropertyWizard() {
                             <div className="space-y-2">
                               <Label className="text-sm font-bold text-primary/80">Bairro</Label>
                               <div className="space-y-1.5">
-                                <Input placeholder="Digite o nome do bairro" className="h-11" />
+                                <Input placeholder="Digite o nome do bairro" className="h-11 border-destructive shadow-sm" />
+                                <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
                               </div>
                             </div>
 
                             {/* CEP */}
                             <div className="space-y-2">
                               <Label className="text-sm font-bold text-primary/80">CEP</Label>
-                              <Input placeholder="00000-000" className="h-11 border-destructive/40" />
-                              <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                              <div className="space-y-1.5">
+                                <Input placeholder="00000-000" className="h-11 border-destructive shadow-sm" />
+                                <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                              </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Coluna Direita: Mapa */}
+                        {/* Coluna Direita: Mapa (Praedium Absolute Mechanism) */}
                         <div className="space-y-8">
                           <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                             <MapIcon className="w-4 h-4" />
                             Localização no mapa
                           </div>
 
-                          <div className="relative aspect-square w-full bg-muted rounded-xl border-2 border-dashed border-primary/10 overflow-hidden group">
+                          <div className="relative aspect-square w-full bg-[#E5E3DF] rounded-xl border border-muted shadow-inner overflow-hidden group">
                             {/* Fake Map Background */}
                             <div 
-                              className="absolute inset-0 bg-cover bg-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700"
+                              className={`absolute inset-0 bg-cover bg-center transition-all duration-700 
+                                ${showMap ? 'opacity-100' : 'opacity-40 grayscale'}
+                              `}
                               style={{ backgroundImage: "url('https://picsum.photos/seed/map-prime/1000/1000')" }}
                             />
                             
-                            {/* Overlay Controls */}
-                            <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
-                              <Button className="bg-primary hover:bg-primary/90 text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl transition-transform hover:scale-105">
-                                Confirme a localização no mapa
-                              </Button>
-                            </div>
+                            {/* TOP RIGHT: Confirmed Badge */}
+                            {mapConfirmed && (
+                              <div className="absolute top-4 right-4 z-20 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <span className="bg-[#4CAF50] text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] font-bold uppercase shadow-lg border border-white/20">
+                                  <ThumbsUp className="w-3.5 h-3.5" />
+                                  Localização confirmada
+                                </span>
+                              </div>
+                            )}
 
-                            {/* Status Badge */}
-                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full border shadow-sm flex items-center gap-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                              <span className="text-[10px] font-bold uppercase text-primary">Localização confirmada</span>
-                            </div>
+                            {/* BOTTOM LEFT: Action Controls */}
+                            {showMap && (
+                              <div className="absolute bottom-4 left-4 z-20 flex gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                {!mapConfirmed ? (
+                                  <>
+                                    <Button 
+                                      size="sm" 
+                                      onClick={() => setMapConfirmed(true)}
+                                      className="bg-[#334659] hover:bg-[#243447] text-white font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg"
+                                    >
+                                      Confirmar
+                                    </Button>
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline"
+                                      onClick={() => { setShowMap(false); setMapConfirmed(false); }}
+                                      className="bg-white hover:bg-muted border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg"
+                                    >
+                                      Resetar
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    onClick={() => setMapConfirmed(false)}
+                                    className="bg-white hover:bg-muted border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg"
+                                  >
+                                    Alterar
+                                  </Button>
+                                )}
+                              </div>
+                            )}
+
+                            {/* CENTERED: Initial Mechanism Button */}
+                            {!showMap && (
+                              <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
+                                <Button 
+                                  onClick={() => setShowMap(true)}
+                                  className="bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl transition-transform hover:scale-105 rounded"
+                                >
+                                  Confirme a localização no mapa
+                                </Button>
+                              </div>
+                            )}
+
+                            {/* CENTERED: Custom Marker */}
+                            {showMap && (
+                              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 mb-8">
+                                <div className="relative animate-bounce duration-1000">
+                                   <div className="w-10 h-10 bg-primary rounded-full rounded-bl-none rotate-45 border-2 border-white shadow-xl flex items-center justify-center">
+                                      <div className="w-3 h-3 bg-white rounded-full -rotate-45" />
+                                   </div>
+                                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-1 bg-black/20 rounded-[100%] blur-[1px]" />
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Empty Map Div for structure parity */}
+                            <div id="map" className="h-full w-full" />
                           </div>
+
+                          {/* Error Message for Map */}
+                          {!mapConfirmed && showMap && (
+                             <div className="bg-destructive/5 border border-destructive/20 rounded p-4 flex items-start gap-3">
+                               <div className="w-5 h-5 bg-destructive rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <span className="text-white text-xs font-bold">!</span>
+                               </div>
+                               <p className="text-sm font-bold text-destructive">Confirme a localização no mapa</p>
+                             </div>
+                          )}
                         </div>
 
                       </div>
