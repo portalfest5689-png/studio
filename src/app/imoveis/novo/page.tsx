@@ -166,8 +166,6 @@ export default function NewPropertyWizard() {
   const [showMap, setShowMap] = useState(false)
 
   // Step 3 States
-  const [iptuMode, setIptuMode] = useState("monthly")
-  const [condoMode, setCondoMode] = useState("not_exempt")
   const [keysAvailable, setKeysAvailable] = useState<string>("")
 
   const handleNext = () => {
@@ -645,61 +643,6 @@ export default function NewPropertyWizard() {
                                 <SelectItem value="outros">Ocupado (Outros)</SelectItem>
                               </SelectContent>
                             </Select>
-                          </div>
-                        </div>
-
-                        {/* IPTU e Condomínio */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 pt-4">
-                          <div className="space-y-4">
-                            <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
-                            <div className="flex flex-wrap gap-2">
-                              {["monthly", "annual", "exempt"].map((mode) => (
-                                <Button
-                                  key={mode}
-                                  type="button"
-                                  onClick={() => setIptuMode(mode)}
-                                  variant={iptuMode === mode ? "default" : "outline"}
-                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all
-                                    ${iptuMode === mode ? 'bg-primary text-white shadow-md' : 'border-muted text-muted-foreground hover:bg-muted/50'}
-                                  `}
-                                >
-                                  {mode === "monthly" ? "Mensal" : mode === "annual" ? "Anual" : "Isento"}
-                                </Button>
-                              ))}
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
-                                <Input disabled={iptuMode === "exempt"} placeholder="0,00" className="h-11 pl-10" />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="space-y-4">
-                            <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
-                            <div className="flex flex-wrap gap-2">
-                              {["not_exempt", "exempt"].map((mode) => (
-                                <Button
-                                  key={mode}
-                                  type="button"
-                                  onClick={() => setCondoMode(mode)}
-                                  variant={condoMode === mode ? "default" : "outline"}
-                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all
-                                    ${condoMode === mode ? 'bg-primary text-white shadow-md' : 'border-muted text-muted-foreground hover:bg-muted/50'}
-                                  `}
-                                >
-                                  {mode === "not_exempt" ? "Não Isento" : "Isento"}
-                                </Button>
-                              ))}
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
-                                <Input disabled={condoMode === "exempt"} placeholder="0,00" className="h-11 pl-10" />
-                              </div>
-                            </div>
                           </div>
                         </div>
                       </section>
