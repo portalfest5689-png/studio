@@ -30,7 +30,8 @@ import {
   List as ListIcon,
   UserPlus,
   Key,
-  Info
+  Info,
+  DollarSign
 } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -165,8 +166,10 @@ export default function NewPropertyWizard() {
   const [mapConfirmed, setMapConfirmed] = useState(false)
   const [showMap, setShowMap] = useState(false)
 
-  // Step 3 States
+  // Step 3/4 States
   const [keysAvailable, setKeysAvailable] = useState<string>("")
+  const [iptuMode, setIptuMode] = useState<string>("monthly")
+  const [condoMode, setCondoMode] = useState<string>("not_exempt")
 
   const handleNext = () => {
     if (currentStep < 6) setCurrentStep(currentStep + 1)
@@ -649,7 +652,169 @@ export default function NewPropertyWizard() {
                     </div>
                   )}
 
-                  {currentStep > 3 && currentStep < 6 && (
+                  {currentStep === 4 && (
+                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                      {/* Transações e Valores - Preços Principais */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <DollarSign className="w-4 h-4" />
+                          Transações e Valores
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Valor de Venda <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                              <Input className="h-11 pl-10" placeholder="0,00" />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Valor de Locação <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                              <Input className="h-11 pl-10" placeholder="0,00" />
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Repetição de Seções conforme solicitado pelo código identificativo */}
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <UserPlus className="w-4 h-4" />
+                          Informe o(s) dono(s) do imóvel
+                        </div>
+                        <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs h-11 px-6">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Adicionar proprietário
+                        </Button>
+                      </section>
+
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Key className="w-4 h-4" />
+                          Controle de Chaves
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Chave Disponível? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select value={keysAvailable} onValueChange={setKeysAvailable}>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="sim">Sim</SelectItem>
+                                <SelectItem value="nao">Não</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Local da Chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select disabled={keysAvailable !== "sim"}>
+                              <SelectTrigger className="h-11">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="filial">Filial</SelectItem>
+                                <SelectItem value="imobiliaria">Imobiliária</SelectItem>
+                                <SelectItem value="outro">Outro</SelectItem>
+                                <SelectItem value="proprietario">Proprietário(a)</SelectItem>
+                                <SelectItem value="alexandre">Alexandre</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="col-span-full space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Informações extras sobre a chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Textarea rows={5} placeholder="" className="custom-border no-resize" />
+                          </div>
+                        </div>
+                      </section>
+
+                      <section className="space-y-8">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <Info className="w-4 h-4" />
+                          Informações detalhadas
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select><SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="novo">Novo</SelectItem><SelectItem value="usado">Usado</SelectItem></SelectContent></Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select><SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="reformado">Reformado</SelectItem><SelectItem value="para-reformar">Para Reformar</SelectItem></SelectContent></Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select><SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="pronto">Morar</SelectItem><SelectItem value="construcao">Construção</SelectItem></SelectContent></Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select><SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="vago">Vago</SelectItem><SelectItem value="ocupado">Ocupado</SelectItem></SelectContent></Select>
+                          </div>
+                        </div>
+
+                        {/* IPTU e Condomínio - Core da Etapa 4 */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 pt-4">
+                          <div className="space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {['monthly', 'annual', 'exempt'].map((mode) => (
+                                <Button
+                                  key={mode}
+                                  type="button"
+                                  onClick={() => setIptuMode(mode)}
+                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all ${
+                                    iptuMode === mode 
+                                    ? 'bg-primary text-white shadow-md' 
+                                    : 'bg-background border border-muted text-muted-foreground hover:bg-muted/50'
+                                  }`}
+                                >
+                                  {mode === 'monthly' ? 'Mensal' : mode === 'annual' ? 'Anual' : 'Isento'}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                                <Input className="h-11 pl-10" placeholder="0,00" disabled={iptuMode === 'exempt'} />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {['not_exempt', 'exempt'].map((mode) => (
+                                <Button
+                                  key={mode}
+                                  type="button"
+                                  onClick={() => setCondoMode(mode)}
+                                  className={`h-10 px-6 font-bold uppercase text-[10px] rounded-lg transition-all ${
+                                    condoMode === mode 
+                                    ? 'bg-primary text-white shadow-md' 
+                                    : 'bg-background border border-muted text-muted-foreground hover:bg-muted/50'
+                                  }`}
+                                >
+                                  {mode === 'not_exempt' ? 'Não Isento' : 'Isento'}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                                <Input className="h-11 pl-10" placeholder="0,00" disabled={condoMode === 'exempt'} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  )}
+
+                  {currentStep > 4 && currentStep < 6 && (
                     <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 text-muted-foreground animate-in fade-in duration-500">
                       <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center"><FileText className="w-8 h-8" /></div>
                       <div>
