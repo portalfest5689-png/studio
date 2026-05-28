@@ -26,7 +26,9 @@ import {
   Phone,
   Mail,
   X,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Plus as PlusIcon,
+  Trash
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -41,6 +43,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog"
 import {
   Select,
@@ -88,7 +91,7 @@ export default function ContactsDashboard() {
 
       <main className="pb-24">
         {/* Page Header */}
-        <div className="bg-white border-b px-4 py-4 md:py-6">
+        <header className="bg-white border-b px-4 py-4 md:py-6">
           <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-semibold text-primary flex items-center gap-2">
@@ -102,11 +105,12 @@ export default function ContactsDashboard() {
                     novo contato
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none">
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-none bg-transparent">
+                  <DialogDescription className="sr-only">Formulário para criar um novo contato</DialogDescription>
                   <section className="card h-100 bg-white rounded-lg overflow-hidden shadow-2xl">
-                    <form className="custom-form d-flex flex-column contact-form">
+                    <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form">
                       <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
-                        <h2 className="text-lg font-bold">Criar novo contato</h2>
+                        <DialogTitle className="text-lg font-bold">Criar novo contato</DialogTitle>
                         <button 
                           type="button" 
                           onClick={() => setIsNewContactOpen(false)}
@@ -118,44 +122,38 @@ export default function ContactsDashboard() {
                       
                       <div className="p-8 space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {/* Nome e Sobrenome */}
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Nome</Label>
-                            <Input required className="h-11 custom-border" placeholder="Ex.: Roger" />
+                          <div className="form-group">
+                            <Label className="col-form-label" htmlFor="contact_name_on_modal">Nome</Label>
+                            <Input required className="custom-border form-control h-11" id="contact_name_on_modal" placeholder="Ex.: Roger" />
                           </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Sobrenome <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                            <Input className="h-11 custom-border" placeholder="Ex.: Silva" />
+                          <div className="form-group">
+                            <Label className="col-form-label" htmlFor="contact_surname_on_modal">Sobrenome<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
+                            <Input className="custom-border form-control h-11" id="contact_surname_on_modal" placeholder="Ex.: Silva" />
                           </div>
-
-                          {/* Cargo e Empresa */}
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Cargo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                            <Input className="h-11 custom-border" placeholder="Ex.: Gerente" />
+                          <div className="form-group">
+                            <Label className="col-form-label" htmlFor="contact_post_on_modal">Cargo<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
+                            <Input className="custom-border form-control h-11" id="contact_post_on_modal" placeholder="Ex.: Gerente" />
                           </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Empresa <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                            <Input className="h-11 custom-border" placeholder="Ex.: imobTrack" />
+                          <div className="form-group">
+                            <Label className="col-form-label" htmlFor="contact_company_on_modal">Empresa<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
+                            <Input className="custom-border form-control h-11" id="contact_company_on_modal" placeholder="Ex.: imobTrack" />
                           </div>
 
-                          {/* Telefone(s) */}
-                          <div className="col-span-full space-y-4">
-                            <Label className="text-sm font-bold text-primary/80">Telefone</Label>
-                            {phones.map((phone, index) => (
+                          <div className="col-sm-12 space-y-4">
+                            <Label className="col-form-label">Telefone</Label>
+                            {phones.map((phone, idx) => (
                               <div key={phone.id} className="flex gap-2">
                                 <div className="flex-1 flex gap-0">
-                                  <div className="w-[100px]">
-                                    <Select defaultValue="+55">
-                                      <SelectTrigger className="h-11 rounded-r-none border-r-0 bg-muted/30">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="+55">🇧🇷 (+55)</SelectItem>
-                                        <SelectItem value="+1">🇺🇸 (+1)</SelectItem>
-                                        <SelectItem value="+351">🇵🇹 (+351)</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
+                                  <Select defaultValue="+55">
+                                    <SelectTrigger className="h-11 w-[100px] rounded-r-none border-r-0 bg-muted/30">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="+55">🇧🇷 (+55)</SelectItem>
+                                      <SelectItem value="+1">🇺🇸 (+1)</SelectItem>
+                                      <SelectItem value="+351">🇵🇹 (+351)</SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                   <Input className="h-11 rounded-l-none custom-border flex-1" placeholder="Ex.: (00) 0000-0000" />
                                 </div>
                                 <Button 
@@ -166,7 +164,7 @@ export default function ContactsDashboard() {
                                   onClick={() => removePhone(phone.id)}
                                   disabled={phones.length === 1}
                                 >
-                                  <Trash2 className="w-4 h-4" />
+                                  <Trash className="w-4 h-4" />
                                 </Button>
                               </div>
                             ))}
@@ -175,14 +173,13 @@ export default function ContactsDashboard() {
                               onClick={addPhone}
                               className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
                             >
-                              <Plus className="w-3 h-3" /> Adicionar telefone
+                              Adicionar telefone
                             </button>
                           </div>
 
-                          {/* E-mail(s) */}
-                          <div className="col-span-full space-y-4">
-                            <Label className="text-sm font-bold text-primary/80">E-mail</Label>
-                            {emails.map((email, index) => (
+                          <div className="col-sm-12 space-y-4">
+                            <Label className="col-form-label">E-mail</Label>
+                            {emails.map((email, idx) => (
                               <div key={email.id} className="flex gap-2">
                                 <Input type="email" className="h-11 custom-border flex-1" placeholder="Ex.: email@email.com" />
                                 <Button 
@@ -193,7 +190,7 @@ export default function ContactsDashboard() {
                                   onClick={() => removeEmail(email.id)}
                                   disabled={emails.length === 1}
                                 >
-                                  <Trash2 className="w-4 h-4" />
+                                  <Trash className="w-4 h-4" />
                                 </Button>
                               </div>
                             ))}
@@ -202,13 +199,12 @@ export default function ContactsDashboard() {
                               onClick={addEmail}
                               className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
                             >
-                              <Plus className="w-3 h-3" /> Adicionar e-mail
+                              Adicionar e-mail
                             </button>
                           </div>
 
-                          {/* Estágio e Tipo */}
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Estágio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <div className="form-group">
+                            <Label className="col-form-label">Estágio<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
                             <Select>
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
@@ -221,8 +217,8 @@ export default function ContactsDashboard() {
                               </SelectContent>
                             </Select>
                           </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Tipo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <div className="form-group">
+                            <Label className="col-form-label">Tipo<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
                             <Select>
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
@@ -239,9 +235,8 @@ export default function ContactsDashboard() {
                             </Select>
                           </div>
 
-                          {/* Origem e Responsável */}
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Origem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <div className="form-group">
+                            <Label className="col-form-label">Origem<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
                             <Select defaultValue="manual">
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
@@ -251,8 +246,8 @@ export default function ContactsDashboard() {
                               </SelectContent>
                             </Select>
                           </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Responsável</Label>
+                          <div className="form-group">
+                            <Label className="col-form-label">Responsável</Label>
                             <Select defaultValue="alexandre">
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue />
@@ -284,8 +279,8 @@ export default function ContactsDashboard() {
               </Dialog>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-3xl justify-end">
-              <div className="relative flex-1 group">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-2xl justify-end">
+              <form id="contacts-search-form" className="flex-1 relative group">
                 <Input 
                   className="pr-10 h-11 border-muted focus-visible:ring-primary rounded-lg text-sm bg-white"
                   placeholder="Nome, telefone ou e-mail"
@@ -293,7 +288,7 @@ export default function ContactsDashboard() {
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   <Search className="w-4 h-4 text-muted-foreground" />
                 </div>
-              </div>
+              </form>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -317,7 +312,7 @@ export default function ContactsDashboard() {
               </DropdownMenu>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Tabs Navigation */}
         <div className="bg-white border-b overflow-x-auto scrollbar-hide">
