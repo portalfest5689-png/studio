@@ -7,16 +7,27 @@ import { Menu, Tv, Bell, ChevronDown, User, Settings, Zap, Power, HelpCircle } f
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import Image from "next/image"
+import { PlaceHolderImages } from "@/lib/placeholder-images"
 
 export function CRMHeader() {
   const pathname = usePathname()
+  const logoImage = PlaceHolderImages.find(img => img.id === 'logo')?.imageUrl || "https://iili.io/C2VYTv9.md.png"
 
   return (
     <header className="header-nav-stripe h-16 w-full flex items-center px-4 sticky top-0 z-50">
       <div className="flex items-center gap-6 flex-1">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-            <span className="text-primary font-bold text-xl">i</span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded bg-white/10 group-hover:bg-white/20 transition-colors">
+            <Image 
+              src={logoImage}
+              alt="imobTrack Logo"
+              width={32}
+              height={32}
+              className="object-contain"
+              priority
+              data-ai-hint="company logo"
+            />
           </div>
           <span 
             className="text-white text-xl hidden md:block" 

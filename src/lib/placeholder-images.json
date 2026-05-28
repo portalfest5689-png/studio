@@ -5,6 +5,12 @@
       "description": "Empty state illustration for real estate capture",
       "imageUrl": "https://picsum.photos/seed/estate/600/400",
       "imageHint": "real estate empty"
+    },
+    {
+      "id": "logo",
+      "description": "imobTrack official logo",
+      "imageUrl": "https://iili.io/C2VYTv9.md.png",
+      "imageHint": "company logo"
     }
   ]
 }
