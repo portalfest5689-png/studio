@@ -6,7 +6,6 @@ import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
   HelpCircle,
@@ -21,13 +20,7 @@ import {
   LayoutGrid,
   List,
   ArrowUpDown,
-  Plus,
-  UserPlus,
-  Phone,
-  Mail,
   X,
-  Search as SearchIcon,
-  Plus as PlusIcon,
   Trash
 } from "lucide-react"
 import {
@@ -50,9 +43,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-  SelectGroup,
-  SelectLabel
+  SelectValue
 } from "@/components/ui/select"
 import Image from "next/image"
 
@@ -73,16 +64,10 @@ export default function ContactsDashboard() {
   
   // Dynamic fields state
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
-  const [emails, setEmails] = useState([{ id: 1, value: "" }])
 
   const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
   const removePhone = (id: number) => {
     if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
-  }
-
-  const addEmail = () => setEmails([...emails, { id: Date.now(), value: "" }])
-  const removeEmail = (id: number) => {
-    if (emails.length > 1) setEmails(emails.filter(e => e.id !== id))
   }
 
   return (
@@ -131,10 +116,6 @@ export default function ContactsDashboard() {
                             <Input className="custom-border form-control h-11" id="contact_surname_on_modal" placeholder="Ex.: Silva" />
                           </div>
                           <div className="form-group">
-                            <Label className="col-form-label" htmlFor="contact_post_on_modal">Cargo<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Input className="custom-border form-control h-11" id="contact_post_on_modal" placeholder="Ex.: Gerente" />
-                          </div>
-                          <div className="form-group">
                             <Label className="col-form-label" htmlFor="contact_company_on_modal">Empresa<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
                             <Input className="custom-border form-control h-11" id="contact_company_on_modal" placeholder="Ex.: imobTrack" />
                           </div>
@@ -174,32 +155,6 @@ export default function ContactsDashboard() {
                               className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
                             >
                               Adicionar telefone
-                            </button>
-                          </div>
-
-                          <div className="col-sm-12 space-y-4">
-                            <Label className="col-form-label">E-mail</Label>
-                            {emails.map((email, idx) => (
-                              <div key={email.id} className="flex gap-2">
-                                <Input type="email" className="h-11 custom-border flex-1" placeholder="Ex.: email@email.com" />
-                                <Button 
-                                  type="button" 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-11 w-11 text-muted-foreground hover:text-destructive"
-                                  onClick={() => removeEmail(email.id)}
-                                  disabled={emails.length === 1}
-                                >
-                                  <Trash className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            ))}
-                            <button 
-                              type="button" 
-                              onClick={addEmail}
-                              className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
-                            >
-                              Adicionar e-mail
                             </button>
                           </div>
 
