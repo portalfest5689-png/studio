@@ -198,6 +198,9 @@ export default function ContactsDashboard() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="manual">Manual</SelectItem>
+                                <SelectItem value="trafego">Tráfego</SelectItem>
+                                <SelectItem value="conteudo">Conteúdo</SelectItem>
+                                <SelectItem value="indicacao">Indicação</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
