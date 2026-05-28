@@ -2,12 +2,15 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, Tv, Bell, ChevronDown, User, Settings, Zap, Power, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function CRMHeader() {
+  const pathname = usePathname()
+
   return (
     <header className="header-nav-stripe h-16 w-full flex items-center px-4 sticky top-0 z-50">
       <div className="flex items-center gap-6 flex-1">
@@ -31,22 +34,25 @@ export function CRMHeader() {
 
         <nav className="hidden lg:flex items-center gap-1">
           {[
-            { label: "Imóveis", href: "/imoveis", active: true },
+            { label: "Imóveis", href: "/imoveis" },
             { label: "Contatos", href: "/contatos" },
             { label: "Atendimentos", href: "/atendimentos" },
             { label: "Atividades", href: "/atividades" },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors ${item.active ? "nav-link-active text-white" : ""}`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          ].map((item) => {
+            const isActive = pathname.startsWith(item.href) || (item.href === "/imoveis" && pathname === "/")
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors ${isActive ? "nav-link-active text-white" : ""}`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
           
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors">
+            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors focus:outline-none">
               Portais <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
@@ -60,7 +66,7 @@ export function CRMHeader() {
           </DropdownMenu>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors">
+            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors focus:outline-none">
               Site <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
@@ -97,7 +103,7 @@ export function CRMHeader() {
         <div className="h-10 w-px bg-white/20 mx-1" />
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-3 pl-2 pr-1 py-1 rounded hover:bg-white/5 transition-colors group">
+          <DropdownMenuTrigger className="flex items-center gap-3 pl-2 pr-1 py-1 rounded hover:bg-white/5 transition-colors group focus:outline-none">
             <Avatar className="w-8 h-8 border border-white/20">
               <AvatarFallback className="bg-accent text-white text-xs font-bold">AM</AvatarFallback>
             </Avatar>
