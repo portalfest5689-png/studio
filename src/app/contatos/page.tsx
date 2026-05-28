@@ -5,29 +5,52 @@ import { useState } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { 
-  Search, 
-  Plus, 
-  HelpCircle, 
-  ChevronDown, 
-  Download, 
-  Trash2, 
-  MessageCircle, 
-  PlusSquare, 
-  Edit, 
-  UserRound, 
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Search,
+  HelpCircle,
+  ChevronDown,
+  Download,
+  Trash2,
+  MessageCircle,
+  PlusSquare,
+  Edit,
+  UserRound,
   SlidersHorizontal,
   LayoutGrid,
   List,
-  ArrowUpDown
+  ArrowUpDown,
+  Plus,
+  UserPlus,
+  Phone,
+  Mail,
+  X,
+  Search as SearchIcon
 } from "lucide-react"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectLabel
+} from "@/components/ui/select"
 import Image from "next/image"
 
 const TABS = [
@@ -43,6 +66,21 @@ const TABS = [
 
 export default function ContactsDashboard() {
   const [activeTab, setActiveTab] = useState("all")
+  const [isNewContactOpen, setIsNewContactOpen] = useState(false)
+  
+  // Dynamic fields state
+  const [phones, setPhones] = useState([{ id: 1, value: "" }])
+  const [emails, setEmails] = useState([{ id: 1, value: "" }])
+
+  const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
+  const removePhone = (id: number) => {
+    if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
+  }
+
+  const addEmail = () => setEmails([...emails, { id: Date.now(), value: "" }])
+  const removeEmail = (id: number) => {
+    if (emails.length > 1) setEmails(emails.filter(e => e.id !== id))
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -57,9 +95,193 @@ export default function ContactsDashboard() {
                 Contatos
                 <HelpCircle className="w-5 h-5 text-muted-foreground cursor-help" />
               </h1>
-              <Button className="btn-custom-red uppercase font-bold text-xs px-6">
-                novo contato
-              </Button>
+              
+              <Dialog open={isNewContactOpen} onOpenChange={setIsNewContactOpen}>
+                <DialogTrigger asChild>
+                  <Button className="btn-custom-red uppercase font-bold text-xs px-6">
+                    novo contato
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none">
+                  <section className="card h-100 bg-white rounded-lg overflow-hidden shadow-2xl">
+                    <form className="custom-form d-flex flex-column contact-form">
+                      <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
+                        <h2 className="text-lg font-bold">Criar novo contato</h2>
+                        <button 
+                          type="button" 
+                          onClick={() => setIsNewContactOpen(false)}
+                          className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </header>
+                      
+                      <div className="p-8 space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Nome e Sobrenome */}
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Nome</Label>
+                            <Input required className="h-11 custom-border" placeholder="Ex.: Roger" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Sobrenome <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input className="h-11 custom-border" placeholder="Ex.: Silva" />
+                          </div>
+
+                          {/* Cargo e Empresa */}
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Cargo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input className="h-11 custom-border" placeholder="Ex.: Gerente" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Empresa <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input className="h-11 custom-border" placeholder="Ex.: imobTrack" />
+                          </div>
+
+                          {/* Telefone(s) */}
+                          <div className="col-span-full space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Telefone</Label>
+                            {phones.map((phone, index) => (
+                              <div key={phone.id} className="flex gap-2">
+                                <div className="flex-1 flex gap-0">
+                                  <div className="w-[100px]">
+                                    <Select defaultValue="+55">
+                                      <SelectTrigger className="h-11 rounded-r-none border-r-0 bg-muted/30">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="+55">🇧🇷 (+55)</SelectItem>
+                                        <SelectItem value="+1">🇺🇸 (+1)</SelectItem>
+                                        <SelectItem value="+351">🇵🇹 (+351)</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <Input className="h-11 rounded-l-none custom-border flex-1" placeholder="Ex.: (00) 0000-0000" />
+                                </div>
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-11 w-11 text-muted-foreground hover:text-destructive"
+                                  onClick={() => removePhone(phone.id)}
+                                  disabled={phones.length === 1}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            ))}
+                            <button 
+                              type="button" 
+                              onClick={addPhone}
+                              className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
+                            >
+                              <Plus className="w-3 h-3" /> Adicionar telefone
+                            </button>
+                          </div>
+
+                          {/* E-mail(s) */}
+                          <div className="col-span-full space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">E-mail</Label>
+                            {emails.map((email, index) => (
+                              <div key={email.id} className="flex gap-2">
+                                <Input type="email" className="h-11 custom-border flex-1" placeholder="Ex.: email@email.com" />
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-11 w-11 text-muted-foreground hover:text-destructive"
+                                  onClick={() => removeEmail(email.id)}
+                                  disabled={emails.length === 1}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            ))}
+                            <button 
+                              type="button" 
+                              onClick={addEmail}
+                              className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
+                            >
+                              <Plus className="w-3 h-3" /> Adicionar e-mail
+                            </button>
+                          </div>
+
+                          {/* Estágio e Tipo */}
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="lead">Lead</SelectItem>
+                                <SelectItem value="qualified_lead">Lead Qualificado</SelectItem>
+                                <SelectItem value="oportunity">Oportunidade</SelectItem>
+                                <SelectItem value="client">Cliente</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Tipo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select>
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="owner">Proprietário</SelectItem>
+                                <SelectItem value="investor">Investidor</SelectItem>
+                                <SelectItem value="buyer">Comprador</SelectItem>
+                                <SelectItem value="renter">Locatário</SelectItem>
+                                <SelectItem value="guarantor">Fiador</SelectItem>
+                                <SelectItem value="contributor">Colaborador</SelectItem>
+                                <SelectItem value="collector">Captador</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Origem e Responsável */}
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Origem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select defaultValue="manual">
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="manual">Manual</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Responsável</Label>
+                            <Select defaultValue="alexandre">
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="alexandre">Alexandre Mendonça</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <footer className="px-8 py-6 bg-muted/30 border-t flex items-center gap-3">
+                        <Button type="submit" className="btn-custom-red h-12 px-10 font-bold uppercase text-xs tracking-widest shadow-lg">
+                          Criar novo
+                        </Button>
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          onClick={() => setIsNewContactOpen(false)}
+                          className="h-12 px-6 font-bold uppercase text-xs text-muted-foreground hover:bg-muted"
+                        >
+                          Fechar
+                        </Button>
+                      </footer>
+                    </form>
+                  </section>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-3xl justify-end">
