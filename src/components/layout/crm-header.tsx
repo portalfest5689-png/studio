@@ -19,9 +19,9 @@ export function CRMHeader() {
           <Image
             src="https://iili.io/C2y0h5Q.md.png"
             alt="imobTrack Logo"
-            width={200}
-            height={40}
-            className="h-10 w-auto object-contain"
+            width={280}
+            height={56}
+            className="h-14 w-auto object-contain"
             priority
           />
         </Link>
