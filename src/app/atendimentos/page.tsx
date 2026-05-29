@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const KANBAN_COLUMNS = [
   { id: "oportunidade", title: "Oportunidade", count: 0, total: "R$ 0" },
@@ -61,11 +62,30 @@ const TABS = [
   { id: "all", label: "Todos", count: 0 },
 ]
 
+// Mock de contatos para simular a conexão
+const MOCK_CONTACTS = [
+  { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
+  { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
+  { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
+]
+
 export default function AtendimentosPage() {
   const [activeTab, setActiveTab] = useState("open")
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban")
   const [isNewDealOpen, setIsNewDealOpen] = useState(false)
   const [selectedStep, setSelectedStep] = useState(0)
+
+  // Estados para busca de contato
+  const [contactSearch, setContactSearch] = useState("")
+  const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string } | null>(null)
+  const [isContactPopoverOpen, setIsContactPopoverOpen] = useState(false)
+
+  const filteredContacts = useMemo(() => {
+    if (!contactSearch) return MOCK_CONTACTS
+    return MOCK_CONTACTS.filter(c => 
+      c.name.toLowerCase().includes(contactSearch.toLowerCase())
+    )
+  }, [contactSearch])
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -101,7 +121,7 @@ export default function AtendimentosPage() {
                     novo atendimento
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl p-0 border-none overflow-hidden shadow-2xl">
+                <DialogContent className="max-w-2xl p-0 border-none overflow-hidden shadow-2xl bg-white">
                   <DialogDescription className="sr-only">Formulário para criar um novo atendimento de venda</DialogDescription>
                   <section className="card h-100 bg-white">
                     <form id="add-deal-modal-form" className="custom-form d-flex flex-column">
@@ -118,23 +138,77 @@ export default function AtendimentosPage() {
 
                       <div className="p-8 space-y-6">
                         <div className="grid grid-cols-1 gap-6">
-                          {/* Contato Field */}
+                          {/* Contato Field Replicado do Modelo */}
                           <div className="form-group space-y-2">
                             <Label className="text-sm font-bold text-primary/80">Contato</Label>
                             <div className="flex gap-2">
                               <div className="relative flex-1 group">
-                                <Input 
-                                  className="h-11 pl-4 pr-10 custom-border" 
-                                  placeholder="Procurar por nome, e-mail ou telefone"
-                                />
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                                  <Search className="w-4 h-4 text-muted-foreground/40" />
-                                </div>
+                                <Popover open={isContactPopoverOpen} onOpenChange={setIsContactPopoverOpen}>
+                                  <PopoverTrigger asChild>
+                                    <div className="relative cursor-text">
+                                      <Input 
+                                        className="h-11 pl-4 pr-10 custom-border" 
+                                        placeholder="Procurar por nome, e-mail ou telefone"
+                                        value={selectedContact ? selectedContact.name : contactSearch}
+                                        onChange={(e) => {
+                                          setContactSearch(e.target.value)
+                                          if (selectedContact) setSelectedContact(null)
+                                          setIsContactPopoverOpen(true)
+                                        }}
+                                      />
+                                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                        <Search className="w-4 h-4 text-muted-foreground/40" />
+                                      </div>
+                                    </div>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[462px] p-0" align="start">
+                                    <div className="bg-white border rounded-md shadow-xl overflow-hidden">
+                                      <ul className="max-h-[300px] overflow-y-auto py-1">
+                                        {filteredContacts.length > 0 ? (
+                                          filteredContacts.map((contact) => (
+                                            <li key={contact.id} className="w-full">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  setSelectedContact(contact)
+                                                  setContactSearch("")
+                                                  setIsContactPopoverOpen(false)
+                                                }}
+                                                className="w-full px-4 py-2 hover:bg-muted text-left flex items-center gap-3 transition-colors"
+                                              >
+                                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white ${contact.type === 'lead' ? 'bg-orange-400' : 'bg-green-500'}`}>
+                                                  {contact.initials}
+                                                </div>
+                                                <span className="font-bold text-sm text-primary">{contact.name}</span>
+                                              </button>
+                                            </li>
+                                          ))
+                                        ) : (
+                                          <li className="px-4 py-8 text-center text-muted-foreground text-sm">
+                                            Nenhum contato encontrado
+                                          </li>
+                                        )}
+                                      </ul>
+                                      <div className="p-4 bg-muted/30 border-t text-center flex flex-col gap-2">
+                                        <div className="text-[11px] text-muted-foreground flex items-center justify-center gap-1">
+                                          <CircleHelp className="w-3.5 h-3.5" />
+                                          Não encontrou o que procurava no CRM?
+                                        </div>
+                                        <Button 
+                                          variant="outline" 
+                                          className="w-full h-10 font-bold uppercase text-[10px] tracking-wider border-accent text-accent hover:bg-accent/5"
+                                        >
+                                          INSERIR CONTATO
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
                               </div>
                               <Button 
                                 type="button" 
                                 variant="outline" 
-                                className="h-11 w-11 p-0 border-muted-foreground/20 hover:bg-muted"
+                                className="h-11 w-11 p-0 border-muted-foreground/20 hover:bg-muted shadow-sm"
                               >
                                 <UserPlus className="w-5 h-5 text-accent" />
                               </Button>
