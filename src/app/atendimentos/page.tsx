@@ -21,7 +21,8 @@ import {
   Briefcase,
   X,
   UserPlus,
-  CircleHelp
+  CircleHelp,
+  Trash
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -79,6 +80,21 @@ export default function AtendimentosPage() {
   const [contactSearch, setContactSearch] = useState("")
   const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string } | null>(null)
   const [isContactPopoverOpen, setIsContactPopoverOpen] = useState(false)
+
+  // Estados para novo contato
+  const [isNewContactOpen, setIsNewContactOpen] = useState(false)
+  const [phones, setPhones] = useState([{ id: 1, value: "" }])
+  const [emails, setEmails] = useState([{ id: 1, value: "" }])
+
+  const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
+  const removePhone = (id: number) => {
+    if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
+  }
+
+  const addEmail = () => setEmails([...emails, { id: Date.now(), value: "" }])
+  const removeEmail = (id: number) => {
+    if (emails.length > 1) setEmails(emails.filter(p => p.id !== id))
+  }
 
   const filteredContacts = useMemo(() => {
     if (!contactSearch) return MOCK_CONTACTS
@@ -197,6 +213,11 @@ export default function AtendimentosPage() {
                                         <Button 
                                           variant="outline" 
                                           className="w-full h-10 font-bold uppercase text-[10px] tracking-wider border-accent text-accent hover:bg-accent/5"
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsContactPopoverOpen(false);
+                                            setIsNewContactOpen(true);
+                                          }}
                                         >
                                           INSERIR CONTATO
                                         </Button>
@@ -209,6 +230,7 @@ export default function AtendimentosPage() {
                                 type="button" 
                                 variant="outline" 
                                 className="h-11 w-11 p-0 border-muted-foreground/20 hover:bg-muted shadow-sm"
+                                onClick={() => setIsNewContactOpen(true)}
                               >
                                 <UserPlus className="w-5 h-5 text-accent" />
                               </Button>
@@ -445,6 +467,184 @@ export default function AtendimentosPage() {
           </div>
         </div>
       </main>
+
+      {/* Novo Contato Modal */}
+      <Dialog open={isNewContactOpen} onOpenChange={setIsNewContactOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-none bg-transparent">
+          <DialogDescription className="sr-only">Formulário para criar um novo contato</DialogDescription>
+          <section className="card h-100 bg-white rounded-lg overflow-hidden shadow-2xl">
+            <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form">
+              <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
+                <DialogTitle className="text-lg font-bold">Criar novo contato</DialogTitle>
+                <button 
+                  type="button" 
+                  onClick={() => setIsNewContactOpen(false)}
+                  className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </header>
+              
+              <div className="p-8 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Nome</Label>
+                    <Input required className="h-11 custom-border" placeholder="Ex.: Roger" />
+                  </div>
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Sobrenome <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Input className="h-11 custom-border" placeholder="Ex.: Silva" />
+                  </div>
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Cargo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Input className="h-11 custom-border" placeholder="Ex.: Gerente" />
+                  </div>
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Empresa <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Input className="h-11 custom-border" placeholder="Ex.: imobTrack" />
+                  </div>
+
+                  <div className="col-span-full space-y-4">
+                    <Label className="text-sm font-bold text-primary/80">Telefone</Label>
+                    {phones.map((phone) => (
+                      <div key={phone.id} className="flex gap-2">
+                        <div className="flex-1 flex gap-0">
+                          <Select defaultValue="+55">
+                            <SelectTrigger className="h-11 w-[100px] rounded-r-none border-r-0 bg-muted/30">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="+55">🇧🇷 (+55)</SelectItem>
+                              <SelectItem value="+1">🇺🇸 (+1)</SelectItem>
+                              <SelectItem value="+351">🇵🇹 (+351)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Input className="h-11 rounded-l-none custom-border flex-1" placeholder="Ex.: (00) 0000-0000" />
+                        </div>
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-11 w-11 text-muted-foreground hover:text-destructive"
+                          onClick={() => removePhone(phone.id)}
+                          disabled={phones.length === 1}
+                        >
+                          <Trash className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    <button 
+                      type="button" 
+                      onClick={addPhone}
+                      className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
+                    >
+                      Adicionar telefone
+                    </button>
+                  </div>
+
+                  <div className="col-span-full space-y-4">
+                    <Label className="text-sm font-bold text-primary/80">E-mail</Label>
+                    {emails.map((email) => (
+                      <div key={email.id} className="flex gap-2">
+                        <Input className="h-11 custom-border flex-1" placeholder="Ex.: email@email.com" type="email" />
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-11 w-11 text-muted-foreground hover:text-destructive"
+                          onClick={() => removeEmail(email.id)}
+                          disabled={emails.length === 1}
+                        >
+                          <Trash className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    <button 
+                      type="button" 
+                      onClick={addEmail}
+                      className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
+                    >
+                      Adicionar e-mail
+                    </button>
+                  </div>
+
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Estágio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Select>
+                      <SelectTrigger className="h-11 custom-border">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="lead">Lead</SelectItem>
+                        <SelectItem value="qualified_lead">Lead Qualificado</SelectItem>
+                        <SelectItem value="oportunity">Oportunidade</SelectItem>
+                        <SelectItem value="client">Cliente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Tipo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Select>
+                      <SelectTrigger className="h-11 custom-border">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="owner">Proprietário</SelectItem>
+                        <SelectItem value="investor">Investidor</SelectItem>
+                        <SelectItem value="buyer">Comprador</SelectItem>
+                        <SelectItem value="renter">Locatário</SelectItem>
+                        <SelectItem value="guarantor">Fiador</SelectItem>
+                        <SelectItem value="contributor">Colaborador</SelectItem>
+                        <SelectItem value="collector">Captador</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Origem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                    <Select defaultValue="manual">
+                      <SelectTrigger className="h-11 custom-border">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="manual">Manual</SelectItem>
+                        <SelectItem value="trafego">Tráfego</SelectItem>
+                        <SelectItem value="conteudo">Conteúdo</SelectItem>
+                        <SelectItem value="indicacao">Indicação</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="form-group space-y-2">
+                    <Label className="text-sm font-bold text-primary/80">Responsável</Label>
+                    <Select defaultValue="alexandre">
+                      <SelectTrigger className="h-11 custom-border">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="alexandre">Alexandre Mendonça</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+              
+              <footer className="px-8 py-6 bg-muted/30 border-t flex items-center gap-3">
+                <Button type="submit" className="btn-custom-red h-12 px-10 font-bold uppercase text-xs tracking-widest shadow-lg">
+                  Criar novo
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  onClick={() => setIsNewContactOpen(false)}
+                  className="h-12 px-6 font-bold uppercase text-xs text-muted-foreground hover:bg-muted"
+                >
+                  Fechar
+                </Button>
+              </footer>
+            </form>
+          </section>
+        </DialogContent>
+      </Dialog>
 
       {/* FAB Mobile */}
       <div className="fixed bottom-6 right-4 md:hidden z-50">
