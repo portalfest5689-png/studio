@@ -1,7 +1,8 @@
+
 "use client"
 
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
+import Link from "next/link"
 
 export function EmptyState() {
   return (
@@ -12,22 +13,15 @@ export function EmptyState() {
           <span className="block sm:inline text-accent">Adicione seus imóveis captados!</span>
         </h2>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Quando você adiciona todas as suas captações na PrimeEstate, mostramos a você ideias de como comercializar com mais inteligência.
+          Quando você adiciona todas as suas captações na imobTrack, mostramos a você ideias de como comercializar com mais inteligência.
         </p>
       </div>
       
-      <Image
-        src="https://picsum.photos/seed/estate/600/400"
-        alt="Sem dados"
-        width={400}
-        height={300}
-        className="mt-4 grayscale opacity-60"
-        data-ai-hint="real estate empty"
-      />
-
-      <Button className="btn-custom-red h-12 px-10 rounded-lg font-bold uppercase tracking-wider text-sm shadow-lg hover:shadow-xl transition-all">
-        Começar agora
-      </Button>
+      <Link href="/imoveis/novo" className="mt-4">
+        <button className="w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center text-accent hover:bg-accent/10 transition-all group shadow-sm">
+          <Plus className="w-16 h-16 transition-transform group-hover:scale-110" />
+        </button>
+      </Link>
     </div>
   )
 }
