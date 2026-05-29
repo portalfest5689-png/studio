@@ -1,4 +1,3 @@
-
 "use client"
 
 import Link from "next/link"
@@ -8,37 +7,22 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import Image from "next/image"
-import { PlaceHolderImages } from "@/lib/placeholder-images"
 
 export function CRMHeader() {
   const pathname = usePathname()
-  const logoImage = PlaceHolderImages.find(img => img.id === 'logo')?.imageUrl || "https://iili.io/C2VYTv9.md.png"
 
   return (
     <header className="header-nav-stripe h-16 w-full flex items-center px-4 sticky top-0 z-50">
       <div className="flex items-center gap-6 flex-1">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded bg-white/10 group-hover:bg-white/20 transition-colors">
-            <Image 
-              src={logoImage}
-              alt="imobTrack Logo"
-              width={32}
-              height={32}
-              className="object-contain"
-              priority
-              data-ai-hint="company logo"
-            />
-          </div>
-          <span 
-            className="text-white text-xl hidden md:block" 
-            style={{ 
-              fontFamily: 'Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif', 
-              fontStyle: 'italic',
-              letterSpacing: '-0.02em'
-            }}
-          >
-            imobTrack
-          </span>
+          <Image
+            src="https://iili.io/C2y0h5Q.md.png"
+            alt="imobTrack Logo"
+            width={160}
+            height={32}
+            className="h-8 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <div className="h-10 w-px bg-white/20 mx-2 hidden md:block" />
