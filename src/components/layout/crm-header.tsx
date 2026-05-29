@@ -13,15 +13,15 @@ export function CRMHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="header-nav-stripe h-16 w-full flex items-center px-4 sticky top-0 z-50">
+    <header className="header-nav-stripe h-24 w-full flex items-center px-4 sticky top-0 z-50">
       <div className="flex items-center gap-6 flex-1">
         <Link href="/" className="flex items-center gap-2 group">
           <Image
             src="https://iili.io/C2y0h5Q.md.png"
             alt="imobTrack Logo"
-            width={280}
-            height={56}
-            className="h-14 w-auto object-contain"
+            width={400}
+            height={80}
+            className="h-20 w-auto object-contain"
             priority
           />
         </Link>
