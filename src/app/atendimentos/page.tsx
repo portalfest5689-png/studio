@@ -5,6 +5,7 @@ import { useState } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Search,
   ChevronDown,
@@ -17,7 +18,10 @@ import {
   LayoutGrid,
   List,
   SlidersHorizontal,
-  Briefcase
+  Briefcase,
+  X,
+  UserPlus,
+  CircleHelp
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -26,6 +30,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 
 const KANBAN_COLUMNS = [
   { id: "oportunidade", title: "Oportunidade", count: 0, total: "R$ 0" },
@@ -45,6 +64,8 @@ const TABS = [
 export default function AtendimentosPage() {
   const [activeTab, setActiveTab] = useState("open")
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban")
+  const [isNewDealOpen, setIsNewDealOpen] = useState(false)
+  const [selectedStep, setSelectedStep] = useState(0)
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -74,9 +95,136 @@ export default function AtendimentosPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button className="btn-custom-red uppercase font-bold text-xs px-6">
-                novo atendimento
-              </Button>
+              <Dialog open={isNewDealOpen} onOpenChange={setIsNewDealOpen}>
+                <DialogTrigger asChild>
+                  <Button className="btn-custom-red uppercase font-bold text-xs px-6">
+                    novo atendimento
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl p-0 border-none overflow-hidden shadow-2xl">
+                  <DialogDescription className="sr-only">Formulário para criar um novo atendimento de venda</DialogDescription>
+                  <section className="card h-100 bg-white">
+                    <form id="add-deal-modal-form" className="custom-form d-flex flex-column">
+                      <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
+                        <DialogTitle className="text-lg font-bold">Adicionar Atendimento</DialogTitle>
+                        <button 
+                          type="button" 
+                          onClick={() => setIsNewDealOpen(false)}
+                          className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </header>
+
+                      <div className="p-8 space-y-6">
+                        <div className="grid grid-cols-1 gap-6">
+                          {/* Contato Field */}
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Contato</Label>
+                            <div className="flex gap-2">
+                              <div className="relative flex-1 group">
+                                <Input 
+                                  className="h-11 pl-4 pr-10 custom-border" 
+                                  placeholder="Procurar por nome, e-mail ou telefone"
+                                />
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                  <Search className="w-4 h-4 text-muted-foreground/40" />
+                                </div>
+                              </div>
+                              <Button 
+                                type="button" 
+                                variant="outline" 
+                                className="h-11 w-11 p-0 border-muted-foreground/20 hover:bg-muted"
+                              >
+                                <UserPlus className="w-5 h-5 text-accent" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="form-group space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">
+                                Nome do atendimento <span className="text-[10px] text-muted-foreground font-normal uppercase ml-1">(opcional)</span>
+                              </Label>
+                              <Input className="h-11 custom-border" placeholder="" />
+                            </div>
+                            <div className="form-group space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">
+                                Valor do negócio <span className="text-[10px] text-muted-foreground font-normal uppercase ml-1">(opcional)</span>
+                              </Label>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
+                                <Input className="h-11 pl-10 custom-border" placeholder="0,00" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Funil de vendas</Label>
+                            <Select defaultValue="geral">
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue placeholder="Escolha um funil" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="geral">Atendimento geral</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Steps Visual Indicator */}
+                          <div className="form-group space-y-3">
+                            <Label className="text-sm font-bold text-primary/80">Etapa do negócio</Label>
+                            <div className="flex items-center gap-1.5 py-2">
+                              {KANBAN_COLUMNS.map((column, idx) => (
+                                <button
+                                  key={column.id}
+                                  type="button"
+                                  onClick={() => setSelectedStep(idx)}
+                                  className={`h-4 flex-1 rounded-full transition-all duration-300 ${
+                                    idx === selectedStep 
+                                      ? "bg-accent shadow-sm ring-2 ring-accent/20" 
+                                      : "bg-muted hover:bg-muted-foreground/20"
+                                  }`}
+                                  title={column.title}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-xs font-bold text-accent uppercase tracking-wider">
+                              {KANBAN_COLUMNS[selectedStep].title}
+                            </p>
+                          </div>
+
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Responsável pelo atendimento</Label>
+                            <Select defaultValue="alexandre">
+                              <SelectTrigger className="h-11 custom-border">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="alexandre">Alexandre Mendonça</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <footer className="px-8 py-6 bg-muted/30 border-t flex items-center gap-3">
+                        <Button type="submit" className="btn-custom-red h-12 px-10 font-bold uppercase text-xs tracking-widest shadow-lg">
+                          Criar novo
+                        </Button>
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          onClick={() => setIsNewDealOpen(false)}
+                          className="h-12 px-6 font-bold uppercase text-xs text-muted-foreground hover:bg-muted"
+                        >
+                          Fechar
+                        </Button>
+                      </footer>
+                    </form>
+                  </section>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 max-w-2xl justify-end">
@@ -226,7 +374,7 @@ export default function AtendimentosPage() {
 
       {/* FAB Mobile */}
       <div className="fixed bottom-6 right-4 md:hidden z-50">
-        <Button className="w-14 h-14 rounded-full btn-custom-red shadow-2xl">
+        <Button onClick={() => setIsNewDealOpen(true)} className="w-14 h-14 rounded-full btn-custom-red shadow-2xl">
           <Plus className="w-8 h-8" />
         </Button>
       </div>
