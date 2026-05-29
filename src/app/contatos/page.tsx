@@ -21,7 +21,8 @@ import {
   List,
   ArrowUpDown,
   X,
-  Trash
+  Trash,
+  Plus
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -366,14 +367,12 @@ export default function ContactsDashboard() {
               </p>
             </div>
             
-            <Image
-              src="https://picsum.photos/seed/contacts-empty/600/400"
-              alt="Sem dados"
-              width={300}
-              height={200}
-              className="mt-4 grayscale opacity-60"
-              data-ai-hint="contacts empty"
-            />
+            <button 
+              onClick={() => setIsNewContactOpen(true)}
+              className="mt-4 w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center text-accent hover:bg-accent/10 transition-all group shadow-sm"
+            >
+              <Plus className="w-16 h-16 transition-transform group-hover:scale-110" />
+            </button>
           </div>
         </div>
       </main>
