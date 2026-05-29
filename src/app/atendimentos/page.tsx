@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -47,6 +47,7 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Textarea } from "@/components/ui/textarea"
 
 const KANBAN_COLUMNS = [
   { id: "oportunidade", title: "Oportunidade", count: 0, total: "R$ 0" },
@@ -63,8 +64,7 @@ const TABS = [
   { id: "all", label: "Todos", count: 0 },
 ]
 
-// Mock de contatos para simular a conexão
-const MOCK_CONTACTS = [
+const INITIAL_CONTACTS = [
   { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
   { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
   { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
@@ -76,6 +76,9 @@ export default function AtendimentosPage() {
   const [isNewDealOpen, setIsNewDealOpen] = useState(false)
   const [selectedStep, setSelectedStep] = useState(0)
 
+  // Estado global de contatos (simulado)
+  const [contacts, setContacts] = useState(INITIAL_CONTACTS)
+
   // Estados para busca de contato
   const [contactSearch, setContactSearch] = useState("")
   const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string } | null>(null)
@@ -84,24 +87,51 @@ export default function AtendimentosPage() {
   // Estados para novo contato
   const [isNewContactOpen, setIsNewContactOpen] = useState(false)
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
-  const [emails, setEmails] = useState([{ id: 1, value: "" }])
 
   const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
   const removePhone = (id: number) => {
     if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
   }
 
-  const addEmail = () => setEmails([...emails, { id: Date.now(), value: "" }])
-  const removeEmail = (id: number) => {
-    if (emails.length > 1) setEmails(emails.filter(p => p.id !== id))
-  }
-
   const filteredContacts = useMemo(() => {
-    if (!contactSearch) return MOCK_CONTACTS
-    return MOCK_CONTACTS.filter(c => 
+    if (!contactSearch) return contacts
+    return contacts.filter(c => 
       c.name.toLowerCase().includes(contactSearch.toLowerCase())
     )
-  }, [contactSearch])
+  }, [contactSearch, contacts])
+
+  const handleCreateContact = (e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.target as HTMLFormElement)
+    const name = formData.get('contact_name_on_modal') as string
+    const surname = formData.get('contact_surname_on_modal') as string
+    const fullName = `${name} ${surname}`.trim()
+    
+    const newContact = {
+      id: Date.now(),
+      name: fullName,
+      initials: name.substring(0, 1).toUpperCase() + (surname ? surname.substring(0, 1).toUpperCase() : ""),
+      type: (formData.get('contact_lead_on_modal') as any) || 'lead'
+    }
+
+    const updatedContacts = [newContact, ...contacts]
+    setContacts(updatedContacts)
+    
+    // Sincroniza com o localStorage para a outra página
+    localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
+    
+    setSelectedContact(newContact)
+    setIsNewContactOpen(false)
+    setContactSearch("")
+  }
+
+  // Carrega contatos do localStorage ao montar
+  useEffect(() => {
+    const saved = localStorage.getItem('crm_contacts')
+    if (saved) {
+      setContacts(JSON.parse(saved))
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -192,7 +222,7 @@ export default function AtendimentosPage() {
                                                 }}
                                                 className="w-full px-4 py-2 hover:bg-muted text-left flex items-center gap-3 transition-colors"
                                               >
-                                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white ${contact.type === 'lead' ? 'bg-orange-400' : 'bg-green-500'}`}>
+                                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white ${contact.type === 'client' ? 'bg-green-500' : 'bg-orange-400'}`}>
                                                   {contact.initials}
                                                 </div>
                                                 <span className="font-bold text-sm text-primary">{contact.name}</span>
@@ -473,7 +503,7 @@ export default function AtendimentosPage() {
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-none bg-transparent">
           <DialogDescription className="sr-only">Formulário para criar um novo contato</DialogDescription>
           <section className="card h-100 bg-white rounded-lg overflow-hidden shadow-2xl">
-            <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form">
+            <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form" onSubmit={handleCreateContact}>
               <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
                 <DialogTitle className="text-lg font-bold">Criar novo contato</DialogTitle>
                 <button 
@@ -489,19 +519,19 @@ export default function AtendimentosPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Nome</Label>
-                    <Input required className="h-11 custom-border" placeholder="Ex.: Roger" />
+                    <Input required name="contact_name_on_modal" className="h-11 custom-border" placeholder="Ex.: Roger" />
                   </div>
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Sobrenome <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Input className="h-11 custom-border" placeholder="Ex.: Silva" />
+                    <Input name="contact_surname_on_modal" className="h-11 custom-border" placeholder="Ex.: Silva" />
                   </div>
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Cargo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Input className="h-11 custom-border" placeholder="Ex.: Gerente" />
+                    <Input name="contact_post_on_modal" className="h-11 custom-border" placeholder="Ex.: Gerente" />
                   </div>
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Empresa <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Input className="h-11 custom-border" placeholder="Ex.: imobTrack" />
+                    <Input name="contact_company_on_modal" className="h-11 custom-border" placeholder="Ex.: imobTrack" />
                   </div>
 
                   <div className="col-span-full space-y-4">
@@ -542,35 +572,9 @@ export default function AtendimentosPage() {
                     </button>
                   </div>
 
-                  <div className="col-span-full space-y-4">
-                    <Label className="text-sm font-bold text-primary/80">E-mail</Label>
-                    {emails.map((email) => (
-                      <div key={email.id} className="flex gap-2">
-                        <Input className="h-11 custom-border flex-1" placeholder="Ex.: email@email.com" type="email" />
-                        <Button 
-                          type="button" 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-11 w-11 text-muted-foreground hover:text-destructive"
-                          onClick={() => removeEmail(email.id)}
-                          disabled={emails.length === 1}
-                        >
-                          <Trash className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
-                    <button 
-                      type="button" 
-                      onClick={addEmail}
-                      className="text-[10px] font-bold uppercase text-accent hover:underline flex items-center gap-1"
-                    >
-                      Adicionar e-mail
-                    </button>
-                  </div>
-
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Estágio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Select>
+                    <Select name="contact_lead_on_modal">
                       <SelectTrigger className="h-11 custom-border">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
@@ -584,7 +588,7 @@ export default function AtendimentosPage() {
                   </div>
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Tipo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Select>
+                    <Select name="contact_type_on_modal">
                       <SelectTrigger className="h-11 custom-border">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
@@ -602,7 +606,7 @@ export default function AtendimentosPage() {
 
                   <div className="form-group space-y-2">
                     <Label className="text-sm font-bold text-primary/80">Origem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                    <Select defaultValue="manual">
+                    <Select name="contact_origin_on_modal" defaultValue="manual">
                       <SelectTrigger className="h-11 custom-border">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>

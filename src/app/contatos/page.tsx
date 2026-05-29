@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,7 +46,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import Image from "next/image"
 
 const TABS = [
   { id: "all", label: "Todos", count: 0 },
@@ -59,16 +58,53 @@ const TABS = [
   { id: "contributor", label: "Colaboradores", count: 0 },
 ]
 
+const INITIAL_CONTACTS = [
+  { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
+  { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
+  { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
+]
+
 export default function ContactsDashboard() {
   const [activeTab, setActiveTab] = useState("all")
   const [isNewContactOpen, setIsNewContactOpen] = useState(false)
   
+  // Estado de contatos (sincronizado)
+  const [contacts, setContacts] = useState(INITIAL_CONTACTS)
+
   // Dynamic fields state
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
 
   const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
   const removePhone = (id: number) => {
     if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
+  }
+
+  // Carrega contatos do localStorage ao montar
+  useEffect(() => {
+    const saved = localStorage.getItem('crm_contacts')
+    if (saved) {
+      setContacts(JSON.parse(saved))
+    }
+  }, [])
+
+  const handleCreateContact = (e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.target as HTMLFormElement)
+    const name = formData.get('contact_name_on_modal') as string
+    const surname = formData.get('contact_surname_on_modal') as string
+    const fullName = `${name} ${surname}`.trim()
+    
+    const newContact = {
+      id: Date.now(),
+      name: fullName,
+      initials: name.substring(0, 1).toUpperCase() + (surname ? surname.substring(0, 1).toUpperCase() : ""),
+      type: (formData.get('contact_lead_on_modal') as any) || 'lead'
+    }
+
+    const updatedContacts = [newContact, ...contacts]
+    setContacts(updatedContacts)
+    localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
+    setIsNewContactOpen(false)
   }
 
   return (
@@ -94,7 +130,7 @@ export default function ContactsDashboard() {
                 <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-none bg-transparent">
                   <DialogDescription className="sr-only">Formulário para criar um novo contato</DialogDescription>
                   <section className="card h-100 bg-white rounded-lg overflow-hidden shadow-2xl">
-                    <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form">
+                    <form id="add-contact-modal-form" className="custom-form d-flex flex-column contact-form" onSubmit={handleCreateContact}>
                       <header className="px-6 py-4 bg-primary text-white flex items-center justify-between">
                         <DialogTitle className="text-lg font-bold">Criar novo contato</DialogTitle>
                         <button 
@@ -108,22 +144,26 @@ export default function ContactsDashboard() {
                       
                       <div className="p-8 space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="form-group">
-                            <Label className="col-form-label" htmlFor="contact_name_on_modal">Nome</Label>
-                            <Input required className="custom-border form-control h-11" id="contact_name_on_modal" placeholder="Ex.: Roger" />
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Nome</Label>
+                            <Input required name="contact_name_on_modal" className="h-11 custom-border" placeholder="Ex.: Roger" />
                           </div>
-                          <div className="form-group">
-                            <Label className="col-form-label" htmlFor="contact_surname_on_modal">Sobrenome<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Input className="custom-border form-control h-11" id="contact_surname_on_modal" placeholder="Ex.: Silva" />
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Sobrenome <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input name="contact_surname_on_modal" className="h-11 custom-border" placeholder="Ex.: Silva" />
                           </div>
-                          <div className="form-group">
-                            <Label className="col-form-label" htmlFor="contact_company_on_modal">Empresa<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Input className="custom-border form-control h-11" id="contact_company_on_modal" placeholder="Ex.: imobTrack" />
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Cargo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input name="contact_post_on_modal" className="h-11 custom-border" placeholder="Ex.: Gerente" />
+                          </div>
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Empresa <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Input name="contact_company_on_modal" className="h-11 custom-border" placeholder="Ex.: imobTrack" />
                           </div>
 
-                          <div className="col-sm-12 space-y-4">
-                            <Label className="col-form-label">Telefone</Label>
-                            {phones.map((phone, idx) => (
+                          <div className="col-span-full space-y-4">
+                            <Label className="text-sm font-bold text-primary/80">Telefone</Label>
+                            {phones.map((phone) => (
                               <div key={phone.id} className="flex gap-2">
                                 <div className="flex-1 flex gap-0">
                                   <Select defaultValue="+55">
@@ -159,9 +199,9 @@ export default function ContactsDashboard() {
                             </button>
                           </div>
 
-                          <div className="form-group">
-                            <Label className="col-form-label">Estágio<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Select>
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estágio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select name="contact_lead_on_modal">
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
@@ -173,9 +213,9 @@ export default function ContactsDashboard() {
                               </SelectContent>
                             </Select>
                           </div>
-                          <div className="form-group">
-                            <Label className="col-form-label">Tipo<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Select>
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Tipo <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select name="contact_type_on_modal">
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
@@ -191,9 +231,9 @@ export default function ContactsDashboard() {
                             </Select>
                           </div>
 
-                          <div className="form-group">
-                            <Label className="col-form-label">Origem<span className="optional font-normal text-[10px] text-muted-foreground uppercase ml-1">(opcional)</span></Label>
-                            <Select defaultValue="manual">
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Origem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Select name="contact_origin_on_modal" defaultValue="manual">
                               <SelectTrigger className="h-11 custom-border">
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
@@ -205,11 +245,11 @@ export default function ContactsDashboard() {
                               </SelectContent>
                             </Select>
                           </div>
-                          <div className="form-group">
-                            <Label className="col-form-label">Responsável</Label>
+                          <div className="form-group space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Responsável</Label>
                             <Select defaultValue="alexandre">
                               <SelectTrigger className="h-11 custom-border">
-                                <SelectValue />
+                                <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="alexandre">Alexandre Mendonça</SelectItem>
@@ -289,7 +329,7 @@ export default function ContactsDashboard() {
                 `}
               >
                 {tab.label}
-                <span className="ml-1 text-[10px] opacity-60">({tab.count})</span>
+                <span className="ml-1 text-[10px] opacity-60">({tab.id === 'all' ? contacts.length : 0})</span>
               </button>
             ))}
           </div>
@@ -301,7 +341,7 @@ export default function ContactsDashboard() {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border mr-2">
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-bold text-primary">0</span>
+                <span className="text-sm font-bold text-primary">{contacts.length > 0 ? 0 : 0}</span>
               </div>
 
               <div className="flex items-center gap-1">
@@ -320,7 +360,7 @@ export default function ContactsDashboard() {
               </div>
 
               <div className="ml-4 text-sm text-primary/60 font-medium hidden sm:block">
-                Sem contatos para exibir
+                {contacts.length === 0 ? "Sem contatos para exibir" : `Mostrando ${contacts.length} contatos`}
               </div>
             </div>
 
@@ -354,26 +394,42 @@ export default function ContactsDashboard() {
           </div>
         </div>
 
-        {/* Empty State */}
+        {/* Contacts List or Empty State */}
         <div className="px-4">
-          <div className="bg-white border rounded-xl p-12 text-center max-w-[1400px] mx-auto flex flex-col items-center gap-6">
-            <div className="max-w-2xl space-y-4">
-              <h2 className="text-3xl font-bold text-primary">
-                Você ainda não tem nenhum contato.{" "}
-                <span className="block sm:inline text-accent">Adicione alguns contatos!</span>
-              </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Quando você adiciona os seus contatos na imobTrack, mostramos a você ideias de como comercializar com mais inteligência.
-              </p>
+          {contacts.length === 0 ? (
+            <div className="bg-white border rounded-xl p-12 text-center max-w-[1400px] mx-auto flex flex-col items-center gap-6">
+              <div className="max-w-2xl space-y-4">
+                <h2 className="text-3xl font-bold text-primary">
+                  Você ainda não tem nenhum contato.{" "}
+                  <span className="block sm:inline text-accent">Adicione alguns contatos!</span>
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Quando você adiciona os seus contatos na imobTrack, mostramos a você ideias de como comercializar com mais inteligência.
+                </p>
+              </div>
+              
+              <button 
+                onClick={() => setIsNewContactOpen(true)}
+                className="mt-4 w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center text-accent hover:bg-accent/10 transition-all group shadow-sm"
+              >
+                <Plus className="w-16 h-16 transition-transform group-hover:scale-110" />
+              </button>
             </div>
-            
-            <button 
-              onClick={() => setIsNewContactOpen(true)}
-              className="mt-4 w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center text-accent hover:bg-accent/10 transition-all group shadow-sm"
-            >
-              <Plus className="w-16 h-16 transition-transform group-hover:scale-110" />
-            </button>
-          </div>
+          ) : (
+            <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {contacts.map((contact) => (
+                <div key={contact.id} className="bg-white border rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white ${contact.type === 'client' ? 'bg-green-500' : 'bg-orange-400'}`}>
+                    {contact.initials}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-primary">{contact.name}</h3>
+                    <p className="text-xs text-muted-foreground uppercase">{contact.type === 'lead' ? 'Lead' : 'Cliente'}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
