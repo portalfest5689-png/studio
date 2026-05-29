@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link"
@@ -18,9 +19,9 @@ export function CRMHeader() {
           <Image
             src="https://iili.io/C2y0h5Q.md.png"
             alt="imobTrack Logo"
-            width={160}
-            height={32}
-            className="h-8 w-auto object-contain"
+            width={200}
+            height={40}
+            className="h-10 w-auto object-contain"
             priority
           />
         </Link>
