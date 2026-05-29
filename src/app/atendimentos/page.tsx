@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Search,
-  HelpCircle,
   ChevronDown,
   Download,
   Trash2,
@@ -18,10 +17,6 @@ import {
   LayoutGrid,
   List,
   SlidersHorizontal,
-  FilterIcon,
-  Trophy,
-  XCircle,
-  Clock,
   Briefcase
 } from "lucide-react"
 import {
@@ -31,13 +26,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select"
 
 const KANBAN_COLUMNS = [
   { id: "oportunidade", title: "Oportunidade", count: 0, total: "R$ 0" },
@@ -241,24 +229,6 @@ export default function AtendimentosPage() {
         <Button className="w-14 h-14 rounded-full btn-custom-red shadow-2xl">
           <Plus className="w-8 h-8" />
         </Button>
-      </div>
-
-      {/* Bottom Kanban Actions (Fixed) */}
-      <div className="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-muted hidden md:flex items-center justify-center px-4 z-40">
-        <div className="max-w-[1400px] w-full grid grid-cols-4 gap-4">
-          <button className="flex items-center justify-center gap-2 py-2 rounded bg-muted/50 text-muted-foreground font-bold uppercase text-[10px] tracking-widest hover:bg-muted transition-colors">
-            <Trash2 className="w-3.5 h-3.5" /> deletar
-          </button>
-          <button className="flex items-center justify-center gap-2 py-2 rounded bg-destructive/10 text-destructive font-bold uppercase text-[10px] tracking-widest hover:bg-destructive/20 transition-colors">
-            <XCircle className="w-3.5 h-3.5" /> perdido
-          </button>
-          <button className="flex items-center justify-center gap-2 py-2 rounded bg-green-100 text-green-700 font-bold uppercase text-[10px] tracking-widest hover:bg-green-200 transition-colors">
-            <Trophy className="w-3.5 h-3.5" /> ganho
-          </button>
-          <button className="flex items-center justify-center gap-2 py-2 rounded bg-primary/10 text-primary font-bold uppercase text-[10px] tracking-widest hover:bg-primary/20 transition-colors">
-            <Clock className="w-3.5 h-3.5" /> outro funil
-          </button>
-        </div>
       </div>
     </div>
   )
