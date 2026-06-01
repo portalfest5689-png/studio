@@ -33,7 +33,6 @@ export function CRMHeader() {
             { label: "Imóveis", href: "/imoveis" },
             { label: "Contatos", href: "/contatos" },
             { label: "Atendimentos", href: "/atendimentos" },
-            { label: "Atividades", href: "/atividades" },
           ].map((item) => {
             const isActive = pathname.startsWith(item.href) || (item.href === "/imoveis" && pathname === "/")
             return (
@@ -47,29 +46,6 @@ export function CRMHeader() {
             )
           })}
           
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors focus:outline-none">
-              Portais <ChevronDown className="w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem className="text-center justify-center p-4 text-muted-foreground text-xs italic">
-                Sem portais ativos
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-accent justify-center text-xs font-bold uppercase">
-                Ver integrações
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors focus:outline-none">
-              Site <ChevronDown className="w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem>Editor de Site</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <Link href="/relatorios" className="px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors">
             Relatórios
           </Link>
