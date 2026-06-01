@@ -75,13 +75,14 @@ export default function AtendimentosPage() {
   const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban")
   const [isNewDealOpen, setIsNewDealOpen] = useState(false)
   const [selectedStep, setSelectedStep] = useState(0)
+  const [dealValue, setDealValue] = useState("")
 
   // Estado global de contatos (simulado)
   const [contacts, setContacts] = useState(INITIAL_CONTACTS)
 
   // Estados para busca de contato
   const [contactSearch, setContactSearch] = useState("")
-  const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string } | null>(null)
+  const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string; type: string } | null>(null)
   const [isContactPopoverOpen, setIsContactPopoverOpen] = useState(false)
 
   // Estados para novo contato
@@ -132,6 +133,12 @@ export default function AtendimentosPage() {
       setContacts(JSON.parse(saved))
     }
   }, [])
+
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Permite apenas números, vírgulas e pontos
+    const value = e.target.value.replace(/[^0-9,.]/g, '')
+    setDealValue(value)
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -184,7 +191,7 @@ export default function AtendimentosPage() {
 
                       <div className="p-8 space-y-6">
                         <div className="grid grid-cols-1 gap-6">
-                          {/* Contato Field Replicado do Modelo */}
+                          {/* Contato Field */}
                           <div className="form-group space-y-2">
                             <Label className="text-sm font-bold text-primary/80">Contato</Label>
                             <div className="flex gap-2">
@@ -280,7 +287,12 @@ export default function AtendimentosPage() {
                               </Label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/60 font-bold text-xs">R$</div>
-                                <Input className="h-11 pl-10 custom-border" placeholder="0,00" />
+                                <Input 
+                                  className="h-11 pl-10 custom-border" 
+                                  placeholder="0,00"
+                                  value={dealValue}
+                                  onChange={handleValueChange}
+                                />
                               </div>
                             </div>
                           </div>
