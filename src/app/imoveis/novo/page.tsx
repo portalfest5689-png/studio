@@ -417,132 +417,135 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 3 && (
-                <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <section className="space-y-8">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                      <FileText className="w-4 h-4" />Dados principais do imóvel
+                <section className="space-y-8 pt-8 border-t animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-4xl mx-auto">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                    <FileText className="w-4 h-4" />Dados principais do imóvel
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Quartos</Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        type="number" 
+                        value={formData.bedrooms} 
+                        onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} 
+                      />
                     </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Quartos</Label>
-                        <Input 
-                          className="h-11" 
-                          type="number" 
-                          value={formData.bedrooms} 
-                          onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          type="number" 
-                          value={formData.livingRooms} 
-                          onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          type="number" 
-                          value={formData.suites} 
-                          onChange={(e) => setFormData({...formData, suites: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
-                        <Input 
-                          className="h-11" 
-                          type="number" 
-                          value={formData.bathrooms} 
-                          onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          type="number" 
-                          value={formData.parkingSpaces} 
-                          onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.usefulArea} 
-                          onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.totalArea} 
-                          onChange={(e) => setFormData({...formData, totalArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.builtArea} 
-                          onChange={(e) => setFormData({...formData, builtArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.terrainWidth} 
-                          onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.terrainLength} 
-                          onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} 
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        type="number" 
+                        value={formData.livingRooms} 
+                        onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} 
+                      />
                     </div>
-
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="more-info" className="border-none">
-                        <AccordionTrigger className="hover:no-underline py-2">
-                          <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                            <Plus className="w-4 h-4" />Adicionar outras medidas e informações
-                          </span>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4">
-                          <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
-                            Funcionalidade adicional para medidas específicas será liberada na próxima versão.
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </section>
-                </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        type="number" 
+                        value={formData.suites} 
+                        onChange={(e) => setFormData({...formData, suites: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Banheiros</Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        type="number" 
+                        value={formData.bathrooms} 
+                        onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        type="number" 
+                        value={formData.parkingSpaces} 
+                        onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        value={formData.usefulArea} 
+                        onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        placeholder="0" 
+                        value={formData.totalArea} 
+                        onChange={(e) => setFormData({...formData, totalArea: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        value={formData.builtArea} 
+                        onChange={(e) => setFormData({...formData, builtArea: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        value={formData.terrainWidth} 
+                        onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                        Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                      </Label>
+                      <Input 
+                        className="h-11" 
+                        value={formData.terrainLength} 
+                        onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} 
+                      />
+                    </div>
+                  </div>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="more-info" className="border-none">
+                      <AccordionTrigger className="hover:no-underline py-2">
+                        <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                          <Plus className="w-4 h-4" />Adicionar outras medidas e informações
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-4">
+                        <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
+                          Funcionalidade adicional para medidas específicas será liberada na próxima versão.
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </section>
               )}
 
               {currentStep === 4 && (
