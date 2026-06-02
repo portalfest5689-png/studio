@@ -55,10 +55,20 @@ const PROPERTY_TYPES = [
 const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
   casa: [
     { value: "padrao", label: "Padrão" },
-    { value: "casa-condominio", label: "Casa de Condomínio" },
-    { value: "sobrado", label: "Sobrado" },
     { value: "bangalo", label: "Bangalô" },
+    { value: "cabana", label: "Cabana" },
+    { value: "casa-canadense", label: "Casa Canadense" },
+    { value: "casa-container", label: "Casa Container" },
+    { value: "casa-condominio", label: "Casa de Condomínio" },
+    { value: "casa-geminada", label: "Casa Geminada" },
+    { value: "chale", label: "Chalé" },
     { value: "edicula", label: "Edícula" },
+    { value: "sobrado-duplex", label: "Sobrado/Duplex" },
+    { value: "sobrado-triplex", label: "Sobrado/Triplex" },
+    { value: "sobreposta-alta", label: "Sobreposta Alta" },
+    { value: "sobreposta-baixa", label: "Sobreposta Baixa" },
+    { value: "tiny-house", label: "Tiny House" },
+    { value: "townhouse", label: "Townhouse" },
   ],
   apartamento: [
     { value: "padrao", label: "Padrão" },
@@ -268,28 +278,13 @@ export default function NewPropertyWizard() {
                           style={{ backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=-23.5505,-46.6333&zoom=15&size=1000x1000&key=AIzaSyDgw2dd2JM2_SEHDJiRz8-rHuezWsJ0-Go')" }} 
                         />
                         
-                        <div className="positional-div top-right-div absolute top-4 right-4 z-20">
-                          <span className="bg-green-500 text-white text-[10px] font-bold px-3 py-1.5 rounded uppercase tracking-wider flex items-center gap-1 shadow-lg">
-                            <ThumbsUp className="w-3 h-3" /> Localização confirmada
-                          </span>
-                        </div>
-
-                        <div className="positional-div bottom-left-div absolute bottom-4 left-4 z-20 flex gap-2">
-                          <Button size="sm" className="bg-[#334659] hover:bg-[#243447] text-white text-[10px] font-bold uppercase tracking-widest px-4">Confirmar</Button>
-                          <Button size="sm" variant="outline" className="border-[#334659] text-[#334659] hover:bg-[#334659]/5 text-[10px] font-bold uppercase tracking-widest px-4">Resetar</Button>
-                        </div>
-
-                        <div className="absolute inset-0 flex items-center justify-center p-8 z-10">
-                          <button className="bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" type="button">
+                        <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
+                          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" type="button">
                             Confirme a localização no mapa
                           </button>
                         </div>
 
-                        <div className="positional-div centered-div centered-marker-div absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                          <div className="animate-bounce">
-                            <MapPin className="w-10 h-10 text-destructive fill-destructive/20" />
-                          </div>
-                        </div>
+                        <div id="map"></div>
                       </div>
                     </div>
                   </div>
