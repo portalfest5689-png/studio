@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { 
   Home, 
   Building2, 
@@ -25,7 +26,10 @@ import {
   Info,
   DollarSign,
   Globe,
-  FolderOpen
+  FolderOpen,
+  Search,
+  Plus,
+  ChevronDown
 } from "lucide-react"
 import Link from "next/link"
 
@@ -110,10 +114,19 @@ export default function NewPropertyWizard() {
     city: "",
     state: "",
     zipCode: "",
+    allotment: "",
+    tower: "",
+    complement: "",
     bedrooms: "0",
     bathrooms: "0",
+    suites: "0",
     parkingSpaces: "0",
     usefulArea: "0",
+    livingRooms: "0",
+    totalArea: "0",
+    builtArea: "0",
+    terrainWidth: "",
+    terrainLength: "",
     sellPrice: "0,00",
     condoFee: "0,00",
     iptu: "0,00",
@@ -250,40 +263,152 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 2 && (
-                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex flex-col md:flex-row gap-12">
-                    <div className="flex-1 space-y-6">
-                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapPin className="w-4 h-4" />Onde fica o imóvel?</div>
-                      <div className="space-y-4">
+                <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="space-y-8">
+                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                        <MapPin className="w-4 h-4" />Onde fica o imóvel?
+                      </div>
+                      
+                      <div className="space-y-6">
                         <div className="space-y-2">
-                          <Label>Endereço</Label>
-                          <Input placeholder="Rua..." value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} />
+                          <Label className="text-sm font-bold text-primary/80">Selecione o endereço</Label>
+                          <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/40">
+                              <Search className="w-4 h-4" />
+                            </div>
+                            <Input 
+                              className="h-11 pl-10 border-destructive shadow-sm" 
+                              placeholder="Digite o nome da rua e número" 
+                              value={formData.address}
+                              onChange={(e) => setFormData({...formData, address: e.target.value})}
+                            />
+                            <p className="text-[11px] text-destructive font-bold mt-1.5 px-1">Esse campo é obrigatório.</p>
+                          </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2"><Label>Número</Label><Input placeholder="123" value={formData.number} onChange={(e) => setFormData({...formData, number: e.target.value})} /></div>
-                          <div className="space-y-2"><Label>Bairro</Label><Input placeholder="Centro" value={formData.neighborhood} onChange={(e) => setFormData({...formData, neighborhood: e.target.value})} /></div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">
+                              Loteamento / Cond / Emp <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                            </Label>
+                            <Input 
+                              className="h-11" 
+                              placeholder="Selecione"
+                              value={formData.allotment}
+                              onChange={(e) => setFormData({...formData, allotment: e.target.value})}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">
+                              Torre/Bloco <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                            </Label>
+                            <Input 
+                              className="h-11" 
+                              placeholder="ex.: Bloco A"
+                              value={formData.tower}
+                              onChange={(e) => setFormData({...formData, tower: e.target.value})}
+                            />
+                          </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2"><Label>Cidade</Label><Input placeholder="São Paulo" value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} /></div>
-                          <div className="space-y-2"><Label>Estado</Label><Input placeholder="SP" value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} /></div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Número/Lote</Label>
+                            <div className="space-y-1.5">
+                              <Input 
+                                className="h-11 border-destructive shadow-sm" 
+                                placeholder="ex.: 980" 
+                                value={formData.number}
+                                onChange={(e) => setFormData({...formData, number: e.target.value})}
+                              />
+                              <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">
+                              Complemento <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                            </Label>
+                            <Input 
+                              className="h-11" 
+                              placeholder="ex.: Apto 42"
+                              value={formData.complement}
+                              onChange={(e) => setFormData({...formData, complement: e.target.value})}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-[100px_1fr] gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Estado</Label>
+                            <Select value={formData.state} onValueChange={(v) => setFormData({...formData, state: v})}>
+                              <SelectTrigger className="h-11"><SelectValue placeholder="UF" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="SP">SP</SelectItem>
+                                <SelectItem value="RJ">RJ</SelectItem>
+                                <SelectItem value="MG">MG</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Cidade</Label>
+                            <div className="space-y-1.5">
+                              <Input 
+                                className="h-11 border-destructive shadow-sm" 
+                                placeholder="Digite o nome da cidade" 
+                                value={formData.city}
+                                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                              />
+                              <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Bairro</Label>
+                          <div className="space-y-1.5">
+                            <Input 
+                              className="h-11 border-destructive shadow-sm" 
+                              placeholder="Digite o nome do bairro" 
+                              value={formData.neighborhood}
+                              onChange={(e) => setFormData({...formData, neighborhood: e.target.value})}
+                            />
+                            <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">CEP</Label>
+                          <div className="space-y-1.5">
+                            <Input 
+                              className="h-11 border-destructive shadow-sm" 
+                              placeholder="00000-000" 
+                              value={formData.zipCode}
+                              onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
+                            />
+                            <p className="text-[11px] text-destructive font-bold">Esse campo é obrigatório.</p>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex-1 space-y-6">
-                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapIcon className="w-4 h-4" />Localização no mapa</div>
+                    <div className="space-y-8">
+                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                        <MapIcon className="w-4 h-4" />Localização no mapa
+                      </div>
                       <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden">
                         <div 
                           className="map-background absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 grayscale" 
                           style={{ backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=-23.5505,-46.6333&zoom=15&size=1000x1000&key=AIzaSyDgw2dd2JM2_SEHDJiRz8-rHuezWsJ0-Go')" }} 
                         />
-                        
                         <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
-                          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" type="button">
+                          <button 
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
+                            type="button"
+                          >
                             Confirme a localização no mapa
                           </button>
                         </div>
-
                         <div id="map"></div>
                       </div>
                     </div>
@@ -292,14 +417,131 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 3 && (
-                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><FileText className="w-4 h-4" />Dados principais</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2"><Label>Quartos</Label><Input type="number" value={formData.bedrooms} onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Banheiros</Label><Input type="number" value={formData.bathrooms} onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Vagas de Garagem</Label><Input type="number" value={formData.parkingSpaces} onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Área Útil (m²)</Label><Input type="number" value={formData.usefulArea} onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} /></div>
-                  </div>
+                <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <section className="space-y-8">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <FileText className="w-4 h-4" />Dados principais do imóvel
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Quartos</Label>
+                        <Input 
+                          className="h-11" 
+                          type="number" 
+                          value={formData.bedrooms} 
+                          onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          type="number" 
+                          value={formData.livingRooms} 
+                          onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          type="number" 
+                          value={formData.suites} 
+                          onChange={(e) => setFormData({...formData, suites: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
+                        <Input 
+                          className="h-11" 
+                          type="number" 
+                          value={formData.bathrooms} 
+                          onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          type="number" 
+                          value={formData.parkingSpaces} 
+                          onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          value={formData.usefulArea} 
+                          onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          value={formData.totalArea} 
+                          onChange={(e) => setFormData({...formData, totalArea: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          value={formData.builtArea} 
+                          onChange={(e) => setFormData({...formData, builtArea: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          value={formData.terrainWidth} 
+                          onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">
+                          Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
+                        </Label>
+                        <Input 
+                          className="h-11" 
+                          value={formData.terrainLength} 
+                          onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} 
+                        />
+                      </div>
+                    </div>
+
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="more-info" className="border-none">
+                        <AccordionTrigger className="hover:no-underline py-2">
+                          <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                            <Plus className="w-4 h-4" />Adicionar outras medidas e informações
+                          </span>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4">
+                          <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
+                            Funcionalidade adicional para medidas específicas será liberada na próxima versão.
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </section>
                 </div>
               )}
 
