@@ -406,14 +406,84 @@ export default function NewPropertyWizard() {
                             <MapIcon className="w-4 h-4" />
                             Localização no mapa
                           </div>
-                          <div className="relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden">
-                            <div className={`absolute inset-0 bg-cover bg-center transition-all duration-700 ${showMap ? 'opacity-100' : 'opacity-40 grayscale'}`} style={{ backgroundImage: "url('https://picsum.photos/seed/map-prime/1000/1000')" }} />
-                            {mapConfirmed && (<div className="absolute top-4 right-4 z-20"><span className="bg-[#4CAF50] text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] font-bold uppercase shadow-lg border border-white/20"><ThumbsUp className="w-3.5 h-3.5" />Localização confirmada</span></div>)}
-                            {showMap && (<div className="absolute bottom-4 left-4 z-20 flex gap-2">
-                                {!mapConfirmed ? (<><Button size="sm" onClick={() => setMapConfirmed(true)} className="bg-[#334659] text-white font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg">Confirmar</Button><Button size="sm" variant="outline" onClick={() => { setShowMap(false); setMapConfirmed(false); }} className="bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded">Resetar</Button></>) : (<Button size="sm" variant="outline" onClick={() => setMapConfirmed(false)} className="bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded">Alterar</Button>)}
-                              </div>)}
-                            {!showMap && (<div className="absolute inset-0 flex items-center justify-center p-8 z-20"><Button onClick={() => setShowMap(true)} className="bg-[#334659] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded">Confirme a localização no mapa</Button></div>)}
-                            {showMap && (<div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 mb-8"><div className="relative animate-bounce"><div className="w-10 h-10 bg-primary rounded-full rounded-bl-none rotate-45 border-2 border-white shadow-xl flex items-center justify-center"><div className="w-3 h-3 bg-white rounded-full -rotate-45" /></div></div></div>)}
+                          
+                          <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden group">
+                            {/* Map Background */}
+                            <div 
+                              className={`map-background absolute inset-0 bg-cover bg-center transition-all duration-700 ${showMap ? 'opacity-100' : 'opacity-40 grayscale'}`} 
+                              style={{ backgroundImage: "url('https://picsum.photos/seed/map-prime/1000/1000')" }} 
+                            />
+
+                            {/* Top Right Badge */}
+                            <div className="positional-div top-right-div absolute top-4 right-4 z-20">
+                              {mapConfirmed && (
+                                <span className="badge message-badge positive-badge bg-[#4CAF50] text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] font-bold uppercase shadow-lg border border-white/20">
+                                  <ThumbsUp className="w-3.5 h-3.5" />
+                                  Localização confirmada
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Bottom Left Actions */}
+                            <div className="positional-div bottom-left-div absolute bottom-4 left-4 z-20">
+                              {showMap && !mapConfirmed && (
+                                <div className="confirm-wrapper flex gap-2">
+                                  <Button 
+                                    type="button" 
+                                    onClick={() => setMapConfirmed(true)} 
+                                    className="btn btn-gray-dark bg-[#334659] text-white font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg hover:bg-[#2a3a47]"
+                                  >
+                                    Confirmar
+                                  </Button>
+                                  <Button 
+                                    type="button" 
+                                    variant="outline" 
+                                    onClick={() => { setShowMap(false); setMapConfirmed(false); }} 
+                                    className="btn btn-outline-gray-dark bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
+                                  >
+                                    Resetar
+                                  </Button>
+                                </div>
+                              )}
+                              {showMap && mapConfirmed && (
+                                <div className="change-wrapper">
+                                  <Button 
+                                    type="button" 
+                                    variant="outline" 
+                                    onClick={() => setMapConfirmed(false)} 
+                                    className="btn btn-outline-gray-dark bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
+                                  >
+                                    Alterar
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Center Button */}
+                            {!showMap && (
+                              <div className="positional-div centered-div centered-button-div absolute inset-0 flex items-center justify-center p-8 z-20">
+                                <div className="show-wrapper">
+                                  <Button 
+                                    type="button" 
+                                    onClick={() => setShowMap(true)} 
+                                    className="btn btn-gray-dark bg-[#334659] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded hover:bg-[#2a3a47]"
+                                  >
+                                    Confirme a localização no mapa
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Center Marker */}
+                            {showMap && (
+                              <div className="positional-div centered-div centered-marker-div absolute inset-0 flex items-center justify-center pointer-events-none z-10 mb-8">
+                                <span className="centered-marker">
+                                  <MapPin className="w-10 h-10 text-primary fill-primary/20 animate-bounce" />
+                                </span>
+                              </div>
+                            )}
+                            
+                            <div id="map"></div>
                           </div>
                         </div>
                       </div>
