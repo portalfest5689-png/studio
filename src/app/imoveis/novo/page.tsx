@@ -6,11 +6,12 @@ import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 import { 
   Home, 
   Building2, 
@@ -31,7 +32,10 @@ import {
   Search,
   Plus,
   ChevronDown,
-  List as ListIcon
+  List as ListIcon,
+  UserPlus,
+  Key,
+  EyeOff
 } from "lucide-react"
 import Link from "next/link"
 
@@ -85,24 +89,7 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
     { value: "studio", label: "Studio" },
     { value: "duplex", label: "Duplex" },
   ],
-  area: [
-    { value: "comercial", label: "Comercial" },
-    { value: "industrial", label: "Industrial" },
-    { value: "residencial", label: "Residencial" },
-  ],
-  "terreno-lote": [
-    { value: "loteamento", label: "Loteamento" },
-    { value: "condominio", label: "Condomínio" },
-    { value: "rua-publica", label: "Rua Pública" },
-  ],
-  chacara: [
-    { value: "lazer", label: "Lazer" },
-    { value: "eventos", label: "Eventos" },
-    { value: "producao", label: "Produção" },
-  ],
 }
-
-const DEFAULT_CATEGORIES = [{ value: "padrao", label: "Padrão" }]
 
 const CHARACTERISTICS_CATEGORIES = [
   {
@@ -193,10 +180,27 @@ export default function NewPropertyWizard() {
     sellPrice: "0,00",
     condoFee: "0,00",
     iptu: "0,00",
-    buildingState: "Pronto para morar",
+    buildingState: "",
     isAdvertised: true,
     responsible: "Alexandre Mendonça",
-    characteristics: [] as string[]
+    characteristics: [] as string[],
+    // Novos campos da Etapa 5
+    hasKeys: "",
+    keysLocation: "",
+    keysInfo: "",
+    propertyStatus: "",
+    reformState: "",
+    occupation: "",
+    iptuMode: "monthly",
+    condoMode: "not_exempt",
+    iptuNumber: "",
+    incraNumber: "",
+    deedStatus: "",
+    registrationNumber: "",
+    notaryOffice: "",
+    electricityNumber: "",
+    waterNumber: "",
+    internalObservations: ""
   })
 
   const handleCharacteristicChange = (item: string) => {
@@ -260,7 +264,7 @@ export default function NewPropertyWizard() {
 
         <div className="max-w-6xl mx-auto px-4 mt-8">
           <Card className="border-none shadow-sm">
-            <CardContent className="pt-8 space-y-12">
+            <CardContent className="pt-8">
               
               {currentStep === 1 && (
                 <div className="max-w-2xl mx-auto w-full space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -324,7 +328,7 @@ export default function NewPropertyWizard() {
                         >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
-                            {(CATEGORIES_MAP[formData.propertyType] || DEFAULT_CATEGORIES).map((cat) => (
+                            {(CATEGORIES_MAP[formData.propertyType] || [{ value: "padrao", label: "Padrão" }]).map((cat) => (
                               <SelectItem key={cat.value} value={cat.label}>{cat.label}</SelectItem>
                             ))}
                           </SelectContent>
@@ -336,7 +340,7 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 2 && (
-                <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                       <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
@@ -490,13 +494,13 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 3 && (
-                <section className="space-y-8 pt-8 border-t animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-4xl mx-auto">
+                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-4xl mx-auto">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                     <FileText className="w-4 h-4" />Dados principais do imóvel
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Quartos</Label>
+                      <Label className="text-sm font-bold text-primary/80">Quartos</Label>
                       <Input 
                         className="h-11" 
                         placeholder="0" 
@@ -506,7 +510,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -518,7 +522,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -530,7 +534,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Banheiros</Label>
+                      <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
                       <Input 
                         className="h-11" 
                         placeholder="0" 
@@ -540,7 +544,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -552,7 +556,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -563,7 +567,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -574,7 +578,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -584,7 +588,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -594,7 +598,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
+                      <Label className="text-sm font-bold text-primary/80">
                         Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -622,7 +626,7 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 4 && (
-                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-6xl mx-auto">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                     <ListIcon className="w-4 h-4" />Quais são as características?
                   </div>
@@ -652,41 +656,296 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 5 && (
-                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Info className="w-4 h-4" />Informações detalhadas</div>
+                <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  {/* Proprietários */}
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <UserPlus className="w-4 h-4" />Informe o(s) dono(s) do imóvel
+                    </div>
+                    <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs px-6 h-12">
+                      <Plus className="w-4 h-4 mr-2" /> Adicionar proprietário
+                    </Button>
+                  </section>
+
+                  {/* Controle de Chaves */}
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Key className="w-4 h-4" />Controle de Chaves
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Chave Disponível? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.hasKeys} onValueChange={(v) => setFormData({...formData, hasKeys: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Local da Chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.keysLocation} onValueChange={(v) => setFormData({...formData, keysLocation: v})} disabled={formData.hasKeys !== "Sim"}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Filial">Filial</SelectItem>
+                            <SelectItem value="Imobiliária">Imobiliária</SelectItem>
+                            <SelectItem value="Outro">Outro</SelectItem>
+                            <SelectItem value="Proprietário(a)">Proprietário(a)</SelectItem>
+                            <SelectGroup>
+                              <SelectLabel>Corretores</SelectLabel>
+                              <SelectItem value="XANDAO">XANDAO</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Informações extras sobre a chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Textarea 
+                        rows={5} 
+                        className="custom-border no-resize" 
+                        value={formData.keysInfo} 
+                        onChange={(e) => setFormData({...formData, keysInfo: e.target.value})} 
+                      />
+                    </div>
+                  </section>
+
+                  {/* Informações detalhadas */}
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Info className="w-4 h-4" />Informações detalhadas
+                    </div>
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.propertyStatus} onValueChange={(v) => setFormData({...formData, propertyStatus: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Novo">Novo</SelectItem>
+                            <SelectItem value="Usado">Usado</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.reformState} onValueChange={(v) => setFormData({...formData, reformState: v})} disabled={formData.propertyStatus !== "Usado"}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Reformado">Reformado</SelectItem>
+                            <SelectItem value="Para Reformar">Para Reformar</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Pronto para morar">Pronto para morar</SelectItem>
+                            <SelectItem value="Em construção">Em construção</SelectItem>
+                            <SelectItem value="Na planta">Na planta</SelectItem>
+                            <SelectItem value="Lançamento">Lançamento</SelectItem>
+                            <SelectItem value="Breve lançamento">Breve lançamento</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.occupation} onValueChange={(v) => setFormData({...formData, occupation: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Vago">Vago</SelectItem>
+                            <SelectItem value="Ocupado com Proprietário">Ocupado com Proprietário</SelectItem>
+                            <SelectItem value="Ocupado com Inquilino">Ocupado com Inquilino</SelectItem>
+                            <SelectItem value="Ocupado (Outros)">Ocupado (Outros)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
+                        <div className="flex gap-2">
+                          {['monthly', 'annual', 'exempt'].map((mode) => (
+                            <Button 
+                              key={mode}
+                              type="button"
+                              variant={formData.iptuMode === mode ? "default" : "outline"}
+                              className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.iptuMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`}
+                              onClick={() => setFormData({...formData, iptuMode: mode})}
+                            >
+                              {mode === 'monthly' ? 'Mensal' : mode === 'annual' ? 'Anual' : 'Isento'}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
+                          <Input 
+                            className="h-11 pl-10" 
+                            placeholder="0" 
+                            value={formData.iptu} 
+                            onChange={(e) => setFormData({...formData, iptu: e.target.value})} 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
+                        <div className="flex gap-2">
+                          {['not_exempt', 'exempt'].map((mode) => (
+                            <Button 
+                              key={mode}
+                              type="button"
+                              variant={formData.condoMode === mode ? "default" : "outline"}
+                              className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.condoMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`}
+                              onClick={() => setFormData({...formData, condoMode: mode})}
+                            >
+                              {mode === 'not_exempt' ? 'Não Isento' : 'Isento'}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
+                          <Input 
+                            className="h-11 pl-10" 
+                            placeholder="0" 
+                            value={formData.condoFee} 
+                            onChange={(e) => setFormData({...formData, condoFee: e.target.value})} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Informações confidenciais */}
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <EyeOff className="w-4 h-4" />Informações confidenciais
+                    </div>
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">IPTU Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11" 
+                          placeholder="01.1.123.1234.0001" 
+                          value={formData.iptuNumber}
+                          onChange={(e) => setFormData({...formData, iptuNumber: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">CCIR Nº (INCRA) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11" 
+                          placeholder="011.121.458.745-2" 
+                          value={formData.incraNumber}
+                          onChange={(e) => setFormData({...formData, incraNumber: e.target.value})}
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Situação da Escritura <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <Select value={formData.deedStatus} onValueChange={(v) => setFormData({...formData, deedStatus: v})}>
+                            <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Contrato sem procuração">Contrato sem procuração</SelectItem>
+                              <SelectItem value="Contrato com procuração">Contrato com procuração</SelectItem>
+                              <SelectItem value="Alienada">Alienada</SelectItem>
+                              <SelectItem value="Definitiva">Definitiva</SelectItem>
+                              <SelectItem value="Inventário">Inventário</SelectItem>
+                              <SelectItem value="Laudêmio">Laudêmio</SelectItem>
+                              <SelectItem value="Posse">Posse</SelectItem>
+                              <SelectItem value="Regularizando">Regularizando</SelectItem>
+                              <SelectItem value="Sem averbação da Construtora">Sem averbação da Construtora</SelectItem>
+                              <SelectItem value="Sem Escritura">Sem Escritura</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Matrícula Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <Input 
+                            className="h-11" 
+                            placeholder="0" 
+                            value={formData.registrationNumber}
+                            onChange={(e) => setFormData({...formData, registrationNumber: e.target.value})}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Cartório <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11" 
+                          placeholder="ex: Registrado no Cartório Shoji, no Boqueirão" 
+                          value={formData.notaryOffice}
+                          onChange={(e) => setFormData({...formData, notaryOffice: e.target.value})}
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Energia Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <Input 
+                            className="h-11" 
+                            placeholder="0" 
+                            value={formData.electricityNumber}
+                            onChange={(e) => setFormData({...formData, electricityNumber: e.target.value})}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-sm font-bold text-primary/80">Água Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                          <Input 
+                            className="h-11" 
+                            placeholder="0" 
+                            value={formData.waterNumber}
+                            onChange={(e) => setFormData({...formData, waterNumber: e.target.value})}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Textarea 
+                          rows={5} 
+                          className="custom-border no-resize" 
+                          placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." 
+                          value={formData.internalObservations}
+                          onChange={(e) => setFormData({...formData, internalObservations: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              )}
+
+              {currentStep === 6 && (
+                <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><DollarSign className="w-4 h-4" />Valores</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                      <Label>Estágio da Obra</Label>
-                      <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Pronto para morar">Pronto para morar</SelectItem>
-                          <SelectItem value="Em construção">Em construção</SelectItem>
-                          <SelectItem value="Na planta">Na planta</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label>Valor de Venda</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
+                        <Input className="pl-10" placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} />
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {currentStep === 6 && (
-                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><DollarSign className="w-4 h-4" />Valores</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2"><Label>Valor de Venda</Label><Input placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Condomínio</Label><Input placeholder="0,00" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>IPTU</Label><Input placeholder="0,00" value={formData.iptu} onChange={(e) => setFormData({...formData, iptu: e.target.value})} /></div>
-                  </div>
-                </div>
-              )}
-
               {currentStep === 7 && (
-                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Globe className="w-4 h-4" />Divulgação</div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 p-6 bg-muted/20 rounded-xl border">
                     <Switch checked={formData.isAdvertised} onCheckedChange={(v) => setFormData({...formData, isAdvertised: v})} />
-                    <Label className="font-bold">Anunciar no site?</Label>
+                    <Label className="font-bold text-primary">Anunciar no site?</Label>
                   </div>
                 </div>
               )}
@@ -700,7 +959,7 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep < 8 && (
-                <div className="pt-8 border-t flex items-center justify-between">
+                <div className="mt-12 pt-8 border-t flex items-center justify-between">
                   <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1} className="text-muted-foreground font-bold uppercase text-xs"><ArrowLeft className="w-4 h-4 mr-2" />Voltar</Button>
                   <Button onClick={handleNext} className="btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">Continuar<ArrowRight className="w-4 h-4 ml-2" /></Button>
                 </div>
