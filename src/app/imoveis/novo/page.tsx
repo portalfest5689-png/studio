@@ -403,22 +403,33 @@ export default function NewPropertyWizard() {
                           </div>
                         </div>
 
-                        <div className={`map-container ${!showMap ? 'map-not-initiated' : ''} map-container-absolute space-y-4`}>
-                          <div className="row">
-                            <div className="col-sm-12 title-row mt-0">
-                              <h3 className="text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 mb-4">
-                                <MapIcon className="w-4 h-4" />
-                                Localização no mapa
-                              </h3>
+                        <div className="space-y-8">
+                          <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                            <MapIcon className="w-4 h-4" />
+                            Localização no mapa
+                          </div>
+                          
+                          <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden">
+                            {/* Map Background */}
+                            <div 
+                              className="map-background absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 grayscale" 
+                              style={{ backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=-23.5505,-46.6333&zoom=15&size=1000x1000&key=AIzaSyDgw2dd2JM2_SEHDJiRz8-rHuezWsJ0-Go')" }} 
+                            />
 
-                              <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden group">
-                                {/* Map Background */}
-                                <div 
-                                  className={`map-background absolute inset-0 bg-cover bg-center transition-all duration-700 ${showMap ? 'opacity-100' : 'opacity-40 grayscale'}`} 
-                                  style={{ backgroundImage: "url('https://picsum.photos/seed/map-prime/1000/1000')" }} 
-                                />
+                            {!showMap && (
+                              <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
+                                <button 
+                                  onClick={() => setShowMap(true)}
+                                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
+                                  type="button"
+                                >
+                                  Confirme a localização no mapa
+                                </button>
+                              </div>
+                            )}
 
-                                {/* Top Right Badge */}
+                            {showMap && (
+                              <>
                                 <div className="positional-div top-right-div absolute top-4 right-4 z-20">
                                   {mapConfirmed && (
                                     <span className="badge message-badge positive-badge bg-[#4CAF50] text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] font-bold uppercase shadow-lg border border-white/20">
@@ -428,14 +439,13 @@ export default function NewPropertyWizard() {
                                   )}
                                 </div>
 
-                                {/* Bottom Left Actions */}
                                 <div className="positional-div bottom-left-div absolute bottom-4 left-4 z-20">
-                                  {showMap && !mapConfirmed && (
+                                  {!mapConfirmed ? (
                                     <div className="confirm-wrapper flex gap-2">
                                       <Button 
                                         type="button" 
                                         onClick={() => setMapConfirmed(true)} 
-                                        className="btn btn-gray-dark bg-[#334659] text-white font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg hover:bg-[#2a3a47]"
+                                        className="bg-[#334659] text-white font-bold uppercase text-[10px] h-9 px-6 rounded shadow-lg hover:bg-[#2a3a47]"
                                       >
                                         Confirmar
                                       </Button>
@@ -443,19 +453,18 @@ export default function NewPropertyWizard() {
                                         type="button" 
                                         variant="outline" 
                                         onClick={() => { setShowMap(false); setMapConfirmed(false); }} 
-                                        className="btn btn-outline-gray-dark bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
+                                        className="bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
                                       >
                                         Resetar
                                       </Button>
                                     </div>
-                                  )}
-                                  {showMap && mapConfirmed && (
+                                  ) : (
                                     <div className="change-wrapper">
                                       <Button 
                                         type="button" 
                                         variant="outline" 
                                         onClick={() => setMapConfirmed(false)} 
-                                        className="btn btn-outline-gray-dark bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
+                                        className="bg-white border-[#334659] text-[#334659] font-bold uppercase text-[10px] h-9 px-6 rounded hover:bg-muted"
                                       >
                                         Alterar
                                       </Button>
@@ -463,44 +472,28 @@ export default function NewPropertyWizard() {
                                   )}
                                 </div>
 
-                                {/* Center Button */}
-                                {!showMap && (
-                                  <div className="positional-div centered-div centered-button-div absolute inset-0 flex items-center justify-center p-8 z-20">
-                                    <div className="show-wrapper">
-                                      <Button 
-                                        type="button" 
-                                        onClick={() => setShowMap(true)} 
-                                        className="btn btn-gray-dark bg-[#334659] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded hover:bg-[#2a3a47]"
-                                      >
-                                        Confirme a localização no mapa
-                                      </Button>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Center Marker */}
-                                {showMap && !mapConfirmed && (
+                                {!mapConfirmed && (
                                   <div className="positional-div centered-div centered-marker-div absolute inset-0 flex items-center justify-center pointer-events-none z-10 mb-8">
                                     <span className="centered-marker">
                                       <MapPin className="w-10 h-10 text-primary fill-primary/20 animate-bounce" />
                                     </span>
                                   </div>
                                 )}
-                                
-                                <div id="map"></div>
-                              </div>
-
-                              {/* Custom Error Block */}
-                              {!mapConfirmed && showMap && (
-                                <div className="w-100 pmt-2" id="map-custom-error">
-                                  <div className="address-error alert alert-danger border border-destructive bg-destructive/10 text-destructive p-3 rounded-lg flex items-center gap-2 text-xs font-bold mt-4">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    <span>Confirme a localização no mapa</span>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+                              </>
+                            )}
+                            
+                            <div id="map"></div>
                           </div>
+
+                          {/* Custom Error Block */}
+                          {!mapConfirmed && showMap && (
+                            <div className="w-100 pmt-2" id="map-custom-error">
+                              <div className="address-error alert alert-danger border border-destructive bg-destructive/10 text-destructive p-3 rounded-lg flex items-center gap-2 text-xs font-bold mt-4">
+                                <AlertTriangle className="w-4 h-4" />
+                                <span>Confirme a localização no mapa</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <section className="space-y-8 pt-8 border-t">
