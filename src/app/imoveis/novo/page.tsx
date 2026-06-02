@@ -22,8 +22,6 @@ import {
   FileText,
   Map as MapIcon,
   ThumbsUp,
-  Search,
-  Key,
   Info,
   DollarSign,
   Globe,
@@ -121,7 +119,8 @@ export default function NewPropertyWizard() {
       const newProperty = {
         ...formData,
         id: Math.random().toString(36).substr(2, 9),
-        code: (properties.length + 1).toString()
+        code: (properties.length + 1).toString(),
+        title: formData.category || formData.propertyType || "Imóvel"
       }
       localStorage.setItem('crm_properties', JSON.stringify([newProperty, ...properties]))
     }
@@ -173,7 +172,7 @@ export default function NewPropertyWizard() {
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Barcode className="w-4 h-4" />Código do Imóvel</div>
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Código Automático</Label>
-                      <Input value="1" readOnly className="bg-muted font-mono h-11" />
+                      <Input value="Automático" readOnly className="bg-muted font-mono h-11" />
                     </div>
                   </section>
 
@@ -204,13 +203,14 @@ export default function NewPropertyWizard() {
                   </section>
 
                   <section className="space-y-6">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Home className="w-4 h-4" />Qual tipo de imóvel você quer inserir?</div>
-                    <div className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Home className="w-4 h-4" />Tipo e Categoria</div>
+                    <div className="space-y-4">
                       <div className="space-y-2">
                         <Label>Escolha um tipo de imóvel</Label>
-                        <Select onValueChange={(v) => {
-                          setFormData({...formData, propertyType: v, category: ""})
-                        }}>
+                        <Select 
+                          value={formData.propertyType}
+                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: ""})}
+                        >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
                             {PROPERTY_TYPES.map((type) => (
@@ -221,7 +221,11 @@ export default function NewPropertyWizard() {
                       </div>
                       <div className="space-y-2">
                         <Label>Escolha uma categoria</Label>
-                        <Select onValueChange={(v) => setFormData({...formData, category: v, title: v})}>
+                        <Select 
+                          value={formData.category}
+                          onValueChange={(v) => setFormData({...formData, category: v})}
+                          disabled={!formData.propertyType}
+                        >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
                             {(CATEGORIES_MAP[formData.propertyType] || DEFAULT_CATEGORIES).map((cat) => (
@@ -236,27 +240,56 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 2 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapPin className="w-4 h-4" />Onde fica o imóvel?</div>
-                    <div className="space-y-4">
-                      <div className="space-y-2"><Label>Endereço</Label><Input placeholder="Rua..." onChange={(e) => setFormData({...formData, address: e.target.value})} /></div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label>Número</Label><Input placeholder="123" onChange={(e) => setFormData({...formData, number: e.target.value})} /></div>
-                        <div className="space-y-2"><Label>Bairro</Label><Input placeholder="Centro" onChange={(e) => setFormData({...formData, neighborhood: e.target.value})} /></div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label>Cidade</Label><Input placeholder="São Paulo" onChange={(e) => setFormData({...formData, city: e.target.value})} /></div>
-                        <div className="space-y-2"><Label>Estado</Label><Input placeholder="SP" onChange={(e) => setFormData({...formData, state: e.target.value})} /></div>
+                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex flex-col md:flex-row gap-12">
+                    <div className="flex-1 space-y-6">
+                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapPin className="w-4 h-4" />Onde fica o imóvel?</div>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label>Endereço</Label>
+                          <Input placeholder="Rua..." value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2"><Label>Número</Label><Input placeholder="123" value={formData.number} onChange={(e) => setFormData({...formData, number: e.target.value})} /></div>
+                          <div className="space-y-2"><Label>Bairro</Label><Input placeholder="Centro" value={formData.neighborhood} onChange={(e) => setFormData({...formData, neighborhood: e.target.value})} /></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2"><Label>Cidade</Label><Input placeholder="São Paulo" value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} /></div>
+                          <div className="space-y-2"><Label>Estado</Label><Input placeholder="SP" value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} /></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="space-y-8">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapIcon className="w-4 h-4" />Localização no mapa</div>
-                    <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden">
-                      <div className="map-background absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 grayscale" style={{ backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=-23.5505,-46.6333&zoom=15&size=1000x1000&key=AIzaSyDgw2dd2JM2_SEHDJiRz8-rHuezWsJ0-Go')" }} />
-                      <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
-                        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" type="button">Confirme a localização no mapa</button>
+
+                    <div className="flex-1 space-y-6">
+                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><MapIcon className="w-4 h-4" />Localização no mapa</div>
+                      <div className="map-wrapper relative aspect-square w-full bg-[#E5E3DF] rounded-xl border shadow-inner overflow-hidden">
+                        <div 
+                          className="map-background absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 grayscale" 
+                          style={{ backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=-23.5505,-46.6333&zoom=15&size=1000x1000&key=AIzaSyDgw2dd2JM2_SEHDJiRz8-rHuezWsJ0-Go')" }} 
+                        />
+                        
+                        <div className="positional-div top-right-div absolute top-4 right-4 z-20">
+                          <span className="bg-green-500 text-white text-[10px] font-bold px-3 py-1.5 rounded uppercase tracking-wider flex items-center gap-1 shadow-lg">
+                            <ThumbsUp className="w-3 h-3" /> Localização confirmada
+                          </span>
+                        </div>
+
+                        <div className="positional-div bottom-left-div absolute bottom-4 left-4 z-20 flex gap-2">
+                          <Button size="sm" className="bg-[#334659] hover:bg-[#243447] text-white text-[10px] font-bold uppercase tracking-widest px-4">Confirmar</Button>
+                          <Button size="sm" variant="outline" className="border-[#334659] text-[#334659] hover:bg-[#334659]/5 text-[10px] font-bold uppercase tracking-widest px-4">Resetar</Button>
+                        </div>
+
+                        <div className="absolute inset-0 flex items-center justify-center p-8 z-10">
+                          <button className="bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" type="button">
+                            Confirme a localização no mapa
+                          </button>
+                        </div>
+
+                        <div className="positional-div centered-div centered-marker-div absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                          <div className="animate-bounce">
+                            <MapPin className="w-10 h-10 text-destructive fill-destructive/20" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -267,10 +300,10 @@ export default function NewPropertyWizard() {
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><FileText className="w-4 h-4" />Dados principais</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2"><Label>Quartos</Label><Input type="number" onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Banheiros</Label><Input type="number" onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Vagas de Garagem</Label><Input type="number" onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Área Útil (m²)</Label><Input type="number" onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Quartos</Label><Input type="number" value={formData.bedrooms} onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Banheiros</Label><Input type="number" value={formData.bathrooms} onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Vagas de Garagem</Label><Input type="number" value={formData.parkingSpaces} onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Área Útil (m²)</Label><Input type="number" value={formData.usefulArea} onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} /></div>
                   </div>
                 </div>
               )}
@@ -281,7 +314,7 @@ export default function NewPropertyWizard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                       <Label>Estágio da Obra</Label>
-                      <Select defaultValue="Pronto para morar" onValueChange={(v) => setFormData({...formData, buildingState: v})}>
+                      <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Pronto para morar">Pronto para morar</SelectItem>
@@ -298,9 +331,9 @@ export default function NewPropertyWizard() {
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><DollarSign className="w-4 h-4" />Valores</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2"><Label>Valor de Venda</Label><Input placeholder="0,00" onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>Condomínio</Label><Input placeholder="0,00" onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
-                    <div className="space-y-2"><Label>IPTU</Label><Input placeholder="0,00" onChange={(e) => setFormData({...formData, iptu: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Valor de Venda</Label><Input placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>Condomínio</Label><Input placeholder="0,00" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
+                    <div className="space-y-2"><Label>IPTU</Label><Input placeholder="0,00" value={formData.iptu} onChange={(e) => setFormData({...formData, iptu: e.target.value})} /></div>
                   </div>
                 </div>
               )}
@@ -309,7 +342,7 @@ export default function NewPropertyWizard() {
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Globe className="w-4 h-4" />Divulgação</div>
                   <div className="flex items-center gap-3">
-                    <Switch defaultChecked onCheckedChange={(v) => setFormData({...formData, isAdvertised: v})} />
+                    <Switch checked={formData.isAdvertised} onCheckedChange={(v) => setFormData({...formData, isAdvertised: v})} />
                     <Label className="font-bold">Anunciar no site?</Label>
                   </div>
                 </div>
@@ -319,7 +352,7 @@ export default function NewPropertyWizard() {
                 <div className="py-12 flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in duration-500">
                   <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center"><CheckCircle2 className="w-12 h-12" /></div>
                   <div className="space-y-2"><h2 className="text-3xl font-bold text-primary">Parabéns!</h2><p className="text-lg text-muted-foreground">O imóvel foi cadastrado com sucesso no sistema.</p></div>
-                  <Link href="/imoveis"><Button className="btn-custom-red h-12 px-10 rounded-lg font-bold uppercase tracking-wider shadow-lg">Voltar ao Dashboard</Button></Link>
+                  <Link href="/"><Button className="btn-custom-red h-12 px-10 rounded-lg font-bold uppercase tracking-wider shadow-lg">Voltar ao Dashboard</Button></Link>
                 </div>
               )}
 
