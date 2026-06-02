@@ -35,7 +35,9 @@ import {
   List as ListIcon,
   UserPlus,
   Key,
-  EyeOff
+  EyeOff,
+  Contact,
+  Paperclip
 } from "lucide-react"
 import Link from "next/link"
 
@@ -45,7 +47,7 @@ const STEPS = [
   { id: 3, label: "Características Técnicas" },
   { id: 4, label: "Características" },
   { id: 5, label: "Detalhes" },
-  { id: 6, label: "Valores" },
+  { id: 6, label: "Negociação" },
   { id: 7, label: "Divulgação" },
   { id: 8, label: "Parabéns" },
 ]
@@ -182,9 +184,8 @@ export default function NewPropertyWizard() {
     iptu: "0,00",
     buildingState: "",
     isAdvertised: true,
-    responsible: "Alexandre Mendonça",
+    responsible: "ALEXANDRE CORRETOR",
     characteristics: [] as string[],
-    // Novos campos da Etapa 5
     hasKeys: "",
     keysLocation: "",
     keysInfo: "",
@@ -200,7 +201,15 @@ export default function NewPropertyWizard() {
     notaryOffice: "",
     electricityNumber: "",
     waterNumber: "",
-    internalObservations: ""
+    internalObservations: "",
+    // Novos campos Etapa 6
+    canSell: false,
+    canRent: false,
+    canSeason: false,
+    authorizedForTrading: "",
+    contractStartDate: "",
+    contractDurationDays: "",
+    contractEndDate: ""
   })
 
   const handleCharacteristicChange = (item: string) => {
@@ -220,7 +229,8 @@ export default function NewPropertyWizard() {
         ...formData,
         id: Math.random().toString(36).substr(2, 9),
         code: (properties.length + 1).toString(),
-        title: formData.category || formData.propertyType || "Imóvel"
+        title: formData.category || formData.propertyType || "Imóvel",
+        status: "Ativo"
       }
       localStorage.setItem('crm_properties', JSON.stringify([newProperty, ...properties]))
     }
@@ -657,7 +667,6 @@ export default function NewPropertyWizard() {
 
               {currentStep === 5 && (
                 <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  {/* Proprietários */}
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <UserPlus className="w-4 h-4" />Informe o(s) dono(s) do imóvel
@@ -667,7 +676,6 @@ export default function NewPropertyWizard() {
                     </Button>
                   </section>
 
-                  {/* Controle de Chaves */}
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <Key className="w-4 h-4" />Controle de Chaves
@@ -711,7 +719,6 @@ export default function NewPropertyWizard() {
                     </div>
                   </section>
 
-                  {/* Informações detalhadas */}
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <Info className="w-4 h-4" />Informações detalhadas
@@ -828,7 +835,6 @@ export default function NewPropertyWizard() {
                     </div>
                   </section>
 
-                  {/* Informações confidenciais */}
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <EyeOff className="w-4 h-4" />Informações confidenciais
@@ -926,17 +932,124 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 6 && (
-                <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><DollarSign className="w-4 h-4" />Valores</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                      <Label>Valor de Venda</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
-                        <Input className="pl-10" placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} />
+                <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <DollarSign className="w-4 h-4" />Transação
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                      <div className="flex flex-col gap-2">
+                        <Switch checked={formData.canSell} onCheckedChange={(v) => setFormData({...formData, canSell: v})} />
+                        <Label className="font-bold text-primary">Vender</Label>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Switch checked={formData.canRent} onCheckedChange={(v) => setFormData({...formData, canRent: v})} />
+                        <Label className="font-bold text-primary">Alugar</Label>
+                      </div>
+                      <div className="flex flex-col gap-2 opacity-0 pointer-events-none">
+                        <Switch checked={formData.canSeason} onCheckedChange={(v) => setFormData({...formData, canSeason: v})} />
+                        <Label className="font-bold text-primary">Temporada</Label>
                       </div>
                     </div>
-                  </div>
+
+                    {(formData.canSell || formData.canRent) && (
+                      <div className="pt-8 space-y-8 animate-in fade-in duration-300">
+                        <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                          <DollarSign className="w-4 h-4" />Valores
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {formData.canSell && (
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor de Venda</Label>
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
+                                <Input className="pl-10" placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} />
+                              </div>
+                            </div>
+                          )}
+                          {formData.canRent && (
+                            <div className="space-y-2">
+                              <Label className="text-sm font-bold text-primary/80">Valor de Locação</Label>
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
+                                <Input className="pl-10" placeholder="0,00" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <UserPlus className="w-4 h-4" />Quem são os captadores desse imóvel?
+                    </div>
+                    <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs px-6 h-12">
+                      <Plus className="w-4 h-4 mr-2" /> Adicionar Captador
+                    </Button>
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Contact className="w-4 h-4" />Quem é o corretor responsável pela negociação do imóvel?
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Corretor responsável</Label>
+                      <Select value={formData.responsible} onValueChange={(v) => setFormData({...formData, responsible: v})}>
+                        <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ALEXANDRE CORRETOR">ALEXANDRE CORRETOR</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Paperclip className="w-4 h-4" />Autorizado para negociação?
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Autorizado? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.authorizedForTrading} onValueChange={(v) => setFormData({...formData, authorizedForTrading: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim, com exclusividade">Sim, com exclusividade</SelectItem>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Início do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11" 
+                          placeholder="01/05/2018" 
+                          value={formData.contractStartDate}
+                          onChange={(e) => setFormData({...formData, contractStartDate: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Duração em dias <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11" 
+                          placeholder="15" 
+                          value={formData.contractDurationDays}
+                          onChange={(e) => setFormData({...formData, contractDurationDays: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Final do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          className="h-11 bg-muted" 
+                          placeholder="30/05/2018" 
+                          readOnly
+                          value={formData.contractEndDate}
+                        />
+                      </div>
+                    </div>
+                  </section>
                 </div>
               )}
 
