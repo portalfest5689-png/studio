@@ -59,11 +59,31 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
     { value: "padrao", label: "Padrão" },
     { value: "casa-condominio", label: "Casa de Condomínio" },
     { value: "sobrado", label: "Sobrado" },
+    { value: "bangalo", label: "Bangalô" },
+    { value: "edicula", label: "Edícula" },
   ],
   apartamento: [
     { value: "padrao", label: "Padrão" },
     { value: "cobertura", label: "Cobertura" },
     { value: "flat", label: "Flat" },
+    { value: "loft", label: "Loft" },
+    { value: "studio", label: "Studio" },
+    { value: "duplex", label: "Duplex" },
+  ],
+  area: [
+    { value: "comercial", label: "Comercial" },
+    { value: "industrial", label: "Industrial" },
+    { value: "residencial", label: "Residencial" },
+  ],
+  "terreno-lote": [
+    { value: "loteamento", label: "Loteamento" },
+    { value: "condominio", label: "Condomínio" },
+    { value: "rua-publica", label: "Rua Pública" },
+  ],
+  chacara: [
+    { value: "lazer", label: "Lazer" },
+    { value: "eventos", label: "Eventos" },
+    { value: "producao", label: "Produção" },
   ],
 }
 
@@ -188,7 +208,9 @@ export default function NewPropertyWizard() {
                     <div className="space-y-6">
                       <div className="space-y-2">
                         <Label>Escolha um tipo de imóvel</Label>
-                        <Select onValueChange={(v) => setFormData({...formData, propertyType: v})}>
+                        <Select onValueChange={(v) => {
+                          setFormData({...formData, propertyType: v, category: ""})
+                        }}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
                             {PROPERTY_TYPES.map((type) => (
