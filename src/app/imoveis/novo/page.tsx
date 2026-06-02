@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,9 +37,16 @@ import {
   Key,
   EyeOff,
   Contact,
-  Paperclip
+  Paperclip,
+  Camera,
+  Youtube,
+  Monitor,
+  Bullhorn,
+  ExternalLink,
+  Trash
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 const STEPS = [
   { id: 1, label: "Dados Principais" },
@@ -156,6 +163,9 @@ const CHARACTERISTICS_CATEGORIES = [
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
+  const [images, setImages] = useState<string[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [formData, setFormData] = useState({
     title: "",
     propertyType: "",
@@ -202,14 +212,23 @@ export default function NewPropertyWizard() {
     electricityNumber: "",
     waterNumber: "",
     internalObservations: "",
-    // Novos campos Etapa 6
     canSell: false,
     canRent: false,
     canSeason: false,
     authorizedForTrading: "",
     contractStartDate: "",
     contractDurationDays: "",
-    contractEndDate: ""
+    contractEndDate: "",
+    // Novos campos Etapa 7
+    youtubeUrl: "",
+    tourUrl: "",
+    hasAdvertising: "",
+    advertisingType: "",
+    advertisingDate: "",
+    webAdvertising: "Sim",
+    webDisplayPrice: "Sim",
+    webTitle: "",
+    webText: ""
   })
 
   const handleCharacteristicChange = (item: string) => {
@@ -221,15 +240,33 @@ export default function NewPropertyWizard() {
     }))
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    Array.from(files).forEach(file => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImages(prev => [...prev, reader.result as string])
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index))
+  }
+
   const handleNext = () => {
     if (currentStep === 7) {
       const saved = localStorage.getItem('crm_properties')
       const properties = saved ? JSON.parse(saved) : []
       const newProperty = {
         ...formData,
+        images: images,
         id: Math.random().toString(36).substr(2, 9),
         code: (properties.length + 1).toString(),
-        title: formData.category || formData.propertyType || "Imóvel",
+        title: formData.webTitle || formData.category || formData.propertyType || "Imóvel",
         status: "Ativo"
       }
       localStorage.setItem('crm_properties', JSON.stringify([newProperty, ...properties]))
@@ -319,7 +356,7 @@ export default function NewPropertyWizard() {
                         <Label>Escolha um tipo de imóvel</Label>
                         <Select 
                           value={formData.propertyType}
-                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: ""})}
+                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: "padrao"})}
                         >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -1054,12 +1091,174 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 7 && (
-                <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Globe className="w-4 h-4" />Divulgação</div>
-                  <div className="flex items-center gap-3 p-6 bg-muted/20 rounded-xl border">
-                    <Switch checked={formData.isAdvertised} onCheckedChange={(v) => setFormData({...formData, isAdvertised: v})} />
-                    <Label className="font-bold text-primary">Anunciar no site?</Label>
-                  </div>
+                <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Camera className="w-4 h-4" />Insira as fotos
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-primary">Adicione fotos ilimitadas e arraste para reorganizá-las</span>
+                      <p className="text-[11px] text-muted-foreground">As fotos devem ser apenas nos formatos JPG, PNG ou GIF e o peso máximo de 10MB.</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                      <div 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="aspect-video bg-muted/50 border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-muted transition-colors group"
+                      >
+                        <Camera className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <span className="text-[10px] font-bold uppercase text-muted-foreground group-hover:text-primary">Adicionar fotos</span>
+                      </div>
+                      {images.map((img, idx) => (
+                        <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border group shadow-sm">
+                          <Image src={img} alt={`Preview ${idx}`} fill className="object-cover" />
+                          <button 
+                            onClick={() => removeImage(idx)}
+                            className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Trash className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      className="hidden" 
+                      multiple 
+                      accept="image/*" 
+                      onChange={handleFileChange}
+                    />
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Youtube className="w-4 h-4 text-red-600" />Adicione vídeos do Youtube
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Copie e cole abaixo o endereço do vídeo no YouTube</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          className="h-11" 
+                          placeholder="https://www.youtube.com/watch?v=..." 
+                          value={formData.youtubeUrl}
+                          onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
+                        />
+                        <Button variant="secondary" className="h-11 px-6 font-bold uppercase text-[10px]">Adicionar vídeo</Button>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Monitor className="w-4 h-4" />Adicione tour virtual
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Copie e cole abaixo o endereço da plataforma de tour virtual</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          className="h-11" 
+                          placeholder="https://www.tourvirtual.com.br/..." 
+                          value={formData.tourUrl}
+                          onChange={(e) => setFormData({...formData, tourUrl: e.target.value})}
+                        />
+                        <Button variant="secondary" className="h-11 px-6 font-bold uppercase text-[10px]">Adicionar tour</Button>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Bullhorn className="w-4 h-4" />Foi colocado propaganda no local?
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Propaganda no local? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.hasAdvertising} onValueChange={(v) => setFormData({...formData, hasAdvertising: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Qual tipo? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.advertisingType} onValueChange={(v) => setFormData({...formData, advertisingType: v})} disabled={formData.hasAdvertising !== "Sim"}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Adesivo">Adesivo</SelectItem>
+                            <SelectItem value="Banner">Banner</SelectItem>
+                            <SelectItem value="Faixa">Faixa</SelectItem>
+                            <SelectItem value="Placa">Placa</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Colocada em: <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Input 
+                          type="date" 
+                          className="h-11" 
+                          disabled={formData.hasAdvertising !== "Sim"} 
+                          value={formData.advertisingDate}
+                          onChange={(e) => setFormData({...formData, advertisingDate: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="space-y-8">
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                      <Globe className="w-4 h-4" />Divulgação do anúncio na internet
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Anunciar no site? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.webAdvertising} onValueChange={(v) => setFormData({...formData, webAdvertising: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não, apenas inserir no sistema">Não, apenas inserir no sistema</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-primary/80">Exibir o preço? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.webDisplayPrice} onValueChange={(v) => setFormData({...formData, webDisplayPrice: v})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não, exibir apenas 'Sob Consulta'">Não, exibir apenas 'Sob Consulta'</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Título do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <div className="space-y-1">
+                        <Input 
+                          className="h-11" 
+                          placeholder="Apartamento em São Paulo, Mooca com 2 quartos, 1 suíte, 150m²" 
+                          value={formData.webTitle}
+                          onChange={(e) => setFormData({...formData, webTitle: e.target.value})}
+                        />
+                        <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webTitle.length}/80</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Descrição do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <div className="space-y-1">
+                        <Textarea 
+                          rows={8} 
+                          className="custom-border no-resize" 
+                          placeholder="Crie o texto você mesmo. Veja nossas dicas ao lado." 
+                          value={formData.webText}
+                          onChange={(e) => setFormData({...formData, webText: e.target.value})}
+                        />
+                        <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webText.length}/3000</p>
+                      </div>
+                    </div>
+                  </section>
                 </div>
               )}
 
@@ -1074,7 +1273,10 @@ export default function NewPropertyWizard() {
               {currentStep < 8 && (
                 <div className="mt-12 pt-8 border-t flex items-center justify-between">
                   <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1} className="text-muted-foreground font-bold uppercase text-xs"><ArrowLeft className="w-4 h-4 mr-2" />Voltar</Button>
-                  <Button onClick={handleNext} className="btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">Continuar<ArrowRight className="w-4 h-4 ml-2" /></Button>
+                  <Button onClick={handleNext} className="btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">
+                    {currentStep === 7 ? "Finalizar" : "Continuar"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
               )}
             </CardContent>

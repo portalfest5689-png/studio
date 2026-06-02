@@ -49,6 +49,7 @@ interface Property {
   buildingState: string
   isAdvertised: boolean
   responsible: string
+  images?: string[]
 }
 
 export default function Home() {
@@ -98,7 +99,7 @@ export default function Home() {
                         </div>
                       </div>
                       <Image 
-                        src={`https://picsum.photos/seed/${property.id}/600/400`}
+                        src={property.images && property.images.length > 0 ? property.images[0] : `https://picsum.photos/seed/${property.id}/600/400`}
                         alt={property.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
