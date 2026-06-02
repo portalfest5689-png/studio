@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,7 +41,7 @@ import {
   Camera,
   Youtube,
   Monitor,
-  Bullhorn,
+  Megaphone,
   ExternalLink,
   Trash
 } from "lucide-react"
@@ -51,8 +51,8 @@ import Image from "next/image"
 const STEPS = [
   { id: 1, label: "Dados Principais" },
   { id: 2, label: "Localização" },
-  { id: 3, label: "Características Técnicas" },
-  { id: 4, label: "Características" },
+  { id: 3, label: "Características" },
+  { id: 4, label: "Características Detalhadas" },
   { id: 5, label: "Detalhes" },
   { id: 6, label: "Negociação" },
   { id: 7, label: "Divulgação" },
@@ -219,7 +219,6 @@ export default function NewPropertyWizard() {
     contractStartDate: "",
     contractDurationDays: "",
     contractEndDate: "",
-    // Novos campos Etapa 7
     youtubeUrl: "",
     tourUrl: "",
     hasAdvertising: "",
@@ -356,7 +355,7 @@ export default function NewPropertyWizard() {
                         <Label>Escolha um tipo de imóvel</Label>
                         <Select 
                           value={formData.propertyType}
-                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: "padrao"})}
+                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: "Selecione"})}
                         >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -527,7 +526,7 @@ export default function NewPropertyWizard() {
                         />
                         <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
                           <button 
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
                             type="button"
                           >
                             Confirme a localização no mapa
@@ -547,7 +546,7 @@ export default function NewPropertyWizard() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Quartos</Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Quartos</Label>
                       <Input 
                         className="h-11" 
                         placeholder="0" 
@@ -557,7 +556,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -569,7 +568,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -581,7 +580,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Banheiros</Label>
                       <Input 
                         className="h-11" 
                         placeholder="0" 
@@ -591,7 +590,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -603,7 +602,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -614,7 +613,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -625,17 +624,18 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
                         className="h-11" 
+                        placeholder="0" 
                         value={formData.builtArea} 
                         onChange={(e) => setFormData({...formData, builtArea: e.target.value})} 
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -645,7 +645,7 @@ export default function NewPropertyWizard() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                         Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                       </Label>
                       <Input 
@@ -1169,7 +1169,7 @@ export default function NewPropertyWizard() {
 
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                      <Bullhorn className="w-4 h-4" />Foi colocado propaganda no local?
+                      <Megaphone className="w-4 h-4" />Foi colocado propaganda no local?
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-2">
@@ -1272,11 +1272,20 @@ export default function NewPropertyWizard() {
 
               {currentStep < 8 && (
                 <div className="mt-12 pt-8 border-t flex items-center justify-between">
-                  <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1} className="text-muted-foreground font-bold uppercase text-xs"><ArrowLeft className="w-4 h-4 mr-2" />Voltar</Button>
-                  <Button onClick={handleNext} className="btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">
+                  <button 
+                    onClick={handleBack} 
+                    disabled={currentStep === 1} 
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />Voltar
+                  </button>
+                  <button 
+                    onClick={handleNext} 
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg"
+                  >
                     {currentStep === 7 ? "Finalizar" : "Continuar"}
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  </button>
                 </div>
               )}
             </CardContent>
