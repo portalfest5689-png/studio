@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Checkbox } from "@/components/ui/checkbox"
 import { 
   Home, 
   Building2, 
@@ -29,18 +30,20 @@ import {
   FolderOpen,
   Search,
   Plus,
-  ChevronDown
+  ChevronDown,
+  List as ListIcon
 } from "lucide-react"
 import Link from "next/link"
 
 const STEPS = [
   { id: 1, label: "Dados Principais" },
   { id: 2, label: "Localização" },
-  { id: 3, label: "Características" },
-  { id: 4, label: "Detalhes" },
-  { id: 5, label: "Valores" },
-  { id: 6, label: "Divulgação" },
-  { id: 7, label: "Parabéns" },
+  { id: 3, label: "Características Técnicas" },
+  { id: 4, label: "Características" },
+  { id: 5, label: "Detalhes" },
+  { id: 6, label: "Valores" },
+  { id: 7, label: "Divulgação" },
+  { id: 8, label: "Parabéns" },
 ]
 
 const PROPERTY_TYPES = [
@@ -101,6 +104,66 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
 
 const DEFAULT_CATEGORIES = [{ value: "padrao", label: "Padrão" }]
 
+const CHARACTERISTICS_CATEGORIES = [
+  {
+    title: "Bem estar e Comodidade",
+    items: [
+      "Adega", "Ambientes Integrados", "Aquário", "Aquecedor", "Ar condicionado", "Arandelas", 
+      "Armário de Cozinha", "Armário Embutido", "Armário no Banheiro", "Banheira", "Box Blindex", 
+      "Churrasqueira na Sacada", "Churrasqueira na Varanda", "Closet", "Copa", "Cozinha Americana", 
+      "Cozinha Gourmet", "Cozinha Grande", "Demi-suíte", "Escritório", "Fechadura Digital", 
+      "Frente para o mar", "Hidromassagem", "Home Office", "Janela Panorâmica", "Jardim de Inverno", 
+      "Lareira", "Lavabo", "Lavanderia", "Mobiliado", "Móveis Planejados", "Ofurô", "Pé Direito Duplo", 
+      "Quintal", "Sacada", "Sacada Fechada com Vidro", "Sacada Gourmet", "Sala de jantar", 
+      "Sala Grande", "Semimobiliado", "Smart Home", "Solarium", "Varanda", "Varanda Fechada com Vidro", 
+      "Varanda Gourmet", "Vista Panorâmica", "Vista para a Montanha", "Vista para o Lago", "Vista para o Mar"
+    ]
+  },
+  {
+    title: "Segurança",
+    items: [
+      "Alarme", "Câmera de Segurança", "Cerca", "Circuito de Segurança", "Guarita", "Guarita Blindada", 
+      "Interfone", "Muro de Vidro", "Muros e Grades", "Portão Eletrônico", "Portaria", "Portaria 24hs", "Ronda 24hs"
+    ]
+  },
+  {
+    title: "Lazer e Natureza",
+    items: [
+      "Academia", "Aceita Pet", "Área de Lazer", "Árvore Frutífera", "Arvorismo", "Bar", "Bar na Piscina", 
+      "Beauty Care", "Biblioteca", "Campo de Futebol", "Campo de Golfe", "Centro de Estética", "Children Care", 
+      "Churrasqueira", "Churrasqueira à Carvão", "Churrasqueira à Gás", "Churrasqueira Ecológica", "Cinema", 
+      "Deck", "Deck Molhado", "Espaço Crossfit", "Espaço Fitness", "Espaço Gourmet", "Espaço Pet", "Espaço Teen", 
+      "Espaço Verde/Parque", "Espaço Yoga", "Espaço Zen", "Horta", "Jacuzzi", "Jardim", "Lago", "Mini Quadra", 
+      "Minimercado", "Muro de Escalada", "Orquidário", "Piscina", "Piscina Climatizada", "Piscina Coberta", 
+      "Piscina Infantil", "Piscina Olímpica", "Piscina para Adulto", "Piscina Privativa", "Piscina Semiolímpica", 
+      "Pista de Cooper", "Pista de Skate", "Playground", "Pomar", "Praça", "Pub", "Quadra de Beach Tennis", 
+      "Quadra de Futebol", "Quadra de Futevôlei", "Quadra de Squash", "Quadra de Tênis", "Quadra de Vôlei de Praia", 
+      "Quadra Poliesportiva", "Sala de Massagem", "Salão de Festas", "Salão de Jogos", "Sauna", "Spa", "Surf Indoor"
+    ]
+  },
+  {
+    title: "Infraestrutura",
+    items: [
+      "Acessibilidade", "Área de Serviço", "Balaústre", "Bicicletário", "Canil", "Carregador de Carro Elétrico", 
+      "Chuveiro a Gás", "Coffee Shop", "Coleta Seletiva de Lixo", "Condomínio Inteligente", "Condomínio Sustentável", 
+      "Coworking", "Dependência Empregada", "Depósito", "Despensa", "Edícula", "Elevador", "Elevador de Emergência", 
+      "Energia Solar", "Esquina", "Estacionamento Visitantes", "Forno de Pizza", "Garagem", "Garagem Coberta", 
+      "Garagem Coletiva", "Garagem Demarcada", "Gás Encanado", "Gerador", "Guarda Volumes", "Hall de Entrada", 
+      "Heliponto", "Isolamento Acústico", "Isolamento Térmico", "Louceiro", "Manobrista", "Marina", "Mini Golf", 
+      "Pista de Atletismo", "Pista de Pouso", "Rampas", "Sala de Reunião", "Salão de Convenção", "TV a Cabo", 
+      "Vestiário", "Wi-Fi"
+    ]
+  },
+  {
+    title: "Acabamento",
+    items: [
+      "Carpete", "Cerâmica", "Cimento Queimado", "Drywall", "Gesso", "Granito", "Janela de Alumínio", "Laje", 
+      "Mármore", "Papel de Parede", "Piso de Madeira", "Piso Elevado", "Piso Laminado", "Piso Vinílico", "Platibanda", 
+      "Porcelanato", "Sanca", "Teto rebaixado"
+    ]
+  }
+]
+
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
@@ -132,11 +195,21 @@ export default function NewPropertyWizard() {
     iptu: "0,00",
     buildingState: "Pronto para morar",
     isAdvertised: true,
-    responsible: "Alexandre Mendonça"
+    responsible: "Alexandre Mendonça",
+    characteristics: [] as string[]
   })
 
+  const handleCharacteristicChange = (item: string) => {
+    setFormData(prev => ({
+      ...prev,
+      characteristics: prev.characteristics.includes(item)
+        ? prev.characteristics.filter(i => i !== item)
+        : [...prev.characteristics, item]
+    }))
+  }
+
   const handleNext = () => {
-    if (currentStep === 6) {
+    if (currentStep === 7) {
       const saved = localStorage.getItem('crm_properties')
       const properties = saved ? JSON.parse(saved) : []
       const newProperty = {
@@ -147,7 +220,7 @@ export default function NewPropertyWizard() {
       }
       localStorage.setItem('crm_properties', JSON.stringify([newProperty, ...properties]))
     }
-    if (currentStep < 7) setCurrentStep(currentStep + 1)
+    if (currentStep < 8) setCurrentStep(currentStep + 1)
   }
 
   const handleBack = () => {
@@ -171,7 +244,7 @@ export default function NewPropertyWizard() {
               {STEPS.map((step) => (
                 <div 
                   key={step.id} 
-                  className={`flex flex-col items-center gap-2 flex-1 relative ${step.id !== 7 ? 'after:content-[""] after:h-[2px] after:w-full after:bg-muted after:absolute after:top-4 after:left-1/2 after:-z-0' : ''}`}
+                  className={`flex flex-col items-center gap-2 flex-1 relative ${step.id !== 8 ? 'after:content-[""] after:h-[2px] after:w-full after:bg-muted after:absolute after:top-4 after:left-1/2 after:-z-0' : ''}`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold z-10 transition-colors ${currentStep >= step.id ? 'bg-primary text-white ring-4 ring-primary/20' : 'bg-muted text-muted-foreground'}`}>
                     {step.id}
@@ -549,6 +622,36 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 4 && (
+                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                    <ListIcon className="w-4 h-4" />Quais são as características?
+                  </div>
+                  
+                  <div className="space-y-12">
+                    {CHARACTERISTICS_CATEGORIES.map((category) => (
+                      <div key={category.title} className="space-y-6">
+                        <h3 className="text-lg font-bold text-primary/70 border-b pb-2">{category.title}</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                          {category.items.map((item) => (
+                            <div key={item} className="flex items-center space-x-3">
+                              <Checkbox 
+                                id={item} 
+                                checked={formData.characteristics.includes(item)}
+                                onCheckedChange={() => handleCharacteristicChange(item)}
+                              />
+                              <Label htmlFor={item} className="text-sm cursor-pointer hover:text-primary transition-colors">
+                                {item}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {currentStep === 5 && (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Info className="w-4 h-4" />Informações detalhadas</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -567,7 +670,7 @@ export default function NewPropertyWizard() {
                 </div>
               )}
 
-              {currentStep === 5 && (
+              {currentStep === 6 && (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><DollarSign className="w-4 h-4" />Valores</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -578,7 +681,7 @@ export default function NewPropertyWizard() {
                 </div>
               )}
 
-              {currentStep === 6 && (
+              {currentStep === 7 && (
                 <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Globe className="w-4 h-4" />Divulgação</div>
                   <div className="flex items-center gap-3">
@@ -588,7 +691,7 @@ export default function NewPropertyWizard() {
                 </div>
               )}
 
-              {currentStep === 7 && (
+              {currentStep === 8 && (
                 <div className="py-12 flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in duration-500">
                   <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center"><CheckCircle2 className="w-12 h-12" /></div>
                   <div className="space-y-2"><h2 className="text-3xl font-bold text-primary">Parabéns!</h2><p className="text-lg text-muted-foreground">O imóvel foi cadastrado com sucesso no sistema.</p></div>
@@ -596,7 +699,7 @@ export default function NewPropertyWizard() {
                 </div>
               )}
 
-              {currentStep < 7 && (
+              {currentStep < 8 && (
                 <div className="pt-8 border-t flex items-center justify-between">
                   <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1} className="text-muted-foreground font-bold uppercase text-xs"><ArrowLeft className="w-4 h-4 mr-2" />Voltar</Button>
                   <Button onClick={handleNext} className="btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">Continuar<ArrowRight className="w-4 h-4 ml-2" /></Button>
