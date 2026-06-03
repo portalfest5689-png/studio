@@ -105,13 +105,16 @@ export default function ContactsDashboard() {
     const name = formData.get('contact_name_on_modal') as string
     const surname = formData.get('contact_surname_on_modal') as string
     const description = formData.get('contact_description_on_modal') as string
+    const stage = formData.get('contact_lead_on_modal') as string
+    const category = formData.get('contact_type_on_modal') as string
+    
     const fullName = `${name} ${surname}`.trim()
     
     const newContact: Contact = {
       id: Date.now(),
       name: fullName,
       initials: name.substring(0, 1).toUpperCase() + (surname ? surname.substring(0, 1).toUpperCase() : ""),
-      type: (formData.get('contact_lead_on_modal') as any) || 'lead',
+      type: stage || category || 'lead',
       description: description
     }
 
@@ -459,7 +462,9 @@ export default function ContactsDashboard() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-primary truncate">{contact.name}</h3>
-                    <p className="text-xs text-muted-foreground uppercase">{contact.type === 'lead' ? 'Lead' : 'Cliente'}</p>
+                    <p className="text-xs text-muted-foreground uppercase">{
+                      TABS.find(t => t.id === contact.type)?.label || 'Lead'
+                    }</p>
                     {contact.description && (
                       <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-2 italic" title={contact.description}>
                         {contact.description}
