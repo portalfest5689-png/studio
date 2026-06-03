@@ -100,222 +100,6 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
   ],
 }
 
-const CHARACTERISTICS_CATEGORIES = [
-  {
-    title: "Bem estar e Comodidade",
-    items: [
-      { id: "wine_cellar", label: "Adega" },
-      { id: "integrated_environments", label: "Ambientes Integrados" },
-      { id: "aquarium", label: "Aquário" },
-      { id: "heater", label: "Aquecedor" },
-      { id: "air_conditioning", label: "Ar condicionado" },
-      { id: "lamps", label: "Arandelas" },
-      { id: "kitchen_cabinet", label: "Armário de Cozinha" },
-      { id: "builtin_cabinet", label: "Armário Embutido" },
-      { id: "bathroom_cabinet", label: "Armário no Banheiro" },
-      { id: "bathtub", label: "Banheira" },
-      { id: "blindex", label: "Box Blindex" },
-      { id: "porch_grill", label: "Churrasqueira na Sacada" },
-      { id: "balcony_grill", label: "Churrasqueira na Varanda" },
-      { id: "closet", label: "Closet" },
-      { id: "copa", label: "Copa" },
-      { id: "american_kitchen", label: "Cozinha Americana" },
-      { id: "gourmet_kitchen", label: "Cozinha Gourmet" },
-      { id: "large_kitchen", label: "Cozinha Grande" },
-      { id: "demi_suite", label: "Demi-suíte" },
-      { id: "office", label: "Escritório" },
-      { id: "smart_lock", label: "Fechadura Digital" },
-      { id: "ocean_front", label: "Frente para o mar" },
-      { id: "whirlpool", label: "Hidromassagem" },
-      { id: "home_office", label: "Home Office" },
-      { id: "panoramic_window", label: "Janela Panorâmica" },
-      { id: "winter_garden", label: "Jardim de Inverno" },
-      { id: "fireplace", label: "Lareira" },
-      { id: "lavatory", label: "Lavabo" },
-      { id: "laundry", label: "Lavanderia" },
-      { id: "furnished", label: "Mobiliado" },
-      { id: "planned_furniture", label: "Móveis Planejados" },
-      { id: "hottub", label: "Ofurô" },
-      { id: "double_height_ceiling", label: "Pé Direito Duplo" },
-      { id: "backyard", label: "Quintal" },
-      { id: "porch", label: "Sacada" },
-      { id: "glass_porch", label: "Sacada Fechada com Vidro" },
-      { id: "gourmet_porch", label: "Sacada Gourmet" },
-      { id: "dining_room", label: "Sala de jantar" },
-      { id: "large_room", label: "Sala Grande" },
-      { id: "half_furnished", label: "Semimobiliado" },
-      { id: "smart_home", label: "Smart Home" },
-      { id: "solarium", label: "Solarium" },
-      { id: "balcony", label: "Varanda" },
-      { id: "glass_balcony", label: "Varanda Fechada com Vidro" },
-      { id: "gourmet_balcony", label: "Varanda Gourmet" },
-      { id: "panoramic_view", label: "Vista Panorâmica" },
-      { id: "mountain_view", label: "Vista para a Montanha" },
-      { id: "lake_view", label: "Vista para o Lago" },
-      { id: "sea_view", label: "Vista para o Mar" }
-    ]
-  },
-  {
-    title: "Segurança",
-    items: [
-      { id: "alarm", label: "Alarme" },
-      { id: "security_camera", label: "Câmera de Segurança" },
-      { id: "fence", label: "Cerca" },
-      { id: "security_circuit", label: "Circuito de Segurança" },
-      { id: "guardhouse", label: "Guarita" },
-      { id: "armored_guardhouse", label: "Guarita Blindada" },
-      { id: "intercom", label: "Interfone" },
-      { id: "glass_wall", label: "Muro de Vidro" },
-      { id: "wall_fence", label: "Muros e Grades" },
-      { id: "electronic_gate", label: "Portão Eletrônico" },
-      { id: "ordinance", label: "Portaria" },
-      { id: "concierge_24h", label: "Portaria 24hs" },
-      { id: "patrol_24h", label: "Ronda 24hs" }
-    ]
-  },
-  {
-    title: "Lazer e Natureza",
-    items: [
-      { id: "academy", label: "Academia" },
-      { id: "pet_friendly", label: "Aceita Pet" },
-      { id: "recreation_area", label: "Área de Lazer" },
-      { id: "fruit_tree", label: "Árvore Frutífera" },
-      { id: "tree_climbing", label: "Arvorismo" },
-      { id: "bar", label: "Bar" },
-      { id: "pool_bar", label: "Bar na Piscina" },
-      { id: "beauty_care", label: "Beauty Care" },
-      { id: "library", label: "Biblioteca" },
-      { id: "soccer_field", label: "Campo de Futebol" },
-      { id: "golf_course", label: "Campo de Golfe" },
-      { id: "beauty_center", label: "Centro de Estética" },
-      { id: "children_care", label: "Children Care" },
-      { id: "barbecue_grill", label: "Churrasqueira" },
-      { id: "coal_grill", label: "Churrasqueira à Carvão" },
-      { id: "gas_grill", label: "Churrasqueira à Gás" },
-      { id: "ecological_grill", label: "Ecológica" },
-      { id: "movie_theater", label: "Cinema" },
-      { id: "deck", label: "Deck" },
-      { id: "wet_deck", label: "Deck Molhado" },
-      { id: "crossfit_space", label: "Espaço Crossfit" },
-      { id: "fitness_space", label: "Espaço Fitness" },
-      { id: "gourmet_space", label: "Espaço Gourmet" },
-      { id: "pet_space", label: "Espaço Pet" },
-      { id: "teen_space", label: "Espaço Teen" },
-      { id: "park", label: "Espaço Verde/Parque" },
-      { id: "yoga_space", label: "Espaço Yoga" },
-      { id: "zen_space", label: "Espaço Zen" },
-      { id: "vegetable_garden", label: "Horta" },
-      { id: "jacuzzi", label: "Jacuzzi" },
-      { id: "garden", label: "Jardim" },
-      { id: "lake", label: "Lago" },
-      { id: "mini_court", label: "Mini Quadra" },
-      { id: "mini_market", label: "Minimercado" },
-      { id: "climbing_wall", label: "Muro de Escalada" },
-      { id: "greenhouse", label: "Orquidário" },
-      { id: "pool", label: "Piscina" },
-      { id: "heated_pool", label: "Piscina Climatizada" },
-      { id: "indoor_pool", label: "Piscina Coberta" },
-      { id: "childrens_pool", label: "Piscina Infantil" },
-      { id: "olympic_pool", label: "Piscina Olímpica" },
-      { id: "adult_pool", label: "Piscina para Adulto" },
-      { id: "private_pool", label: "Piscina Privativa" },
-      { id: "semi_olympic_pool", label: "Piscina Semiolímpica" },
-      { id: "cooper_track", label: "Pista de Cooper" },
-      { id: "skate_park", label: "Pista de Skate" },
-      { id: "playground", label: "Playground" },
-      { id: "orchard", label: "Pomar" },
-      { id: "square", label: "Praça" },
-      { id: "pub", label: "Pub" },
-      { id: "beach_tennis_court", label: "Quadra de Beach Tennis" },
-      { id: "soccer_court", label: "Quadra de Futebol" },
-      { id: "footvolley_court", label: "Quadra de Futevôlei" },
-      { id: "squash_court", label: "Quadra de Squash" },
-      { id: "tennis_court", label: "Quadra de Tênis" },
-      { id: "beach_volleyball_court", label: "Quadra de Vôlei de Praia" },
-      { id: "polysportive_court", label: "Quadra Poliesportiva" },
-      { id: "massage_room", label: "Sala de Massagem" },
-      { id: "party_room", label: "Salão de Festas" },
-      { id: "games_room", label: "Salão de Jogos" },
-      { id: "steam_room", label: "Sauna" },
-      { id: "spa", label: "Spa" },
-      { id: "indoor_surfing", label: "Surf Indoor" }
-    ]
-  },
-  {
-    title: "Infraestrutura",
-    items: [
-      { id: "accessibility", label: "Acessibilidade" },
-      { id: "service_area", label: "Área de Serviço" },
-      { id: "banister", label: "Balaústre" },
-      { id: "bicycle_rack", label: "Bicicletário" },
-      { id: "dog_kennel", label: "Canil" },
-      { id: "electric_vehicle_charger", label: "Carregador de Carro Elétrico" },
-      { id: "gas_shower", label: "Chuveiro a Gás" },
-      { id: "coffee_shop", label: "Coffee Shop" },
-      { id: "eco_garbage_collector", label: "Coleta Seletiva de Lixo" },
-      { id: "smart_condo", label: "Condomínio Inteligente" },
-      { id: "eco_condo", label: "Condomínio Sustentável" },
-      { id: "coworking", label: "Coworking" },
-      { id: "employee_dependency", label: "Dependência Empregada" },
-      { id: "warehouse", label: "Depósito" },
-      { id: "storeroom", label: "Despensa" },
-      { id: "edicule", label: "Edícula" },
-      { id: "elevator", label: "Elevador" },
-      { id: "emergency_elevator", label: "Elevador de Emergência" },
-      { id: "solar_energy", label: "Energia Solar" },
-      { id: "corner", label: "Esquina" },
-      { id: "visitors_parking", label: "Estacionamento Visitantes" },
-      { id: "pizza_oven", label: "Forno de Pizza" },
-      { id: "garage_common", label: "Garagem" },
-      { id: "covered_garage", label: "Garagem Coberta" },
-      { id: "collective_garage", label: "Garagem Coletiva" },
-      { id: "demarcated_garage", label: "Garagem Demarcada" },
-      { id: "gas", label: "Gás Encanado" },
-      { id: "generator", label: "Gerador" },
-      { id: "luggage_storage", label: "Guarda Volumes" },
-      { id: "entrance_hall", label: "Hall de Entrada" },
-      { id: "helipad", label: "Heliponto" },
-      { id: "soundproofing", label: "Isolamento Acústico" },
-      { id: "thermal_insulation", label: "Isolamento Térmico" },
-      { id: "cupboard", label: "Louceiro" },
-      { id: "valet", label: "Manobrista" },
-      { id: "marina", label: "Marina" },
-      { id: "mini_golf", label: "Mini Golf" },
-      { id: "athletics_track", label: "Pista de Atletismo" },
-      { id: "airstrip", label: "Pista de Pouso" },
-      { id: "ramps", label: "Rampas" },
-      { id: "meeting_room", label: "Sala de Reunião" },
-      { id: "convention_hall", label: "Salão de Convenção" },
-      { id: "cable_tv", label: "TV a Cabo" },
-      { id: "locker_room", label: "Vestiário" },
-      { id: "wi_fi", label: "Wi-Fi" }
-    ]
-  },
-  {
-    title: "Acabamento",
-    items: [
-      { id: "carpet", label: "Carpete" },
-      { id: "ceramic", label: "Cerâmica" },
-      { id: "burnt_cement", label: "Cimento Queimado" },
-      { id: "drywall", label: "Drywall" },
-      { id: "plaster", label: "Gesso" },
-      { id: "granite", label: "Granito" },
-      { id: "aluminum_window", label: "Janela de Alumínio" },
-      { id: "slab", label: "Laje" },
-      { id: "marble", label: "Mármore" },
-      { id: "Wallpaper", label: "Papel de Parede" },
-      { id: "wood_floor", label: "Piso de Madeira" },
-      { id: "raised_floor", label: "Piso Elevado" },
-      { id: "laminated_floor", label: "Piso Laminado" },
-      { id: "vinyl_flooring", label: "Piso Vinílico" },
-      { id: "platibanda", label: "Platibanda" },
-      { id: "porcelain", label: "Porcelanato" },
-      { id: "sanca", label: "Sanca" },
-      { id: "lowered_ceiling", label: "Teto rebaixado" }
-    ]
-  }
-]
-
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
@@ -351,7 +135,7 @@ export default function NewPropertyWizard() {
     iptu: "0,00",
     buildingState: "Pronto para morar",
     isAdvertised: true,
-    responsible: "ALEXANDRE CORRETOR",
+    responsible: "XANDAO CORRETOR",
     characteristics: [] as string[],
     hasKeys: "",
     keysLocation: "",
@@ -379,15 +163,6 @@ export default function NewPropertyWizard() {
     webTitle: "",
     webText: ""
   })
-
-  const handleCharacteristicChange = (id: string) => {
-    setFormData(prev => ({
-      ...prev,
-      characteristics: prev.characteristics.includes(id)
-        ? prev.characteristics.filter(i => i !== id)
-        : [...prev.characteristics, id]
-    }))
-  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -468,7 +243,7 @@ export default function NewPropertyWizard() {
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Barcode className="w-4 h-4" />Código do Imóvel</div>
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Código Automático</Label>
-                      <Input value="Automático" readOnly className="bg-muted font-mono h-11" />
+                      <Input value="1" readOnly className="bg-muted font-mono h-11" />
                     </div>
                   </section>
 
@@ -499,7 +274,7 @@ export default function NewPropertyWizard() {
                   </section>
 
                   <section className="space-y-6">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Home className="w-4 h-4" />Tipo e Categoria</div>
+                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider"><Home className="w-4 h-4" />Qual tipo de imóvel você quer inserir?</div>
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <Label>Escolha um tipo de imóvel</Label>
@@ -686,161 +461,93 @@ export default function NewPropertyWizard() {
                       </div>
                     </div>
                   </div>
-
-                  <section className="space-y-8 pt-8 border-t">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                      <FileText className="w-4 h-4" />Dados principais do imóvel
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Quartos</Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          type="number" 
-                          value={formData.bedrooms} 
-                          onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          type="number" 
-                          value={formData.livingRooms} 
-                          onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          type="number" 
-                          value={formData.suites} 
-                          onChange={(e) => setFormData({...formData, suites: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          type="number" 
-                          value={formData.bathrooms} 
-                          onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          type="number" 
-                          value={formData.parkingSpaces} 
-                          onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          value={formData.usefulArea} 
-                          onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          value={formData.totalArea} 
-                          onChange={(e) => setFormData({...formData, totalArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="0" 
-                          value={formData.builtArea} 
-                          onChange={(e) => setFormData({...formData, builtArea: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.terrainWidth} 
-                          onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">
-                          Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
-                        </Label>
-                        <Input 
-                          className="h-11" 
-                          value={formData.terrainLength} 
-                          onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} 
-                        />
-                      </div>
-                    </div>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="more-info" className="border-none">
-                        <AccordionTrigger className="hover:no-underline py-2">
-                          <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                            <Plus className="w-4 h-4" />Adicionar outras medidas e informações
-                          </span>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4">
-                          <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
-                            Funcionalidade adicional para medidas específicas será liberada na próxima versão.
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </section>
                 </div>
               )}
 
               {currentStep === 3 && (
-                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-6xl mx-auto">
+                <section className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
+                    <FileText className="w-4 h-4" />Dados principais do imóvel
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Quartos</Label>
+                      <Input className="h-11" placeholder="0" type="number" value={formData.bedrooms} onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" type="number" value={formData.livingRooms} onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" type="number" value={formData.suites} onChange={(e) => setFormData({...formData, suites: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
+                      <Input className="h-11" placeholder="0" type="number" value={formData.bathrooms} onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" type="number" value={formData.parkingSpaces} onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" value={formData.usefulArea} onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" value={formData.totalArea} onChange={(e) => setFormData({...formData, totalArea: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" placeholder="0" value={formData.builtArea} onChange={(e) => setFormData({...formData, builtArea: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" value={formData.terrainWidth} onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-bold text-primary/80">Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Input className="h-11" value={formData.terrainLength} onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} />
+                    </div>
+                  </div>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="more-info" className="border-none">
+                      <AccordionTrigger className="hover:no-underline py-2">
+                        <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                          <Plus className="w-4 h-4" />Adicionar outras medidas e informações
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-4">
+                        <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
+                          Funcionalidade adicional para medidas específicas será liberada na próxima versão.
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </section>
+              )}
+
+              {currentStep === 4 && (
+                <section className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                     <ListIcon className="w-4 h-4" />Quais são as características?
                   </div>
-                  
                   <div className="space-y-12">
-                    {CHARACTERISTICS_CATEGORIES.map((category) => (
+                    {[
+                      { title: "Bem estar e Comodidade", items: ["Adega", "Ambientes Integrados", "Aquário", "Aquecedor", "Ar condicionado", "Arandelas", "Armário de Cozinha", "Armário Embutido", "Armário no Banheiro", "Banheira", "Box Blindex", "Churrasqueira na Sacada", "Churrasqueira na Varanda", "Closet", "Copa", "Cozinha Americana", "Cozinha Gourmet", "Cozinha Grande", "Demi-suíte", "Escritório", "Fechadura Digital", "Frente para o mar", "Hidromassagem", "Home Office", "Janela Panorâmica", "Jardim de Inverno", "Lareira", "Lavabo", "Lavanderia", "Mobiliado", "Móveis Planejados", "Ofurô", "Pé Direito Duplo", "Quintal", "Sacada", "Sacada Fechada com Vidro", "Sacada Gourmet", "Sala de jantar", "Sala Grande", "Semimobiliado", "Smart Home", "Solarium", "Varanda", "Varanda Fechada com Vidro", "Varanda Gourmet", "Vista Panorâmica", "Vista para a Montanha", "Vista para o Lago", "Vista para o Mar"] },
+                      { title: "Segurança", items: ["Alarme", "Câmera de Segurança", "Cerca", "Circuito de Segurança", "Guarita", "Guarita Blindada", "Interfone", "Muro de Vidro", "Muros e Grades", "Portão Eletrônico", "Portaria", "Portaria 24hs", "Ronda 24hs"] },
+                      { title: "Lazer e Natureza", items: ["Academia", "Aceita Pet", "Área de Lazer", "Árvore Frutífera", "Arvorismo", "Bar", "Bar na Piscina", "Beauty Care", "Biblioteca", "Campo de Futebol", "Campo de Golfe", "Centro de Estética", "Children Care", "Churrasqueira", "Churrasqueira à Carvão", "Churrasqueira à Gás", "Churrasqueira Ecológica", "Cinema", "Deck", "Deck Molhado", "Espaço Crossfit", "Espaço Fitness", "Espaço Gourmet", "Espaço Pet", "Espaço Teen", "Espaço Verde/Parque", "Espaço Yoga", "Zen space", "Horta", "Jacuzzi", "Jardim", "Lago", "Mini Quadra", "Minimercado", "Muro de Escalada", "Orquidário", "Piscina", "Piscina Climatizada", "Piscina Coberta", "Piscina Infantil", "Piscina Olímpica", "Piscina para Adulto", "Piscina Privativa", "Piscina Semiolímpica", "Pista de Cooper", "Pista de Skate", "Playground", "Pomar", "Praça", "Pub", "Quadra de Beach Tennis", "Quadra de Futebol", "Quadra de Futevôlei", "Quadra de Squash", "Quadra de Tênis", "Quadra de Vôlei de Praia", "Quadra Poliesportiva", "Sala de Massagem", "Salão de Festas", "Salão de Jogos", "Sauna", "Spa", "Surf Indoor"] },
+                      { title: "Infraestrutura", items: ["Acessibilidade", "Área de Serviço", "Balaústre", "Bicicletário", "Canil", "Carregador de Carro Elétrico", "Chuveiro a Gás", "Coffee Shop", "Coleta Seletiva de Lixo", "Condomínio Inteligente", "Condomínio Sustentável", "Coworking", "Dependência Empregada", "Depósito", "Despensa", "Edícula", "Elevador", "Elevador de Emergência", "Energia Solar", "Esquina", "Estacionamento Visitantes", "Forno de Pizza", "Garagem", "Garagem Coberta", "Garagem Coletiva", "Garagem Demarcada", "Gás Encanado", "Gerador", "Guarda Volumes", "Hall de Entrada", "Heliponto", "Isolamento Acústico", "Isolamento Térmico", "Louceiro", "Manobrista", "Marina", "Mini Golf", "Pista de Atletismo", "Pista de Pouso", "Rampas", "Sala de Reunião", "Salão de Convenção", "TV a Cabo", "Vestiário", "Wi-Fi"] },
+                      { title: "Acabamento", items: ["Carpete", "Cerâmica", "Cimento Queimado", "Drywall", "Gesso", "Granito", "Janela de Alumínio", "Laje", "Mármore", "Papel de Parede", "Piso de Madeira", "Piso Elevado", "Piso Laminado", "Piso Vinílico", "Platibanda", "Porcelanato", "Sanca", "Teto rebaixado"] }
+                    ].map((category) => (
                       <div key={category.title} className="space-y-6">
                         <h3 className="text-lg font-bold text-primary/70 border-b pb-2">{category.title}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                           {category.items.map((item) => (
-                            <div key={item.id} className="flex items-center space-x-3">
-                              <Checkbox 
-                                id={item.id} 
-                                checked={formData.characteristics.includes(item.id)}
-                                onCheckedChange={() => handleCharacteristicChange(item.id)}
-                              />
-                              <Label htmlFor={item.id} className="text-sm cursor-pointer hover:text-primary transition-colors">
-                                {item.label}
-                              </Label>
+                            <div key={item} className="flex items-center space-x-3">
+                              <Checkbox id={item} />
+                              <Label htmlFor={item} className="text-sm cursor-pointer hover:text-primary transition-colors">{item}</Label>
                             </div>
                           ))}
                         </div>
@@ -850,20 +557,8 @@ export default function NewPropertyWizard() {
                 </section>
               )}
 
-              {currentStep === 4 && (
-                <section className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-6xl mx-auto">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                    <ListIcon className="w-4 h-4" />Quais são as características? (Cont.)
-                  </div>
-                  
-                  <div className="p-12 bg-white rounded-lg border border-dashed text-center text-muted-foreground">
-                    <p>Esta seção está sendo populada com filtros avançados de características específicas.</p>
-                  </div>
-                </section>
-              )}
-
               {currentStep === 5 && (
-                <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <UserPlus className="w-4 h-4" />Informe o(s) dono(s) do imóvel
@@ -907,12 +602,7 @@ export default function NewPropertyWizard() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-bold text-primary/80">Informações extras sobre a chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                      <Textarea 
-                        rows={5} 
-                        className="custom-border no-resize" 
-                        value={formData.keysInfo} 
-                        onChange={(e) => setFormData({...formData, keysInfo: e.target.value})} 
-                      />
+                      <Textarea rows={5} className="custom-border no-resize" value={formData.keysInfo} onChange={(e) => setFormData({...formData, keysInfo: e.target.value})} />
                     </div>
                   </section>
 
@@ -931,9 +621,8 @@ export default function NewPropertyWizard() {
                           </SelectContent>
                         </Select>
                       </div>
-                      
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></label>
+                        <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.reformState} onValueChange={(v) => setFormData({...formData, reformState: v})} disabled={formData.propertyStatus !== "Usado"}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -942,9 +631,8 @@ export default function NewPropertyWizard() {
                           </SelectContent>
                         </Select>
                       </div>
-
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></label>
+                        <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -956,9 +644,8 @@ export default function NewPropertyWizard() {
                           </SelectContent>
                         </Select>
                       </div>
-
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></label>
+                        <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.occupation} onValueChange={(v) => setFormData({...formData, occupation: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -969,65 +656,29 @@ export default function NewPropertyWizard() {
                           </SelectContent>
                         </Select>
                       </div>
-
                       <div className="space-y-4">
                         <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
                         <div className="flex gap-2">
                           {['monthly', 'annual', 'exempt'].map((mode) => (
-                            <Button 
-                              key={mode}
-                              type="button"
-                              variant={formData.iptuMode === mode ? "default" : "outline"}
-                              className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.iptuMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`}
-                              onClick={() => setFormData({...formData, iptuMode: mode})}
-                            >
-                              {mode === 'monthly' ? 'Mensal' : mode === 'annual' ? 'Anual' : 'Isento'}
-                            </Button>
+                            <Button key={mode} type="button" variant={formData.iptuMode === mode ? "default" : "outline"} className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.iptuMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`} onClick={() => setFormData({...formData, iptuMode: mode})}>{mode === 'monthly' ? 'Mensal' : mode === 'annual' ? 'Anual' : 'Isento'}</Button>
                           ))}
                         </div>
                       </div>
-
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
-                          <Input 
-                            className="h-11 pl-10" 
-                            placeholder="0" 
-                            value={formData.iptu} 
-                            onChange={(e) => setFormData({...formData, iptu: e.target.value})} 
-                          />
-                        </div>
+                        <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.iptu} onChange={(e) => setFormData({...formData, iptu: e.target.value})} /></div>
                       </div>
-
                       <div className="space-y-4">
                         <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
                         <div className="flex gap-2">
                           {['not_exempt', 'exempt'].map((mode) => (
-                            <Button 
-                              key={mode}
-                              type="button"
-                              variant={formData.condoMode === mode ? "default" : "outline"}
-                              className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.condoMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`}
-                              onClick={() => setFormData({...formData, condoMode: mode})}
-                            >
-                              {mode === 'not_exempt' ? 'Não Isento' : 'Isento'}
-                            </Button>
+                            <Button key={mode} type="button" variant={formData.condoMode === mode ? "default" : "outline"} className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.condoMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`} onClick={() => setFormData({...formData, condoMode: mode})}>{mode === 'not_exempt' ? 'Não Isento' : 'Isento'}</Button>
                           ))}
                         </div>
                       </div>
-
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
-                          <Input 
-                            className="h-11 pl-10" 
-                            placeholder="0" 
-                            value={formData.condoFee} 
-                            onChange={(e) => setFormData({...formData, condoFee: e.target.value})} 
-                          />
-                        </div>
+                        <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
                       </div>
                     </div>
                   </section>
@@ -1039,21 +690,11 @@ export default function NewPropertyWizard() {
                     <div className="space-y-6">
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">IPTU Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="01.1.123.1234.0001" 
-                          value={formData.iptuNumber}
-                          onChange={(e) => setFormData({...formData, iptuNumber: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="01.1.123.1234.0001" value={formData.iptuNumber} onChange={(e) => setFormData({...formData, iptuNumber: e.target.value})} />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">CCIR Nº (INCRA) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="011.121.458.745-2" 
-                          value={formData.incraNumber}
-                          onChange={(e) => setFormData({...formData, incraNumber: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="011.121.458.745-2" value={formData.incraNumber} onChange={(e) => setFormData({...formData, incraNumber: e.target.value})} />
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
@@ -1076,52 +717,26 @@ export default function NewPropertyWizard() {
                         </div>
                         <div className="space-y-2">
                           <Label className="text-sm font-bold text-primary/80">Matrícula Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input 
-                            className="h-11" 
-                            placeholder="0" 
-                            value={formData.registrationNumber}
-                            onChange={(e) => setFormData({...formData, registrationNumber: e.target.value})}
-                          />
+                          <Input className="h-11" placeholder="0" value={formData.registrationNumber} onChange={(e) => setFormData({...formData, registrationNumber: e.target.value})} />
                         </div>
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Cartório <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="ex: Registrado no Cartório Shoji, no Boqueirão" 
-                          value={formData.notaryOffice}
-                          onChange={(e) => setFormData({...formData, notaryOffice: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="ex: Registrado no Cartório Shoji, no Boqueirão" value={formData.notaryOffice} onChange={(e) => setFormData({...formData, notaryOffice: e.target.value})} />
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <Label className="text-sm font-bold text-primary/80">Energia Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input 
-                            className="h-11" 
-                            placeholder="0" 
-                            value={formData.electricityNumber}
-                            onChange={(e) => setFormData({...formData, electricityNumber: e.target.value})}
-                          />
+                          <Input className="h-11" placeholder="0" value={formData.electricityNumber} onChange={(e) => setFormData({...formData, electricityNumber: e.target.value})} />
                         </div>
                         <div className="space-y-2">
                           <Label className="text-sm font-bold text-primary/80">Água Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input 
-                            className="h-11" 
-                            placeholder="0" 
-                            value={formData.waterNumber}
-                            onChange={(e) => setFormData({...formData, waterNumber: e.target.value})}
-                          />
+                          <Input className="h-11" placeholder="0" value={formData.waterNumber} onChange={(e) => setFormData({...formData, waterNumber: e.target.value})} />
                         </div>
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Textarea 
-                          rows={5} 
-                          className="custom-border no-resize" 
-                          placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." 
-                          value={formData.internalObservations}
-                          onChange={(e) => setFormData({...formData, internalObservations: e.target.value})}
-                        />
+                        <Textarea rows={5} className="custom-border no-resize" placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." value={formData.internalObservations} onChange={(e) => setFormData({...formData, internalObservations: e.target.value})} />
                       </div>
                     </div>
                   </section>
@@ -1129,26 +744,23 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 6 && (
-                <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <section className="space-y-6">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <DollarSign className="w-4 h-4" />Transação
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                      <div className="flex flex-col gap-2">
+                    <div className="flex gap-8">
+                      <div className="flex flex-col gap-2 items-center">
                         <Switch checked={formData.canSell} onCheckedChange={(v) => setFormData({...formData, canSell: v})} />
                         <Label className="font-bold text-primary">Vender</Label>
                       </div>
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 items-center">
                         <Switch checked={formData.canRent} onCheckedChange={(v) => setFormData({...formData, canRent: v})} />
                         <Label className="font-bold text-primary">Alugar</Label>
                       </div>
                     </div>
 
-                    <div className="pt-8 space-y-8 animate-in fade-in duration-300">
-                      <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                        <DollarSign className="w-4 h-4" />Valores
-                      </div>
+                    <div className="pt-8 space-y-8">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {formData.canSell && (
                           <div className="space-y-2">
@@ -1190,7 +802,7 @@ export default function NewPropertyWizard() {
                       <Select value={formData.responsible} onValueChange={(v) => setFormData({...formData, responsible: v})}>
                         <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ALEXANDRE CORRETOR">ALEXANDRE CORRETOR</SelectItem>
+                          <SelectItem value="XANDAO CORRETOR">XANDAO CORRETOR</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -1214,30 +826,15 @@ export default function NewPropertyWizard() {
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Início do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="01/05/2018" 
-                          value={formData.contractStartDate}
-                          onChange={(e) => setFormData({...formData, contractStartDate: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="01/05/2018" value={formData.contractStartDate} onChange={(e) => setFormData({...formData, contractStartDate: e.target.value})} />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Duração em dias <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11" 
-                          placeholder="15" 
-                          value={formData.contractDurationDays}
-                          onChange={(e) => setFormData({...formData, contractDurationDays: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="15" value={formData.contractDurationDays} onChange={(e) => setFormData({...formData, contractDurationDays: e.target.value})} />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Final do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input 
-                          className="h-11 bg-muted" 
-                          placeholder="30/05/2018" 
-                          readOnly
-                          value={formData.contractEndDate}
-                        />
+                        <Input className="h-11 bg-muted" placeholder="30/05/2018" readOnly value={formData.contractEndDate} />
                       </div>
                     </div>
                   </section>
@@ -1254,7 +851,6 @@ export default function NewPropertyWizard() {
                       <span className="text-sm font-medium text-primary">Adicione fotos ilimitadas e arraste para reorganizá-las</span>
                       <p className="text-[11px] text-muted-foreground">As fotos devem ser apenas nos formatos JPG, PNG ou GIF e o peso máximo de 10MB.</p>
                     </div>
-                    
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                       <div 
                         onClick={() => fileInputRef.current?.click()}
@@ -1266,23 +862,11 @@ export default function NewPropertyWizard() {
                       {images.map((img, idx) => (
                         <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border group shadow-sm">
                           <Image src={img} alt={`Preview ${idx}`} fill className="object-cover" />
-                          <button 
-                            onClick={() => removeImage(idx)}
-                            className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Trash className="w-3 h-3" />
-                          </button>
+                          <button onClick={() => removeImage(idx)} className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><Trash className="w-3 h-3" /></button>
                         </div>
                       ))}
                     </div>
-                    <input 
-                      type="file" 
-                      ref={fileInputRef} 
-                      className="hidden" 
-                      multiple 
-                      accept=".png, .gif, .jpg, .jpeg" 
-                      onChange={handleFileChange}
-                    />
+                    <input type="file" ref={fileInputRef} className="hidden" multiple accept=".png, .gif, .jpg, .jpeg" onChange={handleFileChange} />
                   </section>
 
                   <section className="space-y-8">
@@ -1292,25 +876,14 @@ export default function NewPropertyWizard() {
                     <div className="space-y-2">
                       <Label className="text-sm font-bold text-primary/80">Título do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <div className="space-y-1">
-                        <Input 
-                          className="h-11" 
-                          placeholder="Apartamento em São Paulo, Mooca com 2 quartos, 1 suíte, 150m²" 
-                          value={formData.webTitle}
-                          onChange={(e) => setFormData({...formData, webTitle: e.target.value})}
-                        />
+                        <Input className="h-11" placeholder="Apartamento em São Paulo, Mooca com 2 quartos, 1 suíte, 150m²" value={formData.webTitle} onChange={(e) => setFormData({...formData, webTitle: e.target.value})} />
                         <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webTitle.length}/80</p>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-bold text-primary/80">Descrição do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <div className="space-y-1">
-                        <Textarea 
-                          rows={8} 
-                          className="custom-border no-resize" 
-                          placeholder="Crie o texto você mesmo. Veja nossas dicas ao lado." 
-                          value={formData.webText}
-                          onChange={(e) => setFormData({...formData, webText: e.target.value})}
-                        />
+                        <Textarea rows={8} className="custom-border no-resize" placeholder="Crie o texto você mesmo. Veja nossas dicas ao lado." value={formData.webText} onChange={(e) => setFormData({...formData, webText: e.target.value})} />
                         <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webText.length}/3000</p>
                       </div>
                     </div>
@@ -1328,20 +901,8 @@ export default function NewPropertyWizard() {
 
               {currentStep < 8 && (
                 <div className="mt-12 pt-8 border-t flex items-center justify-between">
-                  <button 
-                    onClick={handleBack} 
-                    disabled={currentStep === 1} 
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />Voltar
-                  </button>
-                  <button 
-                    onClick={handleNext} 
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg"
-                  >
-                    {currentStep === 7 ? "Finalizar" : "Continuar"}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </button>
+                  <button onClick={handleBack} disabled={currentStep === 1} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Voltar</button>
+                  <button onClick={handleNext} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">{currentStep === 7 ? "Finalizar" : "Continuar"}<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4 ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
                 </div>
               )}
             </CardContent>
