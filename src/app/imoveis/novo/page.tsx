@@ -40,7 +40,8 @@ import {
   Camera,
   Monitor,
   ExternalLink,
-  Trash
+  Trash,
+  Youtube
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -54,6 +55,10 @@ const STEPS = [
   { id: 6, label: "Negociação" },
   { id: 7, label: "Divulgação" },
   { id: 8, label: "Parabéns" },
+]
+
+const BRAZILIAN_STATES = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
 ]
 
 const PROPERTY_TYPES = [
@@ -533,7 +538,7 @@ export default function NewPropertyWizard() {
                       
                       <div className="space-y-6">
                         <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Selecione o endereço</Label>
+                          <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Selecione o endereço</Label>
                           <div className="relative group">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground/40">
                               <Search className="w-4 h-4" />
@@ -550,7 +555,7 @@ export default function NewPropertyWizard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                               Loteamento / Cond / Emp <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                             </Label>
                             <Input 
@@ -561,7 +566,7 @@ export default function NewPropertyWizard() {
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                               Torre/Bloco <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                             </Label>
                             <Input 
@@ -575,7 +580,7 @@ export default function NewPropertyWizard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Número/Lote</Label>
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Número/Lote</Label>
                             <div className="space-y-1.5">
                               <Input 
                                 className="h-11 border-destructive shadow-sm" 
@@ -587,7 +592,7 @@ export default function NewPropertyWizard() {
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">
                               Complemento <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span>
                             </Label>
                             <Input 
@@ -601,18 +606,18 @@ export default function NewPropertyWizard() {
 
                         <div className="grid grid-cols-[100px_1fr] gap-4">
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Estado</Label>
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Estado</Label>
                             <Select value={formData.state} onValueChange={(v) => setFormData({...formData, state: v})}>
                               <SelectTrigger className="h-11"><SelectValue placeholder="UF" /></SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="SP">SP</SelectItem>
-                                <SelectItem value="RJ">RJ</SelectItem>
-                                <SelectItem value="MG">MG</SelectItem>
+                                {BRAZILIAN_STATES.map((state) => (
+                                  <SelectItem key={state} value={state}>{state}</SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Cidade</Label>
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Cidade</Label>
                             <div className="space-y-1.5">
                               <Input 
                                 className="h-11 border-destructive shadow-sm" 
@@ -626,7 +631,7 @@ export default function NewPropertyWizard() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Bairro</Label>
+                          <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Bairro</Label>
                           <div className="space-y-1.5">
                             <Input 
                               className="h-11 border-destructive shadow-sm" 
@@ -639,7 +644,7 @@ export default function NewPropertyWizard() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">CEP</Label>
+                          <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">CEP</Label>
                           <div className="space-y-1.5">
                             <Input 
                               className="h-11 border-destructive shadow-sm" 
@@ -684,60 +689,62 @@ export default function NewPropertyWizard() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Quartos</Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Quartos</Label>
                       <Input className="h-11" placeholder="0" type="number" value={formData.bedrooms} onChange={(e) => setFormData({...formData, bedrooms: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Salas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" placeholder="0" type="number" value={formData.livingRooms} onChange={(e) => setFormData({...formData, livingRooms: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Suítes <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" placeholder="0" type="number" value={formData.suites} onChange={(e) => setFormData({...formData, suites: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Banheiros</Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Banheiros</Label>
                       <Input className="h-11" placeholder="0" type="number" value={formData.bathrooms} onChange={(e) => setFormData({...formData, bathrooms: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Vagas de Garagem <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" placeholder="0" type="number" value={formData.parkingSpaces} onChange={(e) => setFormData({...formData, parkingSpaces: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Área Útil (m²) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" placeholder="0" value={formData.usefulArea} onChange={(e) => setFormData({...formData, usefulArea: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Área Total <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" placeholder="0" value={formData.totalArea} onChange={(e) => setFormData({...formData, totalArea: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" value={formData.builtArea} onChange={(e) => setFormData({...formData, builtArea: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" value={formData.terrainWidth} onChange={(e) => setFormData({...formData, terrainWidth: e.target.value})} />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Comprimento do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <Input className="h-11" value={formData.terrainLength} onChange={(e) => setFormData({...formData, terrainLength: e.target.value})} />
                     </div>
                   </div>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="more-info" className="border-none">
-                      <AccordionTrigger className="hover:no-underline py-2">
-                        <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                          <Plus className="w-4 h-4" />Adicionar outras medidas e informações
-                        </span>
-                      </AccordionTrigger>
-                      <AccordionContent className="pt-4">
-                        <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
-                          Funcionalidade adicional para medidas específicas será liberada na próxima versão.
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
+                  <div className="w-full">
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="more-info" className="border-none">
+                        <AccordionTrigger className="hover:no-underline py-2">
+                          <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                            <Plus className="w-4 h-4" />Adicionar outras medidas e informações
+                          </span>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4">
+                          <div className="p-4 bg-muted/20 rounded-lg border border-dashed text-center text-muted-foreground italic text-sm">
+                            Funcionalidade adicional para medidas específicas será liberada na próxima versão.
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
                 </section>
               )}
 
@@ -786,7 +793,7 @@ export default function NewPropertyWizard() {
                     </div>
                     <div className="space-y-6">
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.propertyStatus} onValueChange={(v) => setFormData({...formData, propertyStatus: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -796,7 +803,7 @@ export default function NewPropertyWizard() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.reformState} onValueChange={(v) => setFormData({...formData, reformState: v})} disabled={formData.propertyStatus !== "Usado"}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -806,7 +813,7 @@ export default function NewPropertyWizard() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -819,7 +826,7 @@ export default function NewPropertyWizard() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.occupation} onValueChange={(v) => setFormData({...formData, occupation: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -832,7 +839,7 @@ export default function NewPropertyWizard() {
                       </div>
                       
                       <div className="space-y-4">
-                        <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Modo do Condomínio</Label>
                         <div className="flex gap-2">
                           {['not_exempt', 'exempt'].map((mode) => (
                             <Button key={mode} type="button" variant={formData.condoMode === mode ? "default" : "outline"} className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.condoMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`} onClick={() => setFormData({...formData, condoMode: mode})}>{mode === 'not_exempt' ? 'Não Isento' : 'Isento'}</Button>
@@ -840,12 +847,12 @@ export default function NewPropertyWizard() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Textarea rows={5} className="custom-border no-resize" placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." value={formData.internalObservations} onChange={(e) => setFormData({...formData, internalObservations: e.target.value})} />
                       </div>
                     </div>
@@ -878,7 +885,7 @@ export default function NewPropertyWizard() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {formData.canSell && (
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Valor de Venda</Label>
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Valor de Venda</Label>
                             <div className="relative">
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
                               <Input className="pl-10" placeholder="0,00" value={formData.sellPrice} onChange={(e) => setFormData({...formData, sellPrice: e.target.value})} />
@@ -887,7 +894,7 @@ export default function NewPropertyWizard() {
                         )}
                         {(formData.canRent || formData.canSeason) && (
                           <div className="space-y-2">
-                            <Label className="text-sm font-bold text-primary/80">Valor de Locação</Label>
+                            <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Valor de Locação</Label>
                             <div className="relative">
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span>
                               <Input className="pl-10" placeholder="0,00" value={formData.rentPrice} onChange={(e) => setFormData({...formData, rentPrice: e.target.value})} />
@@ -912,7 +919,7 @@ export default function NewPropertyWizard() {
                       <Contact className="w-4 h-4" />Quem é o corretor responsável pela negociação do imóvel?
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Corretor responsável</Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Corretor responsável</Label>
                       <Select value={formData.responsible} onValueChange={(v) => setFormData({...formData, responsible: v})}>
                         <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                         <SelectContent>
@@ -928,7 +935,7 @@ export default function NewPropertyWizard() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Autorizado? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Autorizado? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Select value={formData.authorizedForTrading} onValueChange={(v) => setFormData({...formData, authorizedForTrading: v})}>
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
@@ -939,15 +946,15 @@ export default function NewPropertyWizard() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Início do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Início do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Input className="h-11" placeholder="01/05/2018" value={formData.contractStartDate} onChange={(e) => setFormData({...formData, contractStartDate: e.target.value})} />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Duração em dias <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Duração em dias <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Input className="h-11" placeholder="15" value={formData.contractDurationDays} onChange={(e) => setFormData({...formData, contractDurationDays: e.target.value})} />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Final do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Final do Contrato <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Input className="h-11 bg-muted" placeholder="30/05/2018" readOnly value={formData.contractEndDate} />
                       </div>
                     </div>
@@ -987,15 +994,37 @@ export default function NewPropertyWizard() {
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <Globe className="w-4 h-4" />Divulgação do anúncio na internet
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Anunciar no site? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select value={formData.isAdvertised ? "Sim" : "Não"} onValueChange={(v) => setFormData({...formData, isAdvertised: v === "Sim"})}>
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Sim" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Exibir o preço? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Select defaultValue="Sim">
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Sim" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Sim">Sim</SelectItem>
+                            <SelectItem value="Não">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Título do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Título do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <div className="space-y-1">
                         <Input className="h-11" placeholder="Apartamento em São Paulo, Mooca com 2 quartos, 1 suíte, 150m²" value={formData.webTitle} onChange={(e) => setFormData({...formData, webTitle: e.target.value})} />
                         <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webTitle.length}/80</p>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Descrição do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                      <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Descrição do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <div className="space-y-1">
                         <Textarea rows={8} className="custom-border no-resize" placeholder="Crie o texto você mesmo. Veja nossas dicas ao lado." value={formData.webText} onChange={(e) => setFormData({...formData, webText: e.target.value})} />
                         <p className="text-[10px] text-right text-muted-foreground uppercase">{formData.webText.length}/3000</p>
