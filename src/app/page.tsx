@@ -52,15 +52,47 @@ interface Property {
   images?: string[]
 }
 
+const INITIAL_PROPERTIES: Property[] = [
+  {
+    id: "parkville-01",
+    code: "1001",
+    title: "Casa em Condomínio Parkville - 3 Qts",
+    address: "Sala Pé Direito Duplo | Fundação na Laje",
+    city: "Campina Grande",
+    state: "PB",
+    neighborhood: "Parkville",
+    bedrooms: "3",
+    bathrooms: "2",
+    parkingSpaces: "2",
+    usefulArea: "98",
+    sellPrice: "570.000,00",
+    condoFee: "0,00",
+    iptu: "0,00",
+    status: "Ativo",
+    buildingState: "Pronto",
+    isAdvertised: true,
+    responsible: "Alexandre Mendonça",
+    images: ["https://iili.io/CKIEqR1.md.jpg"]
+  }
+]
+
 export default function Home() {
-  const [properties, setProperties] = useState<Property[]>([])
+  const [properties, setProperties] = useState<Property[]>(INITIAL_PROPERTIES)
 
   useEffect(() => {
     const saved = localStorage.getItem('crm_properties')
     if (saved) {
       setProperties(JSON.parse(saved))
+    } else {
+      localStorage.setItem('crm_properties', JSON.stringify(INITIAL_PROPERTIES))
     }
   }, [])
+
+  const handleDeleteProperty = (id: string) => {
+    const updated = properties.filter(p => p.id !== id)
+    setProperties(updated)
+    localStorage.setItem('crm_properties', JSON.stringify(updated))
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-body">
@@ -88,7 +120,7 @@ export default function Home() {
                           </div>
                           <div className="flex flex-col gap-1 items-end">
                             <span className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter shadow-sm">
-                              Ativo
+                              {property.status || 'Ativo'}
                             </span>
                             {property.isAdvertised && (
                               <span className="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter shadow-sm">
@@ -146,7 +178,9 @@ export default function Home() {
                               <DropdownMenuItem><FileText className="w-4 h-4 mr-2" /> Imprimir ficha</DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem><Edit className="w-4 h-4 mr-2" /> Editar</DropdownMenuItem>
-                              <DropdownMenuItem className="text-destructive"><Trash2 className="w-4 h-4 mr-2" /> Excluir</DropdownMenuItem>
+                              <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteProperty(property.id)}>
+                                <Trash2 className="w-4 h-4 mr-2" /> Excluir
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -199,7 +233,7 @@ export default function Home() {
                           <span className="uppercase tracking-tighter">Restrito</span>
                         </div>
                         <div className="text-[9px] text-muted-foreground italic font-medium">
-                          Atualizado há 5 segundos
+                          Atualizado recentemente
                         </div>
                       </div>
                     </div>
