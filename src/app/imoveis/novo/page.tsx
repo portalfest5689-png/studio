@@ -6,7 +6,7 @@ import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -49,8 +49,8 @@ import Image from "next/image"
 const STEPS = [
   { id: 1, label: "Dados Principais" },
   { id: 2, label: "Localização" },
-  { id: 3, label: "Dados do Imóvel" },
-  { id: 4, label: "Características" },
+  { id: 3, label: "Características" },
+  { id: 4, label: "Informações Detalhadas" },
   { id: 5, label: "Detalhes" },
   { id: 6, label: "Negociação" },
   { id: 7, label: "Divulgação" },
@@ -73,34 +73,6 @@ const PROPERTY_TYPES = [
   { value: "terreno-lote", label: "Terreno/Lote" },
   { value: "village", label: "Village" },
 ]
-
-const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
-  casa: [
-    { value: "padrao", label: "Padrão" },
-    { value: "bangalo", label: "Bangalô" },
-    { value: "cabana", label: "Cabana" },
-    { value: "casa-canadense", label: "Casa Canadense" },
-    { value: "casa-container", label: "Casa Container" },
-    { value: "casa-condominio", label: "Casa de Condomínio" },
-    { value: "casa-geminada", label: "Casa Geminada" },
-    { value: "chale", label: "Chalé" },
-    { value: "edicula", label: "Edícula" },
-    { value: "sobrado-duplex", label: "Sobrado/Duplex" },
-    { value: "sobrado-triplex", label: "Sobrado/Triplex" },
-    { value: "sobreposta-alta", label: "Sobreposta Alta" },
-    { value: "sobreposta-baixa", label: "Sobreposta Baixa" },
-    { value: "tiny-house", label: "Tiny House" },
-    { value: "townhouse", label: "Townhouse" },
-  ],
-  apartamento: [
-    { value: "padrao", label: "Padrão" },
-    { value: "cobertura", label: "Cobertura" },
-    { value: "flat", label: "Flat" },
-    { value: "loft", label: "Loft" },
-    { value: "studio", label: "Studio" },
-    { value: "duplex", label: "Duplex" },
-  ],
-}
 
 const CHARACTERISTICS_CATEGORIES = [
   { 
@@ -355,21 +327,10 @@ export default function NewPropertyWizard() {
     isAdvertised: true,
     responsible: "XANDAO CORRETOR",
     characteristics: [] as string[],
-    hasKeys: "Selecione",
-    keysLocation: "Selecione",
-    keysInfo: "",
     propertyStatus: "Selecione",
     reformState: "Selecione",
     occupation: "Selecione",
-    iptuMode: "monthly",
     condoMode: "not_exempt",
-    iptuNumber: "",
-    incraNumber: "",
-    deedStatus: "Selecione",
-    registrationNumber: "",
-    notaryOffice: "",
-    electricityNumber: "",
-    waterNumber: "",
     internalObservations: "",
     canSell: false,
     canRent: false,
@@ -498,27 +459,12 @@ export default function NewPropertyWizard() {
                         <Label>Escolha um tipo de imóvel</Label>
                         <Select 
                           value={formData.propertyType}
-                          onValueChange={(v) => setFormData({...formData, propertyType: v, category: "Selecione"})}
+                          onValueChange={(v) => setFormData({...formData, propertyType: v})}
                         >
                           <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
                           <SelectContent>
                             {PROPERTY_TYPES.map((type) => (
                               <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Escolha uma categoria</Label>
-                        <Select 
-                          value={formData.category}
-                          onValueChange={(v) => setFormData({...formData, category: v})}
-                          disabled={!formData.propertyType}
-                        >
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            {(CATEGORIES_MAP[formData.propertyType] || [{ value: "padrao", label: "Padrão" }]).map((cat) => (
-                              <SelectItem key={cat.value} value={cat.label}>{cat.label}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -669,13 +615,12 @@ export default function NewPropertyWizard() {
                         />
                         <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
                           <button 
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-[#334659] hover:bg-[#243447] text-white h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-2xl rounded transition-all transform hover:scale-105" 
                             type="button"
                           >
                             Confirme a localização no mapa
                           </button>
                         </div>
-                        <div id="map"></div>
                       </div>
                     </div>
                   </div>
@@ -730,7 +675,7 @@ export default function NewPropertyWizard() {
                     </div>
                   </div>
                   <div className="w-full">
-                    <Accordion type="single" collapsible className="w-full">
+                    <Accordion type="single" collapsible className="w-full border-none">
                       <AccordionItem value="more-info" className="border-none">
                         <AccordionTrigger className="hover:no-underline py-2">
                           <span className="text-sm font-bold text-accent uppercase tracking-wider flex items-center gap-2">
@@ -791,31 +736,13 @@ export default function NewPropertyWizard() {
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <Info className="w-4 h-4" />Informações detalhadas
                     </div>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Condição do imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.propertyStatus} onValueChange={(v) => setFormData({...formData, propertyStatus: v})}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Novo">Novo</SelectItem>
-                            <SelectItem value="Usado">Usado</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Estágio da Reforma <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.reformState} onValueChange={(v) => setFormData({...formData, reformState: v})} disabled={formData.propertyStatus !== "Usado"}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Reformado">Reformado</SelectItem>
-                            <SelectItem value="Para Reformar">Para Reformar</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Estágio da Obra <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                        <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Estágio da Obra</Label>
                         <Select value={formData.buildingState} onValueChange={(v) => setFormData({...formData, buildingState: v})}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Pronto para morar" />
+                          </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="Pronto para morar">Pronto para morar</SelectItem>
                             <SelectItem value="Em construção">Em construção</SelectItem>
@@ -824,36 +751,6 @@ export default function NewPropertyWizard() {
                             <SelectItem value="Breve lançamento">Breve lançamento</SelectItem>
                           </SelectContent>
                         </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Ocupação do Imóvel <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.occupation} onValueChange={(v) => setFormData({...formData, occupation: v})}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Vago">Vago</SelectItem>
-                            <SelectItem value="Ocupado com Proprietário">Ocupado com Proprietário</SelectItem>
-                            <SelectItem value="Ocupado com Inquilino">Ocupado com Inquilino</SelectItem>
-                            <SelectItem value="Ocupado (Outros)">Ocupado (Outros)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Modo do Condomínio</Label>
-                        <div className="flex gap-2">
-                          {['not_exempt', 'exempt'].map((mode) => (
-                            <Button key={mode} type="button" variant={formData.condoMode === mode ? "default" : "outline"} className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.condoMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`} onClick={() => setFormData({...formData, condoMode: mode})}>{mode === 'not_exempt' ? 'Não Isento' : 'Isento'}</Button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Textarea rows={5} className="custom-border no-resize" placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." value={formData.internalObservations} onChange={(e) => setFormData({...formData, internalObservations: e.target.value})} />
                       </div>
                     </div>
                   </section>
@@ -994,28 +891,7 @@ export default function NewPropertyWizard() {
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                       <Globe className="w-4 h-4" />Divulgação do anúncio na internet
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Anunciar no site? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.isAdvertised ? "Sim" : "Não"} onValueChange={(v) => setFormData({...formData, isAdvertised: v === "Sim"})}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Sim" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Sim">Sim</SelectItem>
-                            <SelectItem value="Não">Não</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Exibir o preço? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select defaultValue="Sim">
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Sim" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Sim">Sim</SelectItem>
-                            <SelectItem value="Não">Não</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+                    
                     <div className="space-y-2">
                       <Label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-primary/80">Título do anúncio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                       <div className="space-y-1">
