@@ -71,6 +71,13 @@ const INITIAL_CONTACTS: Contact[] = [
   { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead", description: "Interessada em apartamentos na planta." },
   { id: 2, name: "Roger Silva", initials: "RS", type: "lead", description: "Busca casa em condomínio fechado." },
   { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client", description: "Cliente antigo, focado em investimentos." },
+  { id: 4, name: "D.ROSA", initials: "DR", type: "qualified_lead", description: "QUALIFICADO - CARTA APROVADA – QUER APRT DE TÚLIO – NUMERO: +55 83 8624-2198" },
+  { id: 5, name: "FABRICIO", initials: "FB", type: "qualified_lead", description: "QUALIFICADO DUPLEX NO JARDINS E QUER IMOVEL PARA INVESTIR TAMBÉM – NUMERO: +55 31 9915-8846" },
+  { id: 6, name: "MARTINS", initials: "MT", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – QUER CASA DE EM MEDIA 400.000 EM CONDOMINIO – NUMERO: SEM NUMERO" },
+  { id: 7, name: "CAMILA", initials: "CM", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – QUER CASA DE TÚLIO – RENDA DE 13K – NUMERO: SEM NUMERO" },
+  { id: 8, name: "ADRIANA FERNANDES", initials: "AF", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – APRTS PRESTIGGE RESIDENCE – NUMERO: +55 83 9628-4971. Esta cliente quer saber quanto fica avista um apto de neto – Falar com ela" },
+  { id: 9, name: "PRISCILA NAKAMURA", initials: "PN", type: "qualified_lead", description: "MORA EM UM FLAT NO HERON — QUALIFICADO E EM ANDAMENTO. VAI CHEGAR DE SP E QUER VISITAR CASA E CÍCERO. NUMERO: +55 11 96617-1647" },
+  { id: 10, name: "FRANCISCA", initials: "FC", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – VAI COMBINAR COM O FILHO PRA VER A CASA DE TÚLIO – FINAL DE SEAMANA – SABADO PELA MANHA – NUMERO: +55 83 8762-7790" },
 ]
 
 export default function ContactsDashboard() {
@@ -466,7 +473,7 @@ export default function ContactsDashboard() {
                       TABS.find(t => t.id === contact.type)?.label || 'Lead'
                     }</p>
                     {contact.description && (
-                      <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-2 italic" title={contact.description}>
+                      <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-3 italic" title={contact.description}>
                         {contact.description}
                       </p>
                     )}
