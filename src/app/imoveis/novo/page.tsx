@@ -51,8 +51,8 @@ import Image from "next/image"
 const STEPS = [
   { id: 1, label: "Dados Principais" },
   { id: 2, label: "Localização" },
-  { id: 3, label: "Características" },
-  { id: 4, label: "Características Detalhadas" },
+  { id: 3, label: "Dados do Imóvel" },
+  { id: 4, label: "Características" },
   { id: 5, label: "Detalhes" },
   { id: 6, label: "Negociação" },
   { id: 7, label: "Divulgação" },
@@ -100,6 +100,222 @@ const CATEGORIES_MAP: Record<string, { value: string, label: string }[]> = {
   ],
 }
 
+const CHARACTERISTICS_CATEGORIES = [
+  { 
+    title: "Bem estar e Comodidade", 
+    items: [
+      { id: "wine_cellar", label: "Adega" },
+      { id: "integrated_environments", label: "Ambientes Integrados" },
+      { id: "aquarium", label: "Aquário" },
+      { id: "heater", label: "Aquecedor" },
+      { id: "air_conditioning", label: "Ar condicionado" },
+      { id: "lamps", label: "Arandelas" },
+      { id: "kitchen_cabinet", label: "Armário de Cozinha" },
+      { id: "builtin_cabinet", label: "Armário Embutido" },
+      { id: "bathroom_cabinet", label: "Armário no Banheiro" },
+      { id: "bathtub", label: "Banheira" },
+      { id: "blindex", label: "Box Blindex" },
+      { id: "porch_grill", label: "Churrasqueira na Sacada" },
+      { id: "balcony_grill", label: "Churrasqueira na Varanda" },
+      { id: "closet", label: "Closet" },
+      { id: "copa", label: "Copa" },
+      { id: "american_kitchen", label: "Cozinha Americana" },
+      { id: "gourmet_kitchen", label: "Cozinha Gourmet" },
+      { id: "large_kitchen", label: "Cozinha Grande" },
+      { id: "demi_suite", label: "Demi-suíte" },
+      { id: "office", label: "Escritório" },
+      { id: "smart_lock", label: "Fechadura Digital" },
+      { id: "ocean_front", label: "Frente para o mar" },
+      { id: "whirlpool", label: "Hidromassagem" },
+      { id: "home_office", label: "Home Office" },
+      { id: "panoramic_window", label: "Janela Panorâmica" },
+      { id: "winter_garden", label: "Jardim de Inverno" },
+      { id: "fireplace", label: "Lareira" },
+      { id: "lavatory", label: "Lavabo" },
+      { id: "laundry", label: "Lavanderia" },
+      { id: "furnished", label: "Mobiliado" },
+      { id: "planned_furniture", label: "Móveis Planejados" },
+      { id: "hottub", label: "Ofurô" },
+      { id: "double_height_ceiling", label: "Pé Direito Duplo" },
+      { id: "backyard", label: "Quintal" },
+      { id: "porch", label: "Sacada" },
+      { id: "glass_porch", label: "Sacada Fechada com Vidro" },
+      { id: "gourmet_porch", label: "Sacada Gourmet" },
+      { id: "dining_room", label: "Sala de jantar" },
+      { id: "large_room", label: "Sala Grande" },
+      { id: "half_furnished", label: "Semimobiliado" },
+      { id: "smart_home", label: "Smart Home" },
+      { id: "solarium", label: "Solarium" },
+      { id: "balcony", label: "Varanda" },
+      { id: "glass_balcony", label: "Varanda Fechada com Vidro" },
+      { id: "gourmet_balcony", label: "Varanda Gourmet" },
+      { id: "panoramic_view", label: "Vista Panorâmica" },
+      { id: "mountain_view", label: "Vista para a Montanha" },
+      { id: "lake_view", label: "Vista para o Lago" },
+      { id: "sea_view", label: "Vista para o Mar" }
+    ]
+  },
+  { 
+    title: "Segurança", 
+    items: [
+      { id: "alarm", label: "Alarme" },
+      { id: "security_camera", label: "Câmera de Segurança" },
+      { id: "fence", label: "Cerca" },
+      { id: "security_circuit", label: "Circuito de Segurança" },
+      { id: "guardhouse", label: "Guarita" },
+      { id: "armored_guardhouse", label: "Guarita Blindada" },
+      { id: "intercom", label: "Interfone" },
+      { id: "glass_wall", label: "Muro de Vidro" },
+      { id: "wall_fence", label: "Muros e Grades" },
+      { id: "electronic_gate", label: "Portão Eletrônico" },
+      { id: "ordinance", label: "Portaria" },
+      { id: "concierge_24h", label: "Portaria 24hs" },
+      { id: "patrol_24h", label: "Ronda 24hs" }
+    ]
+  },
+  { 
+    title: "Lazer e Natureza", 
+    items: [
+      { id: "academy", label: "Academia" },
+      { id: "pet_friendly", label: "Aceita Pet" },
+      { id: "recreation_area", label: "Área de Lazer" },
+      { id: "fruit_tree", label: "Árvore Frutífera" },
+      { id: "tree_climbing", label: "Arvorismo" },
+      { id: "bar", label: "Bar" },
+      { id: "pool_bar", label: "Bar na Piscina" },
+      { id: "beauty_care", label: "Beauty Care" },
+      { id: "library", label: "Biblioteca" },
+      { id: "soccer_field", label: "Campo de Futebol" },
+      { id: "golf_course", label: "Campo de Golfe" },
+      { id: "beauty_center", label: "Centro de Estética" },
+      { id: "children_care", label: "Children Care" },
+      { id: "barbecue_grill", label: "Churrasqueira" },
+      { id: "coal_grill", label: "Churrasqueira à Carvão" },
+      { id: "gas_grill", label: "Churrasqueira à Gás" },
+      { id: "ecological_grill", label: "Churrasqueira Ecológica" },
+      { id: "movie_theater", label: "Cinema" },
+      { id: "deck", label: "Deck" },
+      { id: "wet_deck", label: "Deck Molhado" },
+      { id: "crossfit_space", label: "Espaço Crossfit" },
+      { id: "gym", label: "Espaço Fitness" },
+      { id: "gourmet_space", label: "Espaço Gourmet" },
+      { id: "pet_space", label: "Espaço Pet" },
+      { id: "teen_space", label: "Espaço Teen" },
+      { id: "park", label: "Espaço Verde/Parque" },
+      { id: "yoga_space", label: "Espaço Yoga" },
+      { id: "zen_space", label: "Espaço Zen" },
+      { id: "vegetable_garden", label: "Horta" },
+      { id: "jacuzzi", label: "Jacuzzi" },
+      { id: "garden", label: "Jardim" },
+      { id: "lake", label: "Lago" },
+      { id: "mini_court", label: "Mini Quadra" },
+      { id: "mini_market", label: "Minimercado" },
+      { id: "climbing_wall", label: "Muro de Escalada" },
+      { id: "greenhouse", label: "Orquidário" },
+      { id: "pool", label: "Piscina" },
+      { id: "heated_pool", label: "Piscina Climatizada" },
+      { id: "indoor_pool", label: "Piscina Coberta" },
+      { id: "childrens_pool", label: "Piscina Infantil" },
+      { id: "olympic_pool", label: "Piscina Olímpica" },
+      { id: "adult_pool", label: "Piscina para Adulto" },
+      { id: "private_pool", label: "Piscina Privativa" },
+      { id: "semi_olympic_pool", label: "Piscina Semiolímpica" },
+      { id: "cooper_track", label: "Pista de Cooper" },
+      { id: "skate_park", label: "Pista de Skate" },
+      { id: "playground", label: "Playground" },
+      { id: "orchard", label: "Pomar" },
+      { id: "square", label: "Praça" },
+      { id: "pub", label: "Pub" },
+      { id: "beach_tennis_court", label: "Quadra de Beach Tennis" },
+      { id: "soccer_court", label: "Quadra de Futebol" },
+      { id: "footvolley_court", label: "Quadra de Futevôlei" },
+      { id: "squash_court", label: "Quadra de Squash" },
+      { id: "tennis_court", label: "Quadra de Tênis" },
+      { id: "beach_volleyball_court", label: "Quadra de Vôlei de Praia" },
+      { id: "polysportive_court", label: "Quadra Poliesportiva" },
+      { id: "massage_room", label: "Sala de Massagem" },
+      { id: "party_room", label: "Salão de Festas" },
+      { id: "games_room", label: "Salão de Jogos" },
+      { id: "steam_room", label: "Sauna" },
+      { id: "spa", label: "Spa" },
+      { id: "indoor_surfing", label: "Surf Indoor" }
+    ]
+  },
+  { 
+    title: "Infraestrutura", 
+    items: [
+      { id: "accessibility", label: "Acessibilidade" },
+      { id: "service_area", label: "Área de Serviço" },
+      { id: "banister", label: "Balaústre" },
+      { id: "bicycle_rack", label: "Bicicletário" },
+      { id: "dog_kennel", label: "Canil" },
+      { id: "electric_vehicle_charger", label: "Carregador de Carro Elétrico" },
+      { id: "gas_shower", label: "Chuveiro a Gás" },
+      { id: "coffee_shop", label: "Coffee Shop" },
+      { id: "eco_garbage_collector", label: "Coleta Seletiva de Lixo" },
+      { id: "smart_condo", label: "Condomínio Inteligente" },
+      { id: "eco_condo", label: "Condomínio Sustentável" },
+      { id: "coworking", label: "Coworking" },
+      { id: "employee_dependency", label: "Dependência Empregada" },
+      { id: "warehouse", label: "Depósito" },
+      { id: "storeroom", label: "Despensa" },
+      { id: "edicule", label: "Edícula" },
+      { id: "elevator", label: "Elevador" },
+      { id: "emergency_elevator", label: "Elevador de Emergência" },
+      { id: "solar_energy", label: "Energia Solar" },
+      { id: "corner", label: "Esquina" },
+      { id: "visitors_parking", label: "Estacionamento Visitantes" },
+      { id: "pizza_oven", label: "Forno de Pizza" },
+      { id: "garage_common", label: "Garagem" },
+      { id: "covered_garage", label: "Garagem Coberta" },
+      { id: "collective_garage", label: "Garagem Coletiva" },
+      { id: "demarcated_garage", label: "Garagem Demarcada" },
+      { id: "gas", label: "Gás Encanado" },
+      { id: "generator", label: "Gerador" },
+      { id: "luggage_storage", label: "Guarda Volumes" },
+      { id: "entrance_hall", label: "Hall de Entrada" },
+      { id: "helipad", label: "Heliponto" },
+      { id: "soundproofing", label: "Isolamento Acústico" },
+      { id: "thermal_insulation", label: "Isolamento Térmico" },
+      { id: "cupboard", label: "Louceiro" },
+      { id: "valet", label: "Manobrista" },
+      { id: "marina", label: "Marina" },
+      { id: "mini_golf", label: "Mini Golf" },
+      { id: "athletics_track", label: "Pista de Atletismo" },
+      { id: "airstrip", label: "Pista de Pouso" },
+      { id: "ramps", label: "Rampas" },
+      { id: "meeting_room", label: "Sala de Reunião" },
+      { id: "convention_hall", label: "Salão de Convenção" },
+      { id: "cable_tv", label: "TV a Cabo" },
+      { id: "locker_room", label: "Vestiário" },
+      { id: "wi_fi", label: "Wi-Fi" }
+    ]
+  },
+  { 
+    title: "Acabamento", 
+    items: [
+      { id: "carpet", label: "Carpete" },
+      { id: "ceramic", label: "Cerâmica" },
+      { id: "burnt_cement", label: "Cimento Queimado" },
+      { id: "drywall", label: "Drywall" },
+      { id: "plaster", label: "Gesso" },
+      { id: "granite", label: "Granito" },
+      { id: "aluminum_window", label: "Janela de Alumínio" },
+      { id: "slab", label: "Slab" },
+      { id: "marble", label: "Mármore" },
+      { id: "Wallpaper", label: "Papel de Parede" },
+      { id: "wood_floor", label: "Piso de Madeira" },
+      { id: "raised_floor", label: "Piso Elevado" },
+      { id: "laminated_floor", label: "Piso Laminado" },
+      { id: "vinyl_flooring", label: "Piso Vinílico" },
+      { id: "platibanda", label: "Platibanda" },
+      { id: "porcelain", label: "Porcelanato" },
+      { id: "sanca", label: "Sanca" },
+      { id: "lowered_ceiling", label: "Teto rebaixado" }
+    ]
+  }
+]
+
 export default function NewPropertyWizard() {
   const [currentStep, setCurrentStep] = useState(1)
   const [purpose, setPurpose] = useState<string | null>(null)
@@ -109,12 +325,12 @@ export default function NewPropertyWizard() {
   const [formData, setFormData] = useState({
     title: "",
     propertyType: "",
-    category: "",
+    category: "Selecione",
     address: "",
     number: "",
     neighborhood: "",
     city: "",
-    state: "",
+    state: "UF",
     zipCode: "",
     allotment: "",
     tower: "",
@@ -137,17 +353,17 @@ export default function NewPropertyWizard() {
     isAdvertised: true,
     responsible: "XANDAO CORRETOR",
     characteristics: [] as string[],
-    hasKeys: "",
-    keysLocation: "",
+    hasKeys: "Selecione",
+    keysLocation: "Selecione",
     keysInfo: "",
-    propertyStatus: "",
-    reformState: "",
-    occupation: "",
+    propertyStatus: "Selecione",
+    reformState: "Selecione",
+    occupation: "Selecione",
     iptuMode: "monthly",
     condoMode: "not_exempt",
     iptuNumber: "",
     incraNumber: "",
-    deedStatus: "",
+    deedStatus: "Selecione",
     registrationNumber: "",
     notaryOffice: "",
     electricityNumber: "",
@@ -156,7 +372,7 @@ export default function NewPropertyWizard() {
     canSell: false,
     canRent: false,
     canSeason: false,
-    authorizedForTrading: "",
+    authorizedForTrading: "Selecione",
     contractStartDate: "",
     contractDurationDays: "",
     contractEndDate: "",
@@ -254,7 +470,7 @@ export default function NewPropertyWizard() {
                         { id: 'residencial', label: 'Residencial', icon: <Home className="w-6 h-6" /> },
                         { id: 'comercial', label: 'Comercial', icon: <Building2 className="w-6 h-6" /> },
                         { id: 'industrial', label: 'Industrial', icon: <Factory className="w-6 h-6" /> },
-                        { id: 'rural', label: 'Rural', icon: <Signpost className="w-6 h-6" /> },
+                        { id: 'rural', label: 'Rural', icon: <Megaphone className="w-6 h-6" /> },
                       ].map((item) => (
                         <button
                           key={item.id}
@@ -465,7 +681,7 @@ export default function NewPropertyWizard() {
               )}
 
               {currentStep === 3 && (
-                <section className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <section className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 pt-8 border-t">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
                     <FileText className="w-4 h-4" />Dados principais do imóvel
                   </div>
@@ -500,7 +716,7 @@ export default function NewPropertyWizard() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-bold text-primary/80">Área Construída <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                      <Input className="h-11" placeholder="0" value={formData.builtArea} onChange={(e) => setFormData({...formData, builtArea: e.target.value})} />
+                      <Input className="h-11" value={formData.builtArea} onChange={(e) => setFormData({...formData, builtArea: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-sm font-bold text-primary/80">Largura do Terreno <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
@@ -534,20 +750,14 @@ export default function NewPropertyWizard() {
                     <ListIcon className="w-4 h-4" />Quais são as características?
                   </div>
                   <div className="space-y-12">
-                    {[
-                      { title: "Bem estar e Comodidade", items: ["Adega", "Ambientes Integrados", "Aquário", "Aquecedor", "Ar condicionado", "Arandelas", "Armário de Cozinha", "Armário Embutido", "Armário no Banheiro", "Banheira", "Box Blindex", "Churrasqueira na Sacada", "Churrasqueira na Varanda", "Closet", "Copa", "Cozinha Americana", "Cozinha Gourmet", "Cozinha Grande", "Demi-suíte", "Escritório", "Fechadura Digital", "Frente para o mar", "Hidromassagem", "Home Office", "Janela Panorâmica", "Jardim de Inverno", "Lareira", "Lavabo", "Lavanderia", "Mobiliado", "Móveis Planejados", "Ofurô", "Pé Direito Duplo", "Quintal", "Sacada", "Sacada Fechada com Vidro", "Sacada Gourmet", "Sala de jantar", "Sala Grande", "Semimobiliado", "Smart Home", "Solarium", "Varanda", "Varanda Fechada com Vidro", "Varanda Gourmet", "Vista Panorâmica", "Vista para a Montanha", "Vista para o Lago", "Vista para o Mar"] },
-                      { title: "Segurança", items: ["Alarme", "Câmera de Segurança", "Cerca", "Circuito de Segurança", "Guarita", "Guarita Blindada", "Interfone", "Muro de Vidro", "Muros e Grades", "Portão Eletrônico", "Portaria", "Portaria 24hs", "Ronda 24hs"] },
-                      { title: "Lazer e Natureza", items: ["Academia", "Aceita Pet", "Área de Lazer", "Árvore Frutífera", "Arvorismo", "Bar", "Bar na Piscina", "Beauty Care", "Biblioteca", "Campo de Futebol", "Campo de Golfe", "Centro de Estética", "Children Care", "Churrasqueira", "Churrasqueira à Carvão", "Churrasqueira à Gás", "Churrasqueira Ecológica", "Cinema", "Deck", "Deck Molhado", "Espaço Crossfit", "Espaço Fitness", "Espaço Gourmet", "Espaço Pet", "Espaço Teen", "Espaço Verde/Parque", "Espaço Yoga", "Zen space", "Horta", "Jacuzzi", "Jardim", "Lago", "Mini Quadra", "Minimercado", "Muro de Escalada", "Orquidário", "Piscina", "Piscina Climatizada", "Piscina Coberta", "Piscina Infantil", "Piscina Olímpica", "Piscina para Adulto", "Piscina Privativa", "Piscina Semiolímpica", "Pista de Cooper", "Pista de Skate", "Playground", "Pomar", "Praça", "Pub", "Quadra de Beach Tennis", "Quadra de Futebol", "Quadra de Futevôlei", "Quadra de Squash", "Quadra de Tênis", "Quadra de Vôlei de Praia", "Quadra Poliesportiva", "Sala de Massagem", "Salão de Festas", "Salão de Jogos", "Sauna", "Spa", "Surf Indoor"] },
-                      { title: "Infraestrutura", items: ["Acessibilidade", "Área de Serviço", "Balaústre", "Bicicletário", "Canil", "Carregador de Carro Elétrico", "Chuveiro a Gás", "Coffee Shop", "Coleta Seletiva de Lixo", "Condomínio Inteligente", "Condomínio Sustentável", "Coworking", "Dependência Empregada", "Depósito", "Despensa", "Edícula", "Elevador", "Elevador de Emergência", "Energia Solar", "Esquina", "Estacionamento Visitantes", "Forno de Pizza", "Garagem", "Garagem Coberta", "Garagem Coletiva", "Garagem Demarcada", "Gás Encanado", "Gerador", "Guarda Volumes", "Hall de Entrada", "Heliponto", "Isolamento Acústico", "Isolamento Térmico", "Louceiro", "Manobrista", "Marina", "Mini Golf", "Pista de Atletismo", "Pista de Pouso", "Rampas", "Sala de Reunião", "Salão de Convenção", "TV a Cabo", "Vestiário", "Wi-Fi"] },
-                      { title: "Acabamento", items: ["Carpete", "Cerâmica", "Cimento Queimado", "Drywall", "Gesso", "Granito", "Janela de Alumínio", "Laje", "Mármore", "Papel de Parede", "Piso de Madeira", "Piso Elevado", "Piso Laminado", "Piso Vinílico", "Platibanda", "Porcelanato", "Sanca", "Teto rebaixado"] }
-                    ].map((category) => (
+                    {CHARACTERISTICS_CATEGORIES.map((category) => (
                       <div key={category.title} className="space-y-6">
                         <h3 className="text-lg font-bold text-primary/70 border-b pb-2">{category.title}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                           {category.items.map((item) => (
-                            <div key={item} className="flex items-center space-x-3">
-                              <Checkbox id={item} />
-                              <Label htmlFor={item} className="text-sm cursor-pointer hover:text-primary transition-colors">{item}</Label>
+                            <div key={item.id} className="flex items-center space-x-3">
+                              <Checkbox id={item.id} />
+                              <Label htmlFor={item.id} className="text-sm cursor-pointer hover:text-primary transition-colors">{item.label}</Label>
                             </div>
                           ))}
                         </div>
@@ -901,8 +1111,14 @@ export default function NewPropertyWizard() {
 
               {currentStep < 8 && (
                 <div className="mt-12 pt-8 border-t flex items-center justify-between">
-                  <button onClick={handleBack} disabled={currentStep === 1} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Voltar</button>
-                  <button onClick={handleNext} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">{currentStep === 7 ? "Finalizar" : "Continuar"}<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4 ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+                  <button onClick={handleBack} disabled={currentStep === 1} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs">
+                    <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    Voltar
+                  </button>
+                  <button onClick={handleNext} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">
+                    {currentStep === 7 ? "Finalizar" : "Continuar"}
+                    <ArrowRight className="w-4 h-4 ml-2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                  </button>
                 </div>
               )}
             </CardContent>
