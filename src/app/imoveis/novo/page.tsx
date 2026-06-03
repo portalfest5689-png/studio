@@ -16,7 +16,7 @@ import {
   Home, 
   Building2, 
   Factory, 
-  Signpost, 
+  Megaphone, 
   ArrowRight, 
   ArrowLeft, 
   CheckCircle2, 
@@ -24,7 +24,6 @@ import {
   MapPin, 
   FileText,
   Map as MapIcon,
-  ThumbsUp,
   Info,
   DollarSign,
   Globe,
@@ -39,9 +38,7 @@ import {
   Contact,
   Paperclip,
   Camera,
-  Youtube,
   Monitor,
-  Megaphone,
   ExternalLink,
   Trash
 } from "lucide-react"
@@ -301,7 +298,7 @@ const CHARACTERISTICS_CATEGORIES = [
       { id: "plaster", label: "Gesso" },
       { id: "granite", label: "Granito" },
       { id: "aluminum_window", label: "Janela de Alumínio" },
-      { id: "slab", label: "Slab" },
+      { id: "slab", label: "Laje" },
       { id: "marble", label: "Mármore" },
       { id: "Wallpaper", label: "Papel de Parede" },
       { id: "wood_floor", label: "Piso de Madeira" },
@@ -756,7 +753,12 @@ export default function NewPropertyWizard() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                           {category.items.map((item) => (
                             <div key={item.id} className="flex items-center space-x-3">
-                              <Checkbox id={item.id} />
+                              <Checkbox id={item.id} checked={formData.characteristics.includes(item.id)} onCheckedChange={(checked) => {
+                                const newChars = checked 
+                                  ? [...formData.characteristics, item.id]
+                                  : formData.characteristics.filter(id => id !== item.id)
+                                setFormData({...formData, characteristics: newChars})
+                              }} />
                               <Label htmlFor={item.id} className="text-sm cursor-pointer hover:text-primary transition-colors">{item.label}</Label>
                             </div>
                           ))}
@@ -776,44 +778,6 @@ export default function NewPropertyWizard() {
                     <Button variant="outline" className="border-accent text-accent hover:bg-accent/5 font-bold uppercase text-xs px-6 h-12">
                       <Plus className="w-4 h-4 mr-2" /> Adicionar proprietário
                     </Button>
-                  </section>
-
-                  <section className="space-y-6">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                      <Key className="w-4 h-4" />Controle de Chaves
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Chave Disponível? <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.hasKeys} onValueChange={(v) => setFormData({...formData, hasKeys: v})}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Sim">Sim</SelectItem>
-                            <SelectItem value="Não">Não</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Local da Chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Select value={formData.keysLocation} onValueChange={(v) => setFormData({...formData, keysLocation: v})} disabled={formData.hasKeys !== "Sim"}>
-                          <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Filial">Filial</SelectItem>
-                            <SelectItem value="Imobiliária">Imobiliária</SelectItem>
-                            <SelectItem value="Outro">Outro</SelectItem>
-                            <SelectItem value="Proprietário(a)">Proprietário(a)</SelectItem>
-                            <SelectGroup>
-                              <SelectLabel>Corretores</SelectLabel>
-                              <SelectItem value="XANDAO">XANDAO</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-bold text-primary/80">Informações extras sobre a chave <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                      <Textarea rows={5} className="custom-border no-resize" value={formData.keysInfo} onChange={(e) => setFormData({...formData, keysInfo: e.target.value})} />
-                    </div>
                   </section>
 
                   <section className="space-y-6">
@@ -866,18 +830,7 @@ export default function NewPropertyWizard() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-4">
-                        <Label className="text-sm font-bold text-primary/80">Modo do IPTU</Label>
-                        <div className="flex gap-2">
-                          {['monthly', 'annual', 'exempt'].map((mode) => (
-                            <Button key={mode} type="button" variant={formData.iptuMode === mode ? "default" : "outline"} className={`flex-1 h-11 uppercase font-bold text-[10px] ${formData.iptuMode === mode ? 'bg-primary text-white' : 'text-primary/70'}`} onClick={() => setFormData({...formData, iptuMode: mode})}>{mode === 'monthly' ? 'Mensal' : mode === 'annual' ? 'Anual' : 'Isento'}</Button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Valor do IPTU/ITR <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.iptu} onChange={(e) => setFormData({...formData, iptu: e.target.value})} /></div>
-                      </div>
+                      
                       <div className="space-y-4">
                         <Label className="text-sm font-bold text-primary/80">Modo do Condomínio</Label>
                         <div className="flex gap-2">
@@ -890,60 +843,7 @@ export default function NewPropertyWizard() {
                         <Label className="text-sm font-bold text-primary/80">Valor do Condomínio <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">R$</span><Input className="h-11 pl-10" placeholder="0" value={formData.condoFee} onChange={(e) => setFormData({...formData, condoFee: e.target.value})} /></div>
                       </div>
-                    </div>
-                  </section>
 
-                  <section className="space-y-6">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-wider">
-                      <EyeOff className="w-4 h-4" />Informações confidenciais
-                    </div>
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">IPTU Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input className="h-11" placeholder="01.1.123.1234.0001" value={formData.iptuNumber} onChange={(e) => setFormData({...formData, iptuNumber: e.target.value})} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">CCIR Nº (INCRA) <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input className="h-11" placeholder="011.121.458.745-2" value={formData.incraNumber} onChange={(e) => setFormData({...formData, incraNumber: e.target.value})} />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Situação da Escritura <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Select value={formData.deedStatus} onValueChange={(v) => setFormData({...formData, deedStatus: v})}>
-                            <SelectTrigger className="h-11"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Contrato sem procuração">Contrato sem procuração</SelectItem>
-                              <SelectItem value="Contrato com procuração">Contrato com procuração</SelectItem>
-                              <SelectItem value="Alienada">Alienada</SelectItem>
-                              <SelectItem value="Definitiva">Definitiva</SelectItem>
-                              <SelectItem value="Inventário">Inventário</SelectItem>
-                              <SelectItem value="Laudêmio">Laudêmio</SelectItem>
-                              <SelectItem value="Posse">Posse</SelectItem>
-                              <SelectItem value="Regularizando">Regularizando</SelectItem>
-                              <SelectItem value="Sem averbação da Construtora">Sem averbação da Construtora</SelectItem>
-                              <SelectItem value="Sem Escritura">Sem Escritura</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Matrícula Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input className="h-11" placeholder="0" value={formData.registrationNumber} onChange={(e) => setFormData({...formData, registrationNumber: e.target.value})} />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-bold text-primary/80">Cartório <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                        <Input className="h-11" placeholder="ex: Registrado no Cartório Shoji, no Boqueirão" value={formData.notaryOffice} onChange={(e) => setFormData({...formData, notaryOffice: e.target.value})} />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Energia Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input className="h-11" placeholder="0" value={formData.electricityNumber} onChange={(e) => setFormData({...formData, electricityNumber: e.target.value})} />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-bold text-primary/80">Água Nº <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
-                          <Input className="h-11" placeholder="0" value={formData.waterNumber} onChange={(e) => setFormData({...formData, waterNumber: e.target.value})} />
-                        </div>
-                      </div>
                       <div className="space-y-2">
                         <Label className="text-sm font-bold text-primary/80">Observações Internas <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
                         <Textarea rows={5} className="custom-border no-resize" placeholder="Descreva aqui informações valiosas e confidenciais sobre o imóvel e/ou sobre a documentação." value={formData.internalObservations} onChange={(e) => setFormData({...formData, internalObservations: e.target.value})} />
@@ -968,6 +868,10 @@ export default function NewPropertyWizard() {
                         <Switch checked={formData.canRent} onCheckedChange={(v) => setFormData({...formData, canRent: v})} />
                         <Label className="font-bold text-primary">Alugar</Label>
                       </div>
+                      <div className="flex flex-col gap-2 items-center">
+                        <Switch checked={formData.canSeason} onCheckedChange={(v) => setFormData({...formData, canSeason: v})} />
+                        <Label className="font-bold text-primary">Temporada</Label>
+                      </div>
                     </div>
 
                     <div className="pt-8 space-y-8">
@@ -981,7 +885,7 @@ export default function NewPropertyWizard() {
                             </div>
                           </div>
                         )}
-                        {formData.canRent && (
+                        {(formData.canRent || formData.canSeason) && (
                           <div className="space-y-2">
                             <Label className="text-sm font-bold text-primary/80">Valor de Locação</Label>
                             <div className="relative">
@@ -1112,12 +1016,12 @@ export default function NewPropertyWizard() {
               {currentStep < 8 && (
                 <div className="mt-12 pt-8 border-t flex items-center justify-between">
                   <button onClick={handleBack} disabled={currentStep === 1} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-muted-foreground font-bold uppercase text-xs">
-                    <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={2} />
                     Voltar
                   </button>
                   <button onClick={handleNext} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 btn-custom-red h-12 px-8 font-bold uppercase text-xs tracking-widest shadow-lg">
                     {currentStep === 7 ? "Finalizar" : "Continuar"}
-                    <ArrowRight className="w-4 h-4 ml-2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    <ArrowRight className="w-4 h-4 ml-2" strokeWidth={2} />
                   </button>
                 </div>
               )}
