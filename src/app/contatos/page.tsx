@@ -6,6 +6,7 @@ import { CRMHeader } from "@/components/layout/crm-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
   HelpCircle,
@@ -48,20 +49,28 @@ import {
 } from "@/components/ui/select"
 
 const TABS = [
-  { id: "all", label: "Todos", count: 0 },
-  { id: "lead", label: "Leads", count: 0 },
-  { id: "qualified_lead", label: "Leads Qualificados", count: 0 },
-  { id: "oportunity", label: "Oportunidades", count: 0 },
-  { id: "client", label: "Clientes", count: 0 },
-  { id: "owner", label: "Proprietários", count: 0 },
-  { id: "collector", label: "Captadores", count: 0 },
-  { id: "contributor", label: "Colaboradores", count: 0 },
+  { id: "all", label: "Todos" },
+  { id: "lead", label: "Leads" },
+  { id: "qualified_lead", label: "Leads Qualificados" },
+  { id: "oportunity", label: "Oportunidades" },
+  { id: "client", label: "Clientes" },
+  { id: "owner", label: "Proprietários" },
+  { id: "collector", label: "Captadores" },
+  { id: "contributor", label: "Colaboradores" },
 ]
 
-const INITIAL_CONTACTS = [
-  { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
-  { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
-  { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
+interface Contact {
+  id: number
+  name: string
+  initials: string
+  type: string
+  description?: string
+}
+
+const INITIAL_CONTACTS: Contact[] = [
+  { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead", description: "Interessada em apartamentos na planta." },
+  { id: 2, name: "Roger Silva", initials: "RS", type: "lead", description: "Busca casa em condomínio fechado." },
+  { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client", description: "Cliente antigo, focado em investimentos." },
 ]
 
 export default function ContactsDashboard() {
@@ -69,7 +78,7 @@ export default function ContactsDashboard() {
   const [isNewContactOpen, setIsNewContactOpen] = useState(false)
   
   // Estado de contatos (sincronizado)
-  const [contacts, setContacts] = useState(INITIAL_CONTACTS)
+  const [contacts, setContacts] = useState<Contact[]>([])
 
   // Dynamic fields state
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
@@ -84,6 +93,9 @@ export default function ContactsDashboard() {
     const saved = localStorage.getItem('crm_contacts')
     if (saved) {
       setContacts(JSON.parse(saved))
+    } else {
+      setContacts(INITIAL_CONTACTS)
+      localStorage.setItem('crm_contacts', JSON.stringify(INITIAL_CONTACTS))
     }
   }, [])
 
@@ -92,20 +104,34 @@ export default function ContactsDashboard() {
     const formData = new FormData(e.target as HTMLFormElement)
     const name = formData.get('contact_name_on_modal') as string
     const surname = formData.get('contact_surname_on_modal') as string
+    const description = formData.get('contact_description_on_modal') as string
     const fullName = `${name} ${surname}`.trim()
     
-    const newContact = {
+    const newContact: Contact = {
       id: Date.now(),
       name: fullName,
       initials: name.substring(0, 1).toUpperCase() + (surname ? surname.substring(0, 1).toUpperCase() : ""),
-      type: (formData.get('contact_lead_on_modal') as any) || 'lead'
+      type: (formData.get('contact_lead_on_modal') as any) || 'lead',
+      description: description
     }
 
     const updatedContacts = [newContact, ...contacts]
     setContacts(updatedContacts)
     localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
     setIsNewContactOpen(false)
+    setPhones([{ id: 1, value: "" }]) // Reset phones
   }
+
+  const handleDeleteContact = (id: number) => {
+    const updatedContacts = contacts.filter(c => c.id !== id)
+    setContacts(updatedContacts)
+    localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
+  }
+
+  const filteredContacts = contacts.filter(c => {
+    if (activeTab === 'all') return true
+    return c.type === activeTab
+  })
 
   return (
     <div className="min-h-screen bg-[#F4F6F8]">
@@ -256,6 +282,15 @@ export default function ContactsDashboard() {
                               </SelectContent>
                             </Select>
                           </div>
+
+                          <div className="col-span-full space-y-2">
+                            <Label className="text-sm font-bold text-primary/80">Descrição <span className="text-[10px] text-muted-foreground font-normal uppercase">(opcional)</span></Label>
+                            <Textarea 
+                              name="contact_description_on_modal" 
+                              className="min-h-[100px] custom-border no-resize" 
+                              placeholder="Adicione observações ou detalhes extras sobre este contato..."
+                            />
+                          </div>
                         </div>
                       </div>
                       
@@ -316,22 +351,25 @@ export default function ContactsDashboard() {
         {/* Tabs Navigation */}
         <div className="bg-white border-b overflow-x-auto scrollbar-hide">
           <div className="max-w-[1400px] mx-auto flex whitespace-nowrap px-4">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  relative px-5 py-4 text-sm font-medium transition-all
-                  ${activeTab === tab.id 
-                    ? "text-primary border-b-2 border-primary" 
-                    : "text-muted-foreground hover:text-primary"
-                  }
-                `}
-              >
-                {tab.label}
-                <span className="ml-1 text-[10px] opacity-60">({tab.id === 'all' ? contacts.length : 0})</span>
-              </button>
-            ))}
+            {TABS.map((tab) => {
+              const count = contacts.filter(c => tab.id === 'all' || c.type === tab.id).length
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`
+                    relative px-5 py-4 text-sm font-medium transition-all
+                    ${activeTab === tab.id 
+                      ? "text-primary border-b-2 border-primary" 
+                      : "text-muted-foreground hover:text-primary"
+                    }
+                  `}
+                >
+                  {tab.label}
+                  <span className="ml-1 text-[10px] opacity-60">({count})</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -341,7 +379,7 @@ export default function ContactsDashboard() {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border mr-2">
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-bold text-primary">{contacts.length > 0 ? 0 : 0}</span>
+                <span className="text-sm font-bold text-primary">0</span>
               </div>
 
               <div className="flex items-center gap-1">
@@ -360,7 +398,7 @@ export default function ContactsDashboard() {
               </div>
 
               <div className="ml-4 text-sm text-primary/60 font-medium hidden sm:block">
-                {contacts.length === 0 ? "Sem contatos para exibir" : `Mostrando ${contacts.length} contatos`}
+                {filteredContacts.length === 0 ? "Sem contatos para exibir" : `Mostrando ${filteredContacts.length} contatos`}
               </div>
             </div>
 
@@ -396,16 +434,13 @@ export default function ContactsDashboard() {
 
         {/* Contacts List or Empty State */}
         <div className="px-4">
-          {contacts.length === 0 ? (
+          {filteredContacts.length === 0 ? (
             <div className="bg-white border rounded-xl p-12 text-center max-w-[1400px] mx-auto flex flex-col items-center gap-6">
               <div className="max-w-2xl space-y-4">
                 <h2 className="text-3xl font-bold text-primary">
-                  Você ainda não tem nenhum contato.{" "}
+                  Nenhum contato encontrado.{" "}
                   <span className="block sm:inline text-accent">Adicione alguns contatos!</span>
                 </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  Quando você adiciona os seus contatos na imobTrack, mostramos a você ideias de como comercializar com mais inteligência.
-                </p>
               </div>
               
               <button 
@@ -417,15 +452,28 @@ export default function ContactsDashboard() {
             </div>
           ) : (
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {contacts.map((contact) => (
-                <div key={contact.id} className="bg-white border rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+              {filteredContacts.map((contact) => (
+                <div key={contact.id} className="bg-white border rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-shadow relative group">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white ${contact.type === 'client' ? 'bg-green-500' : 'bg-orange-400'}`}>
                     {contact.initials}
                   </div>
-                  <div>
-                    <h3 className="font-bold text-primary">{contact.name}</h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-primary truncate">{contact.name}</h3>
                     <p className="text-xs text-muted-foreground uppercase">{contact.type === 'lead' ? 'Lead' : 'Cliente'}</p>
+                    {contact.description && (
+                      <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-2 italic" title={contact.description}>
+                        {contact.description}
+                      </p>
+                    )}
                   </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
+                    onClick={() => handleDeleteContact(contact.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               ))}
             </div>
