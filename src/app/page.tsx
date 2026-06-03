@@ -56,7 +56,7 @@ const INITIAL_PROPERTIES: Property[] = [
   {
     id: "parkville-01",
     code: "1001",
-    title: "Casa em Condomínio Parkville - 3 Qts",
+    title: "Casa em Condomínio Parkville",
     address: "Sala Pé Direito Duplo | Fundação na Laje",
     city: "Campina Grande",
     state: "PB",
@@ -110,7 +110,17 @@ export default function Home() {
             <div className="max-w-[1400px] mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {properties.map((property) => (
-                  <div key={property.id} className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col h-full">
+                  <div key={property.id} className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col h-full relative">
+                    {/* Botão de Excluir Rápido (estilo contatos) */}
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8 bg-white/80 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 z-20 shadow-sm border"
+                      onClick={() => handleDeleteProperty(property.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+
                     {/* Card Header with Image */}
                     <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                       <div className="absolute inset-0 z-10 p-3 flex flex-col justify-between pointer-events-none">
@@ -118,7 +128,7 @@ export default function Home() {
                           <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-[10px] font-bold shadow-lg border border-white/20">
                             {property.responsible.split(' ').map(n => n[0]).join('').substring(0, 2)}
                           </div>
-                          <div className="flex flex-col gap-1 items-end">
+                          <div className="flex flex-col gap-1 items-end pr-10"> {/* Pr para não encostar no botão de lixeira */}
                             <span className="bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter shadow-sm">
                               {property.status || 'Ativo'}
                             </span>
