@@ -138,6 +138,32 @@ export default function ContactsDashboard() {
     localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
   }
 
+  const handleExportCSV = () => {
+    if (contacts.length === 0) return;
+    
+    const headers = ["Nome", "Iniciais", "Tipo", "Descrição"];
+    const rows = contacts.map(c => [
+        c.name,
+        c.initials,
+        TABS.find(t => t.id === c.type)?.label || 'Lead',
+        c.description || ""
+    ]);
+
+    const csvContent = [
+        headers.join(","),
+        ...rows.map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `contatos_imobtrack_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const filteredContacts = contacts.filter(c => {
     if (activeTab === 'all') return true
     return c.type === activeTab
@@ -345,7 +371,7 @@ export default function ContactsDashboard() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Personalizar Campos</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleExportCSV}>
                     <Download className="w-4 h-4 mr-2" /> Exportar Resultado para CSV
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
