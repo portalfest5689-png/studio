@@ -78,6 +78,8 @@ const INITIAL_CONTACTS: Contact[] = [
   { id: 8, name: "ADRIANA FERNANDES", initials: "AF", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – APRTS PRESTIGGE RESIDENCE – NUMERO: +55 83 9628-4971. Esta cliente quer saber quanto fica avista um apto de neto – Falar com ela" },
   { id: 9, name: "PRISCILA NAKAMURA", initials: "PN", type: "qualified_lead", description: "MORA EM UM FLAT NO HERON — QUALIFICADO E EM ANDAMENTO. VAI CHEGAR DE SP E QUER VISITAR CASA E CÍCERO. NUMERO: +55 11 96617-1647" },
   { id: 10, name: "FRANCISCA", initials: "FC", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – VAI COMBINAR COM O FILHO PRA VER A CASA DE TÚLIO – FINAL DE SEAMANA – SABADO PELA MANHA – NUMERO: +55 83 8762-7790" },
+  { id: 11, name: "ANTONIA MEDEIROS", initials: "AM", type: "qualified_lead", description: "CASA E TULIO - NUMERO = +55 83 99174-7620. QUER PAGAR A VISTA E VAI CHEGAR DE VIAGEM EM 20 DIAS E QUER FALAR COM O CORRETOR" },
+  { id: 12, name: "GLADSTONE ALLNA", initials: "GA", type: "qualified_lead", description: "CASA DE TULIO - NUMERO: +55 83 9859-6622. ENTRADA DE 100K, CARTA DE CREDITO APROVADA, RENDA DE 20K. QUER APENAS FAZER UMA VISITA" },
 ]
 
 export default function ContactsDashboard() {
