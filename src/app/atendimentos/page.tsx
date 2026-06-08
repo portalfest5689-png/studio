@@ -71,6 +71,8 @@ const INITIAL_CONTACTS = [
   { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
   { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
   { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
+  { id: 11, name: "ANTONIA MEDEIROS", initials: "AM", type: "qualified_lead" },
+  { id: 12, name: "GLADSTONE ALLNA", initials: "GA", type: "qualified_lead" },
 ]
 
 interface Deal {
@@ -155,7 +157,9 @@ export default function AtendimentosPage() {
       responsible: "Alexandre Mendonça"
     }
 
-    setDeals([newDeal, ...deals])
+    const updatedDeals = [newDeal, ...deals]
+    setDeals(updatedDeals)
+    localStorage.setItem('crm_deals', JSON.stringify(updatedDeals))
     setIsNewDealOpen(false)
     
     // Reset fields
@@ -169,6 +173,10 @@ export default function AtendimentosPage() {
     const saved = localStorage.getItem('crm_contacts')
     if (saved) {
       setContacts(JSON.parse(saved))
+    }
+    const savedDeals = localStorage.getItem('crm_deals')
+    if (savedDeals) {
+      setDeals(JSON.parse(savedDeals))
     }
   }, [])
 
@@ -459,7 +467,7 @@ export default function AtendimentosPage() {
         <div className="bg-white border-b overflow-x-auto scrollbar-hide">
           <div className="max-w-[1400px] mx-auto flex whitespace-nowrap px-4">
             {TABS.map((tab) => {
-              const count = tab.id === 'all' ? deals.length : (tab.id === 'open' ? deals.length : 0)
+              const count = tab.id === 'all' ? deals.length : (tab.id === 'open' ? deals.filter(d => d.step < 4).length : 0)
               return (
                 <button
                   key={tab.id}
