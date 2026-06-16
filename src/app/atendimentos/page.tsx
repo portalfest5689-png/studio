@@ -71,8 +71,17 @@ const INITIAL_CONTACTS = [
   { id: 1, name: "D.rosa Farias", initials: "DF", type: "lead" },
   { id: 2, name: "Roger Silva", initials: "RS", type: "lead" },
   { id: 3, name: "Alexandre Mendonça", initials: "AM", type: "client" },
+  { id: 4, name: "D.ROSA", initials: "DR", type: "qualified_lead" },
+  { id: 5, name: "FABRICIO", initials: "FB", type: "qualified_lead" },
+  { id: 6, name: "MARTINS", initials: "MT", type: "qualified_lead" },
+  { id: 7, name: "CAMILA", initials: "CM", type: "qualified_lead" },
+  { id: 8, name: "ADRIANA FERNANDES", initials: "AF", type: "qualified_lead" },
+  { id: 9, name: "PRISCILA NAKAMURA", initials: "PN", type: "qualified_lead" },
+  { id: 10, name: "FRANCISCA", initials: "FC", type: "qualified_lead" },
   { id: 11, name: "ANTONIA MEDEIROS", initials: "AM", type: "qualified_lead" },
   { id: 12, name: "GLADSTONE ALLNA", initials: "GA", type: "qualified_lead" },
+  { id: 13, name: "Enilton Sr. Enilton", initials: "EE", type: "qualified_lead" },
+  { id: 14, name: "Kalina ✨", initials: "K", type: "qualified_lead" },
 ]
 
 interface Deal {

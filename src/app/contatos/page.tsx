@@ -80,6 +80,8 @@ const INITIAL_CONTACTS: Contact[] = [
   { id: 10, name: "FRANCISCA", initials: "FC", type: "qualified_lead", description: "QUALIFICADO E EM ANDAMENTO – VAI COMBINAR COM O FILHO PRA VER A CASA DE TÚLIO – FINAL DE SEAMANA – SABADO PELA MANHA – NUMERO: +55 83 8762-7790" },
   { id: 11, name: "ANTONIA MEDEIROS", initials: "AM", type: "qualified_lead", description: "CASA E TULIO - NUMERO = +55 83 99174-7620. QUER PAGAR A VISTA E VAI CHEGAR DE VIAGEM EM 20 DIAS E QUER FALAR COM O CORRETOR" },
   { id: 12, name: "GLADSTONE ALLNA", initials: "GA", type: "qualified_lead", description: "CASA DE TULIO - NUMERO: +55 83 9859-6622. ENTRADA DE 100K, CARTA DE CREDITO APROVADA, RENDA DE 20K. QUER APENAS FAZER UMA VISITA" },
+  { id: 13, name: "Enilton Sr. Enilton", initials: "EE", type: "qualified_lead", description: "Casa Tulio -- NUMERO: +55 83 8220-8745" },
+  { id: 14, name: "Kalina ✨", initials: "K", type: "qualified_lead", description: "CASA DE CICERO -- NUMERO: +55 83 9975-8030" },
 ]
 
 export default function ContactsDashboard() {
