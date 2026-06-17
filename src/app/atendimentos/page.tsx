@@ -102,18 +102,13 @@ export default function AtendimentosPage() {
   const [dealValue, setDealValue] = useState("")
   const [dealName, setDealName] = useState("")
 
-  // Estado de atendimentos
   const [deals, setDeals] = useState<Deal[]>([])
-
-  // Estado global de contatos
   const [contacts, setContacts] = useState(INITIAL_CONTACTS)
 
-  // Estados para busca de contato
   const [contactSearch, setContactSearch] = useState("")
   const [selectedContact, setSelectedContact] = useState<{ id: number; name: string; initials: string; type: string } | null>(null)
   const [isContactPopoverOpen, setIsContactPopoverOpen] = useState(false)
 
-  // Estados para novo contato
   const [isNewContactOpen, setIsNewContactOpen] = useState(false)
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
 
@@ -171,7 +166,6 @@ export default function AtendimentosPage() {
     localStorage.setItem('crm_deals', JSON.stringify(updatedDeals))
     setIsNewDealOpen(false)
     
-    // Reset fields
     setDealName("")
     setDealValue("")
     setSelectedContact(null)
@@ -212,7 +206,6 @@ export default function AtendimentosPage() {
       <CRMHeader />
 
       <main className="pb-24">
-        {/* Page Header */}
         <header className="bg-white border-b px-4 py-4 md:py-6">
           <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -472,7 +465,6 @@ export default function AtendimentosPage() {
           </div>
         </header>
 
-        {/* Tabs Navigation */}
         <div className="bg-white border-b overflow-x-auto scrollbar-hide">
           <div className="max-w-[1400px] mx-auto flex whitespace-nowrap px-4">
             {TABS.map((tab) => {
@@ -497,7 +489,6 @@ export default function AtendimentosPage() {
           </div>
         </div>
 
-        {/* Actions Bar */}
         <div className="py-4 px-4">
           <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="hidden lg:flex items-center gap-2">
@@ -550,7 +541,6 @@ export default function AtendimentosPage() {
           </div>
         </div>
 
-        {/* Kanban Board */}
         <div className="px-4 mt-2">
           <div className="max-w-[1400px] mx-auto overflow-x-auto pb-6 scrollbar-hide">
             <div className="flex gap-4 min-w-max">
@@ -560,7 +550,6 @@ export default function AtendimentosPage() {
                 
                 return (
                   <div key={column.id} className="w-[280px] flex flex-col gap-4">
-                    {/* Column Header */}
                     <div className="bg-white border rounded-lg p-4 shadow-sm">
                       <div className="flex items-center justify-between mb-1">
                         <h3 className="font-bold text-primary text-sm uppercase tracking-tight truncate">
@@ -573,7 +562,6 @@ export default function AtendimentosPage() {
                       </div>
                     </div>
 
-                    {/* Column Body / Kanban Cards */}
                     <div className="min-h-[500px] rounded-lg border-2 border-dashed border-muted/50 flex flex-col gap-3 p-2 bg-muted/5">
                       {columnDeals.length > 0 ? (
                         columnDeals.map((deal) => (
@@ -620,7 +608,6 @@ export default function AtendimentosPage() {
         </div>
       </main>
 
-      {/* Novo Contato Modal */}
       <Dialog open={isNewContactOpen} onOpenChange={setIsNewContactOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-none bg-transparent">
           <DialogDescription className="sr-only">Formulário para criar um novo contato</DialogDescription>
@@ -772,7 +759,6 @@ export default function AtendimentosPage() {
         </DialogContent>
       </Dialog>
 
-      {/* FAB Mobile */}
       <div className="fixed bottom-6 right-4 md:hidden z-50">
         <Button onClick={() => setIsNewDealOpen(true)} className="w-14 h-14 rounded-full btn-custom-red shadow-2xl">
           <Plus className="w-8 h-8" />

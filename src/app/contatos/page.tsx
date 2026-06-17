@@ -88,10 +88,7 @@ export default function ContactsDashboard() {
   const [activeTab, setActiveTab] = useState("all")
   const [isNewContactOpen, setIsNewContactOpen] = useState(false)
   
-  // Estado de contatos (sincronizado)
   const [contacts, setContacts] = useState<Contact[]>([])
-
-  // Dynamic fields state
   const [phones, setPhones] = useState([{ id: 1, value: "" }])
 
   const addPhone = () => setPhones([...phones, { id: Date.now(), value: "" }])
@@ -99,7 +96,6 @@ export default function ContactsDashboard() {
     if (phones.length > 1) setPhones(phones.filter(p => p.id !== id))
   }
 
-  // Carrega contatos do localStorage ao montar
   useEffect(() => {
     const saved = localStorage.getItem('crm_contacts')
     if (saved) {
@@ -133,7 +129,7 @@ export default function ContactsDashboard() {
     setContacts(updatedContacts)
     localStorage.setItem('crm_contacts', JSON.stringify(updatedContacts))
     setIsNewContactOpen(false)
-    setPhones([{ id: 1, value: "" }]) // Reset phones
+    setPhones([{ id: 1, value: "" }]) 
   }
 
   const handleDeleteContact = (id: number) => {
@@ -178,7 +174,6 @@ export default function ContactsDashboard() {
       <CRMHeader />
 
       <main className="pb-24">
-        {/* Page Header */}
         <header className="bg-white border-b px-4 py-4 md:py-6">
           <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -388,7 +383,6 @@ export default function ContactsDashboard() {
           </div>
         </header>
 
-        {/* Tabs Navigation */}
         <div className="bg-white border-b overflow-x-auto scrollbar-hide">
           <div className="max-w-[1400px] mx-auto flex whitespace-nowrap px-4">
             {TABS.map((tab) => {
@@ -413,7 +407,6 @@ export default function ContactsDashboard() {
           </div>
         </div>
 
-        {/* Actions Bar */}
         <div className="py-4 px-4">
           <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -472,7 +465,6 @@ export default function ContactsDashboard() {
           </div>
         </div>
 
-        {/* Contacts List or Empty State */}
         <div className="px-4">
           {filteredContacts.length === 0 ? (
             <div className="bg-white border rounded-xl p-12 text-center max-w-[1400px] mx-auto flex flex-col items-center gap-6">
@@ -500,7 +492,7 @@ export default function ContactsDashboard() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-primary truncate">{contact.name}</h3>
                     <p className="text-xs text-muted-foreground uppercase">{
-                      TABS.find(t => t.id === contact.type)?.label || 'Lead'
+                      TABS.find(t => t.id === c.type)?.label || 'Lead'
                     }</p>
                     {contact.description && (
                       <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-3 italic" title={contact.description}>
