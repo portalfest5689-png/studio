@@ -6,7 +6,9 @@ export const metadata: Metadata = {
   title: 'Imóveis - imobTrack CRM',
   description: 'Sistema de Gestão Imobiliária Profissional',
   icons: {
-    icon: 'https://iili.io/CoixRJ1.md.png',
+    icon: [
+      { url: 'https://iili.io/CoixRJ1.md.png', type: 'image/png' },
+    ],
     shortcut: 'https://iili.io/CoixRJ1.md.png',
     apple: 'https://iili.io/CoixRJ1.md.png',
   },
@@ -20,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="custom-scroll">
       <head>
-        <link rel="icon" href="https://iili.io/CoixRJ1.md.png" />
+        <link rel="icon" href="https://iili.io/CoixRJ1.md.png" type="image/png" />
         <link rel="shortcut icon" href="https://iili.io/CoixRJ1.md.png" />
         <link rel="apple-touch-icon" href="https://iili.io/CoixRJ1.md.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
