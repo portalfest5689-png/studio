@@ -7,11 +7,14 @@ export const metadata: Metadata = {
   description: 'Sistema de Gestão Imobiliária Profissional',
   icons: {
     icon: [
-      { url: 'https://iili.io/CoixRJ1.md.png', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: 'https://iili.io/CoixRJ1.md.png',
-    apple: 'https://iili.io/CoixRJ1.md.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -22,9 +25,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="custom-scroll">
       <head>
-        <link rel="icon" href="https://iili.io/CoixRJ1.md.png" type="image/png" />
-        <link rel="shortcut icon" href="https://iili.io/CoixRJ1.md.png" />
-        <link rel="apple-touch-icon" href="https://iili.io/CoixRJ1.md.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
