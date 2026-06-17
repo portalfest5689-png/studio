@@ -423,6 +423,9 @@ export default function ContactsDashboard() {
                   <PlusSquare className="w-5 h-5" />
                 </Button>
                 <Button variant="ghost" size="icon" className="text-accent hover:bg-accent/10" disabled>
+                  <PlusSquare className="w-5 h-5" />
+                </Button>
+                <Button variant="ghost" size="icon" className="text-accent hover:bg-accent/10" disabled>
                   <Edit className="w-5 h-5" />
                 </Button>
                 <Button variant="ghost" size="icon" className="text-accent hover:bg-accent/10" disabled>
@@ -492,7 +495,7 @@ export default function ContactsDashboard() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-primary truncate">{contact.name}</h3>
                     <p className="text-xs text-muted-foreground uppercase">{
-                      TABS.find(t => t.id === c.type)?.label || 'Lead'
+                      TABS.find(t => t.id === contact.type)?.label || 'Lead'
                     }</p>
                     {contact.description && (
                       <p className="text-[11px] text-muted-foreground mt-2 border-t pt-2 line-clamp-3 italic" title={contact.description}>
